@@ -59,3 +59,134 @@
 .wrapper .search .search-fixed-top .search-box .fa-search{
 	margin-right: 1vw;
 }
+
+/****************** 点餐分类 ****************/
+.wrapper .foodtype{
+	width: 100%;
+	height: 48vw;
+	
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-content: center;
+}
+.wrapper .foodtype li{
+	width: 18vw;
+	height: 20vw;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+	user-select: none;
+	cursor: pointer;
+}
+.wrapper .foodtype li img{
+	width: 12vw;
+	height: 12vw;
+}
+.wrapper .foodtype li p{
+	font-size: 3.2vw;
+	color: #666;
+}
+
+/****************** 横幅广告 ****************/
+.wrapper .banner{
+	width: 95%;
+	margin: 0 auto;
+	height: 29vw;
+	
+	background-image: url(../img/index_banner.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	
+	box-sizing: border-box;
+	padding: 2vw 6vw;
+}
+.wrapper .banner h3{
+	font-size: 4.2vw;
+	margin-bottom: 1.2vw;
+}
+.wrapper .banner p{
+	font-size: 3.4vw;
+	color: #666;
+	margin-bottom: 2.4vw;
+}
+.wrapper .banner a{
+	font-size: 3vw;
+	color: #c79060;
+	font-weight: 700;
+}
+
+/****************** 横幅广告 ****************/
+.wrapper .supermember{
+	 width: 95%;
+	 margin: 0 auto;
+	 height: 11.5vw;
+	 background-color: #feedc1;
+	 margin-top: 1.3vw;
+	 border-radius: 2px;
+	 color: #644f1b;
+	 
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+.wrapper .supermember .left{
+	display: flex;
+	align-items: center;
+	margin-left: 4vw;
+	user-select: none;
+}
+.wrapper .supermember .left img{
+	width: 6vw;
+	height: 6vw;
+	margin-right: 2vw;
+}
+.wrapper .supermember .left h3{
+	font-size: 4vw;
+	margin-right: 2vw;
+}
+.wrapper .supermember .left p{
+	font-size: 3vw;
+}
+.wrapper .supermember .right{
+	font-size: 3vw;
+	margin-right: 4vw;
+	cursor: pointer;
+}
+
+/****************** 推荐商家 ****************/
+.wrapper .recommend{
+	width: 100%;
+	height: 14vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.wrapper .recommend .recommend-line{
+	width: 6vw;
+	height: 0.2vw;
+	background-color: #888;
+}
+.wrapper .recommend p{
+	font-size: 4vw;
+	margin: 0 4vw;
+}
+
+/****************** 推荐方式 ****************/
+.wrapper .recommendtype{
+	width: 100%;
+	height: 5vw;
+	margin-bottom: 5vw;
+	
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	
+}
+.wrapper .recommendtype li{
+	font-size: 3.5vw;
+	color: #555;
+}
