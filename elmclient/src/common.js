@@ -9,7 +9,7 @@ export function getCurDate(){
 	return year + "-" + month + "-" + day;
 }
 
-//向sessionStorage中存储一个JSON对象
+//向前端sessionStorage中存储一个JSON对象
 export function setSessionStorage(keyStr, value){
 	sessionStorage.setItem(keyStr, JSON.stringify(value));
 }
@@ -29,7 +29,7 @@ export function removeSessionStorage(keyStr){
 	sessionStorage.removeItem(keyStr);
 }
 
-//向localStorage中存储一个JSON对象
+//向永久存储localStorage中存储一个JSON对象
 export function setLocalStorage(keyStr){
 	localStorage.setItem(keyStr, JSON.stringify(value));
 }
