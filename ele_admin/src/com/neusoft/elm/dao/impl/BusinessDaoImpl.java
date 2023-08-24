@@ -125,5 +125,117 @@ public class BusinessDaoImpl implements BusinessDao{
 		
 		return result;
 	}
+	
+	@Override
+	public Business getBusinessByIdByPass(Integer businessId, String password) {
+		Business business = null;
+		String sql = "select * from business where businessId = ? and password = ? ";
+		
+		try {
+			con = DBUtil.getConnection();  // 创建与数据库的连接
+			pst = con.prepareStatement(sql); // 预编译sql语句
+			pst.setInt(1, businessId);
+			pst.setString(2, password);
+			rs = pst.executeQuery(); // 执行查询 保存结果到rs
+			// 查到多行数据  每次while对一行进行遍历   封装到一个对象中  将该对象加入list
+			while (rs.next()) {
+				business = new Business();
+				business.setBusinessId(rs.getInt("businessId"));
+				business.setPassword(rs.getString("password"));
+				business.setBusinessName(rs.getString("businessName"));
+				business.setBusinessAddress(rs.getString("businessAddress"));
+				business.setBusinessExplain(rs.getString("businessExplain"));
+				business.setStarPrice(rs.getDouble("starPrice"));
+				business.setDeliveryPrice(rs.getDouble("deliveryPrice"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// 释放资源
+			DBUtil.close(rs, pst, con);
+		}
+		
+		return business;
 
+	}
+	
+	@Override
+	public Business getBusinessById(Integer businessId){
+		Business business = null;
+		String sql = "select * from business where businessId = ?";
+		
+		try {
+			con = DBUtil.getConnection();  // 创建与数据库的连接
+			pst = con.prepareStatement(sql); // 预编译sql语句
+			pst.setInt(1, businessId);
+			rs = pst.executeQuery(); // 执行查询 保存结果到rs
+			// 查到多行数据  每次while对一行进行遍历   封装到一个对象中  将该对象加入list
+			while (rs.next()) {
+				business = new Business();
+				business.setBusinessId(rs.getInt("businessId"));
+				business.setPassword(rs.getString("password"));
+				business.setBusinessName(rs.getString("businessName"));
+				business.setBusinessAddress(rs.getString("businessAddress"));
+				business.setBusinessExplain(rs.getString("businessExplain"));
+				business.setStarPrice(rs.getDouble("starPrice"));
+				business.setDeliveryPrice(rs.getDouble("deliveryPrice"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// 释放资源
+			DBUtil.close(rs, pst, con);
+		}
+		
+		return business;
+	}
+	
+	@Override
+	public int updateBusiness(Business business) {
+		int result = 0;
+		String sql = "update business set businessName = ?, businessAddress = ?, businessExplain = ?, starPrice = ?, deliveryPrice = ? where businessId = ?";
+		
+		try {
+			con = DBUtil.getConnection();  
+			pst = con.prepareStatement(sql);
+			pst.setString(1, business.getBusinessName());
+			pst.setString(2, business.getBusinessAddress());
+			pst.setString(3, business.getBusinessExplain());
+			pst.setDouble(4, business.getStarPrice());
+			pst.setDouble(5, business.getDeliveryPrice());
+			pst.setInt(6, business.getBusinessId());
+			result = pst.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			// 释放资源
+			DBUtil.close(null, pst, con);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int updateBusinessPassword(Integer businessId, String password) {
+		int result = 0;
+		String sql = "update business set password = ? where businessId = ?";
+		
+		try {
+			con = DBUtil.getConnection();  
+			pst = con.prepareStatement(sql);
+			pst.setString(1, password);
+			pst.setInt(2, businessId);
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			// 释放资源
+			DBUtil.close(null, pst, con);
+		}
+		
+		return result;
+	}
 }

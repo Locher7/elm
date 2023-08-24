@@ -13,7 +13,7 @@ public class ElmAdminEntry {
 		Scanner input = new Scanner(System.in);
 		
 		System.out.println("----------------------------------------------------------");
-		System.out.println("| \t\t\t 饿了么后台管理系统 \t\t\t |");
+		System.out.println("| \t\t\t 饿了么后台管理员系统 \t\t\t |");
 		System.out.println("----------------------------------------------------------");
 		
 		AdminView adminView = new AdminViewImpl();
@@ -48,7 +48,7 @@ public class ElmAdminEntry {
 						businessView.removeBusiness();
 						break;
 					case 5:
-						System.out.println("---------------------欢迎下次访问饿了么后台管理系统---------------------");
+						System.out.println("---------------------欢迎下次访问饿了么后台管理员系统---------------------");
 						break;
 					default:
 						System.out.println("没有该选项");
