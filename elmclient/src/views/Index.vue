@@ -19,7 +19,7 @@
 
 		<!-- 点餐分类 -->
 		<ul class="foodtype">
-			<li>
+			<li @click="toBusinessList">
 				<img src="../assets/dcfl01.png">
 				<p>美食</p>
 			</li>
@@ -410,13 +410,18 @@
 		},
 		components:{
 			Footer
-		}
+		},
+		methods:{
+			toBusinessList(){
+				this.$router.push('/businessList');
+			}
+		},
 	}
 </script>
 
 
 
-<style>
+<style scoped>
 	/****************** 总容器 ****************/
 	.wrapper {
 		width: 100%;
