@@ -6,6 +6,7 @@
 		<link  href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 		<link  href="framework/reset.css" rel="stylesheet">
 		<link  href="css/index.css" rel="stylesheet">
+		<script src="js/index.js"></script>
 		<title></title>
 	</head>
 	<body>
@@ -20,7 +21,7 @@
 			
 			<!-- search -->
 			<div class="search">
-				<div class="search-fixed-top">
+				<div class="search-fixed-top" id="fixedBox">
 					<div class="search-box">
 						<i class="fa fa-search"></i>搜索饿了么商家、商品名称
 					</div>					
@@ -106,16 +107,16 @@
 			</ul>
 		
 			<!-- 商家列表 -->
-			<ul class="bussiness">
+			<ul class="business">
 				<li>
 					<img src="img/sj01.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>万家饺子(软件园E18店)</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -123,30 +124,30 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
+						<div class="business-info-explain">
 							<div>各种饺子</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
@@ -154,13 +155,13 @@
 				</li>
 				<li>
 					<img src="img/sj02.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>小锅饭豆腐馆(全运店)</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -168,30 +169,30 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
-							<div>各种饺子</div>
+						<div class="business-info-explain">
+							<div>小锅套餐</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
@@ -199,13 +200,13 @@
 				</li>
 				<li>
 					<img src="img/sj03.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>麦当劳麦乐送(全运路店)</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -213,30 +214,30 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
-							<div>各种饺子</div>
+						<div class="business-info-explain">
+							<div>汉堡薯条</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
@@ -244,13 +245,13 @@
 				</li>
 				<li>
 					<img src="img/sj04.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>米村拌饭(浑南店)</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -258,30 +259,30 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
-							<div>各种饺子</div>
+						<div class="business-info-explain">
+							<div>各式拌饭</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
@@ -289,13 +290,13 @@
 				</li>
 				<li>
 					<img src="img/sj05.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>申记串道(中海康城店)</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -303,30 +304,30 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
-							<div>各种饺子</div>
+						<div class="business-info-explain">
+							<div>烤串炸串</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
@@ -334,13 +335,13 @@
 				</li>
 				<li>
 					<img src="img/sj06.png">
-					<div class="bussiness-info">
-						<div class="bussiness-info-h">
+					<div class="business-info">
+						<div class="business-info-h">
 							<h3>半亩良田排骨米饭</h3>
-							<div class="bussiness-info-like">&#8226;</div>
+							<div class="business-info-like">&#8226;</div>
 						</div>
-						<div class="bussiness-info-star">
-							<div class="bussiness-info-star-left">
+						<div class="business-info-star">
+							<div class="business-info-star-left">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -348,34 +349,54 @@
 								<i class="fa fa-star"></i>
 								<p>4.9 月售345单</p>
 							</div>
-							<div class="bussiness-info-star-right">
+							<div class="business-info-star-right">
 								蜂鸟专送
 							</div>
 						</div>
-						<div class="bussiness-info-delivery">
+						<div class="business-info-delivery">
 							<p>&#165;15起送 | &#165;3配送</p>
 							<p>3.22公里 | 30分钟</p>
 						</div>
-						<div class="bussiness-info-explain">
-							<div>各种饺子</div>
+						<div class="business-info-explain">
+							<div>排骨米饭</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">新</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon">新</div>
 								<p>饿了么新用户首单立减9元</p>
 							</div>
-							<div class="bussiness-info-promotion-right">
+							<div class="business-info-promotion-right">
 								<p>2个活动</p>
 								<i class="fa fa-caret-down"></i>
 							</div>
 						</div>
-						<div class="bussiness-info-promotion">
-							<div class="bussiness-info-promotion-left">
-								<div class="bussiness-info-promotion-left-incon">特</div>
+						<div class="business-info-promotion">
+							<div class="business-info-promotion-left">
+								<div class="business-info-promotion-left-incon" style="background-color: #f1884f;">特</div>
 								<p>特价商品5元起</p>
 							</div>
 						</div>
 					</div>
+				</li>
+			</ul>
+		
+			<!-- 底部菜单 -->
+			<ul class="footer">
+				<li>
+					<i class="fa fa-home"></i>
+					<p>首页</p>
+				</li>
+				<li>
+					<i class="fa fa-compass"></i>
+					<p>发现</p>
+				</li>
+				<li>
+					<i class="fa fa-file-text-o"></i>
+					<p>订单</p>
+				</li>
+				<li>
+					<i class="fa fa-user-o"></i>
+					<p>我的</p>
 				</li>
 			</ul>
 		</div>
