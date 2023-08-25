@@ -196,7 +196,7 @@
 				<!-- 不够起送费 -->
 				<!--<div class="cart-right-item">&#165;15起送</div>-->
 				<!-- 达到起送费 -->
-				<div class="cart-right-item" onclick="location.href='order.html'">去结算</div>
+				<div class="cart-right-item" @click="toOrder">去结算</div>
 			</div>
 		</div>
 
@@ -204,25 +204,30 @@
 </template>
 
 <script>
-	// export default{
-	// 	name:'BusinessInfo',
-	// 	data(){
-	// 		return {
-	// 			businessId:this.$query.businessId,
-	// 			business:{}
-	// 		}
-	// 	},
-	// 	created(){
-	// 	    //根据businessId查询商家信息
-	// 		this.$axios.post('BusinessController/getBuinessById',this.$qs.stringify({
-	// 			businessId:this.businessId
-	// 		})).then(response=>{
-	// 			this.business=response.data;
-	// 		}).catch(errpr=>{
-	// 			console.error(error);
-	// 		})
-	// 	},
-	// }
+	export default {
+		name: 'BusinessInfo',
+		data() {
+			// return {
+			// 	businessId:this.$query.businessId,
+			// 	business:{}
+			// }
+		},
+		// created(){
+		//     //根据businessId查询商家信息
+		// 	this.$axios.post('BusinessController/getBuinessById',this.$qs.stringify({
+		// 		businessId:this.businessId
+		// 	})).then(response=>{
+		// 		this.business=response.data;
+		// 	}).catch(errpr=>{
+		// 		console.error(error);
+		// 	})
+		// },
+		methods: {
+			toOrder() {
+				this.$router.push('/orders');
+			}
+		},
+	}
 </script>
 
 <style scoped>
