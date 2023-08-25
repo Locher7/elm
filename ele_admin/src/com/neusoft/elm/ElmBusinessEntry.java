@@ -6,8 +6,10 @@ import com.neusoft.elm.po.Admin;
 import com.neusoft.elm.po.Business;
 import com.neusoft.elm.view.AdminView;
 import com.neusoft.elm.view.BusinessView;
+import com.neusoft.elm.view.FoodView;
 import com.neusoft.elm.view.Impl.AdminViewImpl;
 import com.neusoft.elm.view.Impl.BusinessViewImpl;
+import com.neusoft.elm.view.Impl.FoodViewImpl;
 
 public class ElmBusinessEntry {
 
@@ -21,6 +23,7 @@ public class ElmBusinessEntry {
 		
 		
 		BusinessView businessView = new BusinessViewImpl();
+		
 		// log in
 		Business business = businessView.login();
 		if (business != null) {
@@ -47,7 +50,7 @@ public class ElmBusinessEntry {
 						businessView.editBusinessPassword(business.getBusinessId());
 						break;
 					case 4:
-						foodmanager();
+						foodmanager(business.getBusinessId());
 						break;
 					case 5:
 						System.out.println("---------------------欢迎下次访问饿了么后台商家管理系统---------------------");
@@ -65,8 +68,10 @@ public class ElmBusinessEntry {
 		input.close();
 	}
 	
-	private void foodmanager() {
+	private void foodmanager(int businessId) {
 		Scanner input = new Scanner(System.in);
+		
+		FoodView foodView = new FoodViewImpl();
 		
 		int menu = 0;
 		while(menu != 5) {
@@ -81,16 +86,16 @@ public class ElmBusinessEntry {
 			
 			switch (menu) {
 				case 1:
-					System.out.println("1.查看食品列表");
+					foodView.showFoodList(businessId);
 					break;
 				case 2:
-					System.out.println("2.新增食品");
+					foodView.saveFood(businessId);
 					break;
 				case 3:
-					System.out.println("3.修改食品");
+					foodView.updateFood(businessId);
 					break;
 				case 4:
-					System.out.println("4.删除食品");
+					foodView.removeFood(businessId);
 					break;
 				case 5:
 					break;
