@@ -3,6 +3,7 @@ import {
 	createWebHistory
 } from 'vue-router';
 import Index from '../views/Index.vue';
+import BusinessList from '../views/BusinessList.vue';
 
 const routes = [{
 		path: '/',
@@ -13,8 +14,14 @@ const routes = [{
 		path: '/index',
 		name: 'Index',
 		component: Index
+	},
+	{
+		path: '/businessList',
+		name: 'BusinessList',
+		component: BusinessList
 	}
 ];
+
 
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
@@ -27,4 +34,5 @@ router.push = function push(location) {
 	return originalPush.call(this, location).catch(err => err);
 };
 
+  
 export default router;
