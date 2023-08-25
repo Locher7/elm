@@ -4,6 +4,8 @@ import {
 } from 'vue-router';
 import Index from '../views/Index.vue';
 import BusinessList from '../views/BusinessList.vue';
+import BusinessInfo from '../views/BusinessInfo.vue';
+import Orders from '../views/Orders.vue';
 
 const routes = [{
 		path: '/',
@@ -19,6 +21,16 @@ const routes = [{
 		path: '/businessList',
 		name: 'BusinessList',
 		component: BusinessList
+	},
+	{
+		path: '/businessInfo',
+		name: 'BusinessInfo',
+		component: BusinessInfo
+	},
+	{
+		path: '/orders',
+		name: 'Orders',
+		component: Orders
 	}
 ];
 
@@ -34,5 +46,5 @@ router.push = function push(location) {
 	return originalPush.call(this, location).catch(err => err);
 };
 
-  
+
 export default router;

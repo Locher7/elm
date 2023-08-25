@@ -368,10 +368,10 @@
 				</div>
 			</li>
 		</ul>
-		
+
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
-		
+
 	</div>
 </template>
 
@@ -380,11 +380,11 @@
 <script>
 	//导入共通组件
 	import Footer from '../components/Footer.vue';
-	
-	export default{
-		name:'Index',
-		mounted(){
-			document.onscroll = ()=> {
+
+	export default {
+		name: 'Index',
+		mounted() {
+			document.onscroll = () => {
 				//获取滚动条位置
 				let s1 = document.documentElement.scrollTop;
 				let s2 = document.body.scrollTop;
@@ -404,15 +404,15 @@
 				}
 			}
 		},
-		destroyed(){
+		destroyed() {
 			//当切换到其他主件时，就不需要document滚动条事件，所以将此事件去掉
-			document.onscroll=null;
+			document.onscroll = null;
 		},
-		components:{
+		components: {
 			Footer
 		},
-		methods:{
-			toBusinessList(){
+		methods: {
+			toBusinessList() {
 				this.$router.push('/businessList');
 			}
 		},
@@ -790,5 +790,4 @@
 	.wrapper .business li .business-info .business-info-promotion .business-info-promotion-right p {
 		margin-right: 2vw;
 	}
-
 </style>

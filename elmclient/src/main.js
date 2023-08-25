@@ -43,20 +43,20 @@ app.config.globalProperties.$setLocalStorage = setLocalStorage;
 app.config.globalProperties.$getLocalStorage = getLocalStorage;
 app.config.globalProperties.$removeLocalStorage = removeLocalStorage;
 
-
-router.beforeEach(function(to, from, next) {
-	let user = getSessionStorage('user'); // 使用getSessionStorage获取用户信息
-	// 除了登录、注册、首页、商家列表、商家信息之外，都需要判断是否登录
-	if (!(to.path == '/' || to.path == '/index' || to.path == '/businessList' || to.path == '/businessInfo' || to.path ==
-			'/login' || to.path == '/register')) {
-		if (user == null) {
-			next('/login'); // 重定向到登录页面
-		} else {
-			next(); // 用户已登录，继续路由跳转
-		}
-	} else {
-		next(); // 其他页面不需要登录验证，直接跳转
-	}
-});
+//导航守卫
+// router.beforeEach(function(to, from, next) {
+// 	let user = getSessionStorage('user'); // 使用getSessionStorage获取用户信息
+// 	// 除了登录、注册、首页、商家列表、商家信息之外，都需要判断是否登录
+// 	if (!(to.path == '/' || to.path == '/index' || to.path == '/businessList' || to.path == '/businessInfo' || to.path ==
+// 			'/login' || to.path == '/register')) {
+// 		if (user == null) {
+// 			next('/login'); // 重定向到登录页面
+// 		} else {
+// 			next(); // 用户已登录，继续路由跳转
+// 		}
+// 	} else {
+// 		next(); // 其他页面不需要登录验证，直接跳转
+// 	}
+// });
 
 createApp(App).use(router).mount('#app')
