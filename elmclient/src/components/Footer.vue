@@ -21,17 +21,17 @@
 </template>
 
 <script>
-export default{
-    name:'Footer',
-    methods:{
-        toIndex() {
-			this.$router.push('/index');
-		},
-		toOrderList() {
+	export default {
+		name: 'Footer',
+		methods: {
+			toIndex() {
+				this.$router.push('/index');
+			},
+			toOrderList() {
 				this.$router.push('/orderList');
 			}
-    }
-}
+		}
+	}
 </script>
 
 <style>

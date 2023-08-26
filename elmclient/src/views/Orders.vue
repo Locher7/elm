@@ -52,17 +52,17 @@
 </template>
 
 <script>
-export default{
-    name:'Order',
-    data(){
-        
-    },
-    methods:{
-        toPayment() {
+	export default {
+		name: 'Order',
+		data() {
+
+		},
+		methods: {
+			toPayment() {
 				this.$router.push('/payment');
 			}
-    }
-}
+		}
+	}
 </script>
 
 <style scoped>
