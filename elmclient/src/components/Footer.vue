@@ -1,7 +1,7 @@
 <template>
 	<!-- 底部菜单 -->
 	<ul class="footer">
-		<li>
+		<li @click="toIndex">
 			<i class="fa fa-home"></i>
 			<p>首页</p>
 		</li>
@@ -9,7 +9,7 @@
 			<i class="fa fa-compass"></i>
 			<p>发现</p>
 		</li>
-		<li>
+		<li @click="toOrderList">
 			<i class="fa fa-file-text-o"></i>
 			<p>订单</p>
 		</li>
@@ -21,7 +21,17 @@
 </template>
 
 <script>
-
+export default{
+    name:'Footer',
+    methods:{
+        toIndex() {
+			this.$router.push('/index');
+		},
+		toOrderList() {
+				this.$router.push('/orderList');
+			}
+    }
+}
 </script>
 
 <style>

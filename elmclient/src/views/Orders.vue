@@ -44,7 +44,7 @@
 			<div class="total-left">
 				&#165;49
 			</div>
-			<div class="total-right" onclick="location.href='payment.html'">
+			<div class="total-right" @click="toPayment">
 				去支付
 			</div>
 		</div>
@@ -52,7 +52,17 @@
 </template>
 
 <script>
-
+export default{
+    name:'Order',
+    data(){
+        
+    },
+    methods:{
+        toPayment() {
+				this.$router.push('/payment');
+			}
+    }
+}
 </script>
 
 <style scoped>

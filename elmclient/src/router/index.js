@@ -6,6 +6,10 @@ import Index from '../views/Index.vue';
 import BusinessList from '../views/BusinessList.vue';
 import BusinessInfo from '../views/BusinessInfo.vue';
 import Orders from '../views/Orders.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
+import Payment from '../views/Payment.vue';
+import OrderList from '../views/OrderList.vue';
 
 const routes = [{
 		path: '/',
@@ -31,6 +35,26 @@ const routes = [{
 		path: '/orders',
 		name: 'Orders',
 		component: Orders
+	},
+	{
+		path: '/login',
+		name: 'Login',
+		component: Login
+	},
+	{
+		path: '/register',
+		name: 'Register',
+		component: Register
+	},
+	{
+		path: '/payment',
+		name: 'Payment',
+		component: Payment
+	},
+	{
+		path: '/orderList',
+		name: 'OrderList',
+		component: OrderList
 	}
 ];
 

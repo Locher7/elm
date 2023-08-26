@@ -206,13 +206,16 @@
 <script>
 	export default {
 		name: 'BusinessInfo',
-		data() {
-			// return {
-			// 	businessId:this.$query.businessId,
-			// 	business:{}
-			// }
-		},
+		// data() {
+		// 	return {
+		// 		businessId:this.$query.businessId,
+		// 		business:{},
+		// 		foodArr:[],
+		// 		user:{}
+		// 	}
+		// },
 		// created(){
+		// 	this.user=this.$getSessionStorage('user');
 		//     //根据businessId查询商家信息
 		// 	this.$axios.post('BusinessController/getBuinessById',this.$qs.stringify({
 		// 		businessId:this.businessId
@@ -220,12 +223,33 @@
 		// 		this.business=response.data;
 		// 	}).catch(errpr=>{
 		// 		console.error(error);
-		// 	})
+		// 	});
+
+		// 	//根据businessId查询所属视频信息
+		// 	this.$axios.post('FoodController/listFoodByBusinessId',this.$qs.stringify({
+		// 		businessId:this.businessId
+		// 	})).then(response=>{
+		// 		this.foodArr=response.data;
+		// 		for(let i=0;i<this.foodArr.length;i++){
+		// 			this.foodArr[i].quantity=0;
+		// 		}
+		// 	}).catch(error=>{
+		// 		console.error(error);
+		// 	});
 		// },
 		methods: {
 			toOrder() {
 				this.$router.push('/orders');
-			}
+			},
+			// add(index){
+			// 	//首先做登录验证
+			// 	if(this.user==null){
+			// 		this.$router.push('/login');
+			// 		return
+			// 	}
+
+			// 	//
+			// }
 		},
 	}
 </script>
