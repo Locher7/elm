@@ -12,7 +12,7 @@
 					手机号码:
 				</div>
 				<div class="content">
-					<input type="text" placeholder="请输入手机号">
+					<input type="text"  v-model="userId" placeholder="请输入手机号">
 				</div>
 			</li>
 			<li>
@@ -20,13 +20,13 @@
 					密码:
 				</div>
 				<div class="content">
-					<input type="password" placeholder="请输入密码">
+					<input type="password" v-model="password" placeholder="请输入密码">
 				</div>
 			</li>
 		</ul>
 
 		<div class="button-login">
-			<button>登录</button>
+			<button @click="login">登录</button>
 		</div>
 
 		<div class="divider">
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { setSessionStorage } from '@/common';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Login',
@@ -57,10 +58,38 @@
 			Footer
 		},
 		methods: {
+			login(){
+				if(this.userId==''){
+					alert('手机号码不能为空');
+					return;
+				}
+				if(this.password==''){
+					alert('密码不能为空');
+					return;
+				}
+
+				//登录请求
+				this.$axios.post('UserController/getUserByIdByPass',this.$qs.stringify({
+					userId:this.userId,
+					password:this.password
+				})).then(response=>{
+					let user=response.data;
+					if(user==null){
+						alert('用户名或密码不正确!');
+					}else{
+						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中
+						user.userImg='';
+						this.$setSessionStorage('user',user);
+						this.$go(-1);
+					}
+				}).catch(error=>{
+					console.error(error);
+				});
+			},
 			toRegister() {
 				this.$router.push('/register');
 			}
-		}
+		},
 	}
 </script>
 

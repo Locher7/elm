@@ -7,97 +7,15 @@
 
 		<!-- 商家列表 -->
 		<ul class="business">
-			<!-- <li @click="toBusinessInfo(itme.businessId)"> -->
-				<li @click="toBusinessInfo(businessId)">
+			<li v-for="item in businessArr" :key="item.id">
 				<div class="business-img">
-					<img src="../assets/sj01.png">
-					<div class="business-img-quantity">3</div>
+					<img src="item.businessImg">
+					<div class="business-img-quantity" v-show="item.quantity>0">3</div>
 				</div>
 				<div class="business-info">
-					<h3>万家饺子(软件园E18店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>各种饺子炒菜</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj02.png">
-					<div class="business-img-quantity">1</div>
-				</div>
-				<div class="business-info">
-					<h3>小锅饭豆腐馆(全运店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>小锅套餐</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj03.png">
-				</div>
-				<div class="business-info">
-					<h3>麦当劳麦乐送(全运路店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>汉堡薯条</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj04.png">
-				</div>
-				<div class="business-info">
-					<h3>米村拌饭(浑南店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>各种炒菜拌饭</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj05.png">
-				</div>
-				<div class="business-info">
-					<h3>申记串道(中海康城店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>烤串炸串</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj06.png">
-				</div>
-				<div class="business-info">
-					<h3>半亩良田排骨米饭</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>排骨米饭套餐</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj07.png">
-				</div>
-				<div class="business-info">
-					<h3>茶兮鲜果饮品(国际软件园店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>甜品饮品</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj08.png">
-				</div>
-				<div class="business-info">
-					<h3>唯一水果捞(软件园E18店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>新鲜水果</p>
-				</div>
-			</li>
-			<li onclick="location.href='businessInfo.html'">
-				<div class="business-img">
-					<img src="../assets/sj09.png">
-				</div>
-				<div class="business-info">
-					<h3>满园春饼(全运路店)</h3>
-					<p>&#165;15起送 | &#165;3配送</p>
-					<p>各种春饼</p>
+					<h3>{{ item.businessName }}</h3>
+					<p>&#165;{{ item.starPrice }}起送 | &#165;{{ deliveryPrice }}配送</p>
+					<p>{{ item.businessExplain }}</p>
 				</div>
 			</li>
 		</ul>
@@ -112,22 +30,22 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'BusinessList',
-		// data() {
-		// 	return{
-		// 		orderTypedId:this.$route.query.orderTypedId,
-		// 		businessArr:[]
-		// 	}
-		// },
-		// created(){
-		//     //根据orderTypeId查询商家信息
-		//     this.$axios.post('BusinessController/listBusinessByOrderTypeId',this.$qs.stringify({
-		//         orderTypedId:this.orderTypedId
-		//     })).then(response=>{
-		//         this.businessArr=response.data;
-		//     }).catch(errpr=>{
-		//         console.error(error);
-		//     })
-		// },
+		data() {
+			return{
+				orderTypedId:this.$route.query.orderTypedId,
+				businessArr:[]
+			}
+		},
+		created(){
+		    //根据orderTypeId查询商家信息
+			this.$axios.post('BusinessController/listBusinessByOrderTypeId',this.$qs.stringify({
+				orderTypedId:this.orderTypedId
+			})).then(response=>{
+				this.businessArr=response.data;
+			}).catch(error=>{
+				console.error(error);
+			})
+		},
 		components: {
 			Footer
 		},

@@ -413,8 +413,8 @@
 		},
 		methods: {
 			toBusinessList(orderTypedId) {
-				// this.$router.push({ path: '/businessList', query: { orderTypeId: orderTypeId } });
-				this.$router.push({ path: '/businessList'});
+				this.$router.push({ path: '/businessList', query: { orderTypeId: orderTypeId } });
+				// this.$router.push({ path: '/businessList'});
 			}
 		},
 	}

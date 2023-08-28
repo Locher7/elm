@@ -7,174 +7,34 @@
 
 		<!-- 商家logo -->
 		<div class="business-logo">
-			<img src="../assets/sj01.png">
+			<img :src="business.businessImg">
 		</div>
 
 		<!-- 商家信息 -->
 		<div class="business-info">
-			<h1>万家饺子(软件园E18店)</h1>
-			<p>&#165;15起送 配送&#165;3</p>
-			<p>特色美食</p>
+			<h1>{{ business.businessName }}</h1>
+			<p>&#165;{{ business.starPrice }}起送 {{ business.deliveryPrice }}配送&#165;3</p>
+			<p>{{ business.businessExplain }}</p>
 		</div>
 
 		<!-- 食品列表 -->
 		<ul class="food">
-			<li>
+			<li v-for="(item,index) in foodArr" :key="item.id">
 				<div class="food-left">
-					<img src="../assets/sp01.png">
+					<img :src="item.foodImg">
 					<div class="food-left-info">
-						<h3>纯肉鲜肉(水饺)</h3>
-						<p>新鲜猪肉</p>
-						<p>&#165;15</p>
+						<h3>{{ item.foodName }}</h3>
+						<p>{{ item.foodExplain }}</p>
+						<p>&#165;{{ item.foodPrice }}</p>
 					</div>
 				</div>
 				<div class="food-right">
 					<div>
-						<i class="fa fa-minus-circle"></i>
+						<i class="fa fa-minus-circle" @click="minus(index)" v-show="item.quantity!=0"></i>
 					</div>
-					<p><span>2</span></p>
+					<p><span v-show="item.quantity!=0">{{ item.quantity }}</span></p>
 					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp02.png">
-					<div class="food-left-info">
-						<h3>玉米鲜肉(水饺)</h3>
-						<p>玉米鲜肉</p>
-						<p>&#165;16</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div>
-						<i class="fa fa-minus-circle"></i>
-					</div>
-					<p><span>3</span></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp03.png">
-					<div class="food-left-info">
-						<h3>虾仁三鲜(蒸饺)</h3>
-						<p>新鲜虾仁</p>
-						<p>&#165;22</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div>
-						<i class="fa fa-minus-circle"></i>
-					</div>
-					<p><span>1</span></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp04.png">
-					<div class="food-left-info">
-						<h3>素三鲜(蒸饺)</h3>
-						<p>素三鲜</p>
-						<p>&#165;13</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp05.png">
-					<div class="food-left-info">
-						<h3>角瓜鸡蛋(蒸饺)</h3>
-						<p>新鲜鸡蛋</p>
-						<p>&#165;12</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp06.png">
-					<div class="food-left-info">
-						<h3>小白菜肉(水饺)</h3>
-						<p>新鲜猪肉</p>
-						<p>&#165;15</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp07.png">
-					<div class="food-left-info">
-						<h3>芹菜牛肉(水饺)</h3>
-						<p>新鲜牛肉</p>
-						<p>&#165;15</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp08.png">
-					<div class="food-left-info">
-						<h3>虾腰鲜肉(水饺)</h3>
-						<p>新鲜猪肉</p>
-						<p>&#165;20</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="food-left">
-					<img src="../assets/sp09.png">
-					<div class="food-left-info">
-						<h3>青椒鲜肉(水饺)</h3>
-						<p>新鲜猪肉</p>
-						<p>&#165;15</p>
-					</div>
-				</div>
-				<div class="food-right">
-					<div></div>
-					<p></p>
-					<div>
-						<i class="fa fa-plus-circle"></i>
+						<i class="fa fa-plus-circle" @click="add(index)"></i>
 					</div>
 				</div>
 			</li>
@@ -206,50 +66,81 @@
 <script>
 	export default {
 		name: 'BusinessInfo',
-		// data() {
-		// 	return {
-		// 		businessId:this.$query.businessId,
-		// 		business:{},
-		// 		foodArr:[],
-		// 		user:{}
-		// 	}
-		// },
-		// created(){
-		// 	this.user=this.$getSessionStorage('user');
-		//     //根据businessId查询商家信息
-		// 	this.$axios.post('BusinessController/getBuinessById',this.$qs.stringify({
-		// 		businessId:this.businessId
-		// 	})).then(response=>{
-		// 		this.business=response.data;
-		// 	}).catch(errpr=>{
-		// 		console.error(error);
-		// 	});
+		data() {
+			return {
+				businessId:this.$query.businessId,
+				business:{},
+				foodArr:[],
+				user:{}
+			}
+		},
+		created(){
+			this.user=this.$getSessionStorage('user');
+		    //根据businessId查询商家信息
+			this.$axios.post('BusinessController/getBusinessById',this.$qs.stringify({
+				businessId:this.businessId
+			})).then(response=>{
+				this.business=response.data;
+			}).catch(error=>{
+				console.error(error);
+			});
 
-		// 	//根据businessId查询所属视频信息
-		// 	this.$axios.post('FoodController/listFoodByBusinessId',this.$qs.stringify({
-		// 		businessId:this.businessId
-		// 	})).then(response=>{
-		// 		this.foodArr=response.data;
-		// 		for(let i=0;i<this.foodArr.length;i++){
-		// 			this.foodArr[i].quantity=0;
-		// 		}
-		// 	}).catch(error=>{
-		// 		console.error(error);
-		// 	});
-		// },
+			//根据businessId查询所属食品信息
+			this.$axios.post('FoodController/listFoodByBusinessId',this.$qs.stringify({
+				businessId:this.businessId
+			})).then(response=>{
+				this.foodArr=response.data;
+				for(let i=0;i<this.foodArr.length;i++){
+					this.foodArr[i].quantity=0;
+				}
+			}).catch(error=>{
+				console.error(error);
+			});
+		},
 		methods: {
 			toOrder() {
 				this.$router.push('/orders');
 			},
-			// add(index){
-			// 	//首先做登录验证
-			// 	if(this.user==null){
-			// 		this.$router.push('/login');
-			// 		return
-			// 	}
+			add(index){
+				//首先做登录验证
+				if(this.user==null){
+					this.$router.push('/login');
+					return
+				}
 
-			// 	//
-			// }
+				if(this.foodArr[index].quantity==0){
+					//做insert
+					this.savaCart(index);
+				}else{
+					//update
+				}
+			},
+			minus(index){
+				if(this.foodArr[index].quantity>1){
+					//做update
+				}else{
+					//做delete
+				}
+			},
+			//封装函数
+			savaCart(index){
+				this.$axios.post('CartController/savaCart',this.$qs.stringify({
+				businessId:this.businessId,
+				userId:this.user.userId,
+				foodId:this.foodArr[index].foodId
+			})).then(response=>{
+				if(response.data==1){
+					//此食品数量要更新为1；
+					this.foodArr[index].quantity=1;
+					//让vue监听数量变化
+					this.foodArr.sort();
+				}else{
+					alert('向购物车中添加食品失败!')
+				}
+			}).catch(error=>{
+				console.error(error);
+			});
+			}
 		},
 	}
 </script>
