@@ -7,7 +7,8 @@
 
 		<!-- 商家列表 -->
 		<ul class="business">
-			<li @click="toBusinessInfo">
+			<!-- <li @click="toBusinessInfo(itme.businessId)"> -->
+				<li @click="toBusinessInfo(businessId)">
 				<div class="business-img">
 					<img src="../assets/sj01.png">
 					<div class="business-img-quantity">3</div>
@@ -111,14 +112,12 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'BusinessList',
-		data() {
-			//接口
-			// return{
-			//     orderTypedId:this.$route.query.orderTypedId,
-			//     businessArr:[]
-			// }
-		},
-		//接口
+		// data() {
+		// 	return{
+		// 		orderTypedId:this.$route.query.orderTypedId,
+		// 		businessArr:[]
+		// 	}
+		// },
 		// created(){
 		//     //根据orderTypeId查询商家信息
 		//     this.$axios.post('BusinessController/listBusinessByOrderTypeId',this.$qs.stringify({
@@ -140,8 +139,9 @@
 			}
 		},
 		methods: {
-			toBusinessInfo() {
+			toBusinessInfo(businessId) {
 				this.$router.push('/businessInfo');
+				// this.$router.push({ path: '/businessInfo', query: { businessId: businessId } });
 			}
 		},
 	}

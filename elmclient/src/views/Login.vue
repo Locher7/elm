@@ -4,7 +4,7 @@
 		<header>
 			<p>用户登录</p>
 		</header>
-
+		<img src="../assets/brand.png">
 		<!-- 表单部分 -->
 		<ul class="form-box">
 			<li>
@@ -12,7 +12,7 @@
 					手机号码:
 				</div>
 				<div class="content">
-					<input type="text" placeholder="手机号码">
+					<input type="text" placeholder="请输入手机号">
 				</div>
 			</li>
 			<li>
@@ -20,13 +20,19 @@
 					密码:
 				</div>
 				<div class="content">
-					<input type="password" placeholder="密码">
+					<input type="password" placeholder="请输入密码">
 				</div>
 			</li>
 		</ul>
 
 		<div class="button-login">
 			<button>登录</button>
+		</div>
+
+		<div class="divider">
+			<div class="line"></div>
+			<div class="text">OR</div>
+			<div class="line"></div>
 		</div>
 		<div class="button-register">
 			<button @click="toRegister">注册</button>
@@ -63,8 +69,9 @@
 	.wrapper {
 		width: 100%;
 		height: 100%;
+		
 	}
-
+	
 	/****************** header ****************/
 	.wrapper header {
 		width: 100%;
@@ -82,30 +89,37 @@
 		justify-content: center;
 		align-items: center;
 	}
-
+	.wrapper img{
+		height: 20vh;
+		width: 50vw;
+		display: block;
+		margin: 20vw auto 0vw auto;
+	}
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
 		width: 100%;
-		margin-top: 12vw;
 	}
 
 	.wrapper .form-box li {
 		box-sizing: border-box;
-		padding: 4vw 3vw 0 3vw;
-
+		margin: 6vw 10vw 0 10vw;
 		display: flex;
 		align-items: center;
+		border: #f4eeee solid;
+		border-width: 0px 0px 1.8px 0px;
 	}
 
 	.wrapper .form-box li .title {
+		margin: 2vw 0vw;
 		flex: 0 0 18vw;
-		font-size: 3vw;
-		font-weight: 700;
+		font-size: 3.8vw;
+		font-weight: 550;
 		color: #666;
 	}
 
 	.wrapper .form-box li .content {
 		flex: 1;
+		margin: 2vw 0vw 2vw 2vw;
 	}
 
 	.wrapper .form-box li .content input {
@@ -113,23 +127,24 @@
 		outline: none;
 		width: 100%;
 		height: 4vw;
-		font-size: 3vw;
+		font-size: 3.5vw;
+		background-color: transparent;
 	}
 
 	.wrapper .button-login {
 		width: 100%;
 		box-sizing: border-box;
-		padding: 4vw 3vw 0 3vw;
+		padding: 10vw 10vw 0vw 10vw;
 	}
 
 	.wrapper .button-login button {
 		width: 100%;
-		height: 10vw;
-		font-size: 3.8vw;
+		height: 13vw;
+		font-size: 5vw;
 		font-weight: 700;
 		color: #fff;
-		background-color: #38ca73;
-		border-radius: 4px;
+		background-color: #0097ff;
+		border-radius: 50px;
 
 		border: none;
 		outline: none;
@@ -138,56 +153,42 @@
 	.wrapper .button-register {
 		width: 100%;
 		box-sizing: border-box;
-		padding: 4vw 3vw 0 3vw;
+		padding: 0vw 10vw 0 10vw;
 	}
 
 	.wrapper .button-register button {
 		width: 100%;
-		height: 10vw;
-		font-size: 3.8vw;
+		height: 13vw;
+		font-size: 5vw;
 		font-weight: 700;
 		color: #666;
 		background-color: #eee;
-		border-radius: 4px;
+		border-radius: 50px;
 
 		border: none;
 		outline: none;
 		border: solid 1px #ddd;
 	}
 
-	/****************** 底部菜单 ****************/
-	.wrapper .footer {
-		width: 100%;
-		height: 14vw;
-		border-top: solid 1px #ddd;
-		background-color: #fff;
 
-		position: fixed;
-		left: 0;
-		bottom: 0;
-
+	.wrapper .divider{
 		display: flex;
-		justify-content: space-around;
-		align-items: center;
+		margin: 5vw 6vw;
 	}
-
-	.wrapper .footer li {
+	.wrapper .line {
+		height: 1px;
+		width: 30vw;
+		background-color: #d6d2d2;
+		margin: 3vw 6vw 0vw 6vw;
+	}
+	.wrapper .text {
+		height: 100%;
+		width: 34px;
+		color: #d6d2d2;
+		font-size: 17px;
+		text-align: center;
 		display: flex;
-		flex-direction: column;
+		align-items: center;
 		justify-content: center;
-		align-items: center;
-
-		color: #999;
-		user-select: none;
-		cursor: pointer;
-	}
-
-	.wrapper .footer li p {
-		font-size: 2.8vw;
-
-	}
-
-	.wrapper .footer li i {
-		font-size: 5vw;
 	}
 </style>
