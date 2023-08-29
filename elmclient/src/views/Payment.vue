@@ -9,25 +9,22 @@
 		<h3>订单信息: </h3>
 		<div class="order-info">
 			<p>
-				万家饺子(软件园E18店)
-				<i class="fa fa-caret-down" id="showBtn"></i>
+				{{ orders.business.businessName }}
+				<i class="fa fa-caret-down" @click="detailetShow"></i>
 			</p>
-			<p>&#165;49</p>
+			<p>&#165;{{ orders.orderTotal }}</p>
 		</div>
 
 		<!-- 订单明细 -->
-		<ul class="order-detailed" id="detailedBox">
-			<li>
-				<p>纯肉鲜肉(水饺) x 2</p>
-				<p>&#165;30</p>
+		<ul class="order-detailed" v-show="isShowDetailet">
+			<li v-for="item in orders.list" :key="item.id">
+				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
+				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
-			<li>
-				<p>玉米鲜肉(水饺) x 1</p>
-				<p>&#165;16</p>
-			</li>
+			
 			<li>
 				<p>配送费</p>
-				<p>&#165;3</p>
+				<p>&#165;{{ orders.business.deliveryPrice }}</p>
 			</li>
 		</ul>
 
@@ -53,11 +50,50 @@
 
 <script>
 	import Footer from '../components/Footer.vue';
+	
 	export default {
-		name: 'Paymeny',
+		name: 'Payment',
 		data() {
-
+			return{
+				orderId:this.$route.query.orderId,
+				order:{
+					business:{}
+				},
+				isShowDetailet:false
+			}
 		},
+
+		created(){
+			this.$axios.post('OrderController/getOrderById',this.$qs.stringify({
+				orderId:this.orderId
+			})).then(response=>{
+				this.orders=response.data;
+				console.log(this.orders)
+			}).catch(error=>{
+				console.error(error);
+			});
+		},
+
+		mounted(){
+			//一旦路由到在线支付组件，就不能回到订单确认组件
+			//先将当前url添加到history对象中
+			history.pushState(null,null,document.URL);
+			//popstate事件能够监听history对象的变化
+			window.onpopstate=()=>{
+				this.$router.push('/index');
+			}
+		},
+
+		destroyed(){
+			window.onpopstate=null;
+		},
+
+		methods:{
+			detailetShow(){
+				this.isShowDetailet=!this.isShowDetailet;
+			}
+		},
+
 		components: {
 			Footer
 		}

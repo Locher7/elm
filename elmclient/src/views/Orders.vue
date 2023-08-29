@@ -78,12 +78,33 @@
 		},
 
 		methods: {
-			// toPayment() {
-			// 	this.$router.push('/payment');
-			// },
 			toUserAddress(){
-				this.$router.push({path:'/userAddress'})
-			}
+				this.$router.push({path:'/userAddress',query:{businessId:this.businessId}});
+			},
+			toPayment() {
+				if(this.deliveryaddress==null){
+					alert('请选择送货地址');
+					return;
+				}
+				
+				//创建订单
+				this.$axios.post('OrderController/createOrders',this.$qs.stringify({
+					userId:this.user.userId,
+					businessId:this.businessId,
+					daId:this.deliveryaddress,
+					orderTotal:this.totalPrice
+				})).then(response=>{
+					let orderId=response.data;
+					if(orderId>0){
+						this.$router.push({path:'/payment',query:{orderId:orderId}});
+					}else{
+						alter('创建订单失败');
+					}
+				}).catch(error=>{
+					console.error(error);
+				});
+					
+				},
 		},
 
 		computed:{
