@@ -42,11 +42,20 @@
 	width: 100%;
 	margin-left: 3vw;
 }
-.wrapper .address li .address-info p:first-child{
+.wrapper .address li .address-info .address-info-detailed{
+	display: flex;
+	align-items: center;
+}
+.wrapper .address li .address-info .address-info-detailed p:first-child{
+	font-size: 5vw;
+	color: #777;
+	margin-right: 2vw;
+}
+.wrapper .address li .address-info .address-info-detailed p:last-child{
 	font-size: 5vw;
 	color: #777;
 }
-.wrapper .address li .address-info p:last-child{
+.wrapper .address li .address-info p{
 	font-size: 4vw;
 	color: #777;
 }
