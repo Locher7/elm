@@ -43,20 +43,20 @@
 		<!-- 购物车 -->
 		<div class="cart">
 			<div class="cart-left">
-				<div class="cart-left-icon">
+				<div class="cart-left-icon" :style="totalQuantity==0?'background-color:#505051;':'background-color:#3190E8;'">
 					<i class="fa fa-shopping-cart"></i>
-					<div class="cart-left-icon-quantity">3</div>
+					<div class="cart-left-icon-quantity" v-show="totalQuantity!=0">{{ totalQuantity }}</div>
 				</div>
 				<div class="cart-left-info">
-					<p>&#165;12.88</p>
-					<p>另需配送费3元</p>
+					<p>&#165;{{ totalPrice }}</p>
+					<p>另需配送费{{ business.deliveryPrice }}元</p>
 				</div>
 			</div>
 			<div class="cart-right">
 				<!-- 不够起送费 -->
-				<!--<div class="cart-right-item">&#165;15起送</div>-->
+				<div class="cart-right-item" v-show="totalSettle<business.starPrice" style="background-color: #535356;cursor: default;">&#165;{{ business.starPrice }}起送</div>
 				<!-- 达到起送费 -->
-				<div class="cart-right-item" @click="toOrder">去结算</div>
+				<div class="cart-right-item"  @click="toOrder" v-show="totalSettle>=business.starPrice">去结算</div>
 			</div>
 		</div>
 
@@ -93,14 +93,42 @@
 				for(let i=0;i<this.foodArr.length;i++){
 					this.foodArr[i].quantity=0;
 				}
+
+				//如果已登录，需要去查询购物车中是否已经选购了某个食品
+				if(this.user!=null){
+					this.listCart();
+				}
 			}).catch(error=>{
 				console.error(error);
 			});
 		},
 		methods: {
 			toOrder() {
-				this.$router.push('/orders');
+				this.$router.push({ path: '/orders', query: { businessId: this.business.businessId } });
 			},
+			
+			listCart(){
+				this.$axios.post('CartController/listCart',this.$qs.stringify({
+				businessId:this.businessId,
+				userId:this.user.userId,
+			})).then(response=>{
+				let cartArr=response.data;
+				//遍历所有食品列表
+				for(let foodItem of this.foodArr){
+					foodItem.quantity=0;
+					for(let cartItem of cartArr){
+						if(cartItem.foodId==foodItem.foodId){
+							foodItem.quantity=cartItem.quantity;
+						}
+					}
+				}
+				this.foodArr.sort();
+			}).catch(error=>{
+				console.error(error);
+			});
+			},
+			
+
 			add(index){
 				//首先做登录验证
 				if(this.user==null){
@@ -112,17 +140,23 @@
 					//做insert
 					this.savaCart(index);
 				}else{
-					//update
+					//做update
+					this.updateCart(index,1);
 				}
 			},
+
 			minus(index){
 				if(this.foodArr[index].quantity>1){
 					//做update
+					this.updateCart(index,-1);
 				}else{
 					//做delete
+					this.removeCart(index);
 				}
 			},
+
 			//封装函数
+			//增加一个食品
 			savaCart(index){
 				this.$axios.post('CartController/savaCart',this.$qs.stringify({
 				businessId:this.businessId,
@@ -140,7 +174,73 @@
 			}).catch(error=>{
 				console.error(error);
 			});
-			}
+			},
+
+			//更新食品数量
+			updateCart(index,num){
+				this.$axios.post('CartController/updateCart',this.$qs.stringify({
+				businessId:this.businessId,
+				userId:this.user.userId,
+				foodId:this.foodArr[index].foodId,
+				quantity:this.foodArr[index].quantity+num
+			})).then(response=>{
+				if(response.data==1){
+					//此食品数量要更新为1或-1；
+					this.foodArr[index].quantity+=num;
+					//让vue监听数量变化,视图层发生变化
+					this.foodArr.sort();
+				}else{
+					alert('向购物车中更新食品失败!')
+				}
+			}).catch(error=>{
+				console.error(error);
+			});
+			},
+
+			//删除食品数量
+			removeCart(index){
+				this.$axios.post('CartController/removeCart',this.$qs.stringify({
+				businessId:this.businessId,
+				userId:this.user.userId,
+				foodId:this.foodArr[index].foodId,
+			})).then(response=>{
+				if(response.data==1){
+					//此食品数量要更新为0；视图的减号和数量要消失
+					this.foodArr[index].quantity=0;
+					//让vue监听数量变化,视图层发生变化
+					this.foodArr.sort();
+				}else{
+					alert('从购物车中删除食品失败!')
+				}
+			}).catch(error=>{
+				console.error(error);
+			});
+			},
+
+			//计算属性
+			computed:{
+				//食品总价格
+				totalPrice(){
+					let total=0;
+					for(let item of this.foodArr){
+						total+=item.foodPrice*item.quantity;
+					}
+					return total;
+				},
+				//食品总数量
+				totalQuantity(){
+					let quantity=0;
+					for(let item of this.foodArr){
+						quantity+=item.quantity;
+					}
+					return quantity;
+				},
+				//结算总价格
+				totalSettle(){
+					return this.totalPrice+this.business.deliveryPrice;
+				}
+			},
+
 		},
 	}
 </script>

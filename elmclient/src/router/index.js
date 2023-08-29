@@ -10,6 +10,7 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Payment from '../views/Payment.vue';
 import OrderList from '../views/OrderList.vue';
+import UserAddress from '../views/UserAddress.vue';
 
 const routes = [{
 		path: '/',
@@ -55,6 +56,11 @@ const routes = [{
 		path: '/orderList',
 		name: 'OrderList',
 		component: OrderList
+	},
+	{
+		path: '/userAddress',
+		name: 'UserAddress',
+		component: UserAddress
 	}
 ];
 

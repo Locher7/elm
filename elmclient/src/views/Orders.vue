@@ -8,60 +8,98 @@
 		<!-- 订单信息 -->
 		<div class="order-info">
 			<h5>订单配送至:</h5>
-			<div class="order-info-address">
-				<p>沈阳市浑南区智慧四街1-121号</p>
+			<div class="order-info-address" @click="toUserAddress">
+				<p>{{ deliveryaddress != null ? deliveryaddress.address : '请选择收货地址' }}</p>
 				<i class="fa fa-angle-right"></i>
 			</div>
-			<p>习先生 13656784321</p>
+			<p>{{ user.userName }}{{ userSex }} {{ user.userId }}</p>
 		</div>
 
-		<h3>万家饺子(软件园E18店)</h3>
+		<h3>{{ business.businessName }}</h3>
 
 		<!-- 订单明细 -->
 		<ul class="order-detailed">
-			<li>
+			<li v-for="item in cartArr" :key="item.id">
 				<div class="order-detailed-left">
-					<img src="../assets/sp01.png">
-					<p>纯肉鲜肉(水饺) x 2</p>
+					<img :src="item.food.foodImg">
+					<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				</div>
-				<p>&#165;30</p>
-			</li>
-			<li>
-				<div class="order-detailed-left">
-					<img src="../assets/sp02.png">
-					<p>玉米鲜肉(水饺) x 1</p>
-				</div>
-				<p>&#165;16</p>
+				<p>&#165;3{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
 		</ul>
 		<div class="order-deliveryfee">
 			<p>配送费</p>
-			<p>&#165;3</p>
+			<p>&#165;{{ business.deliveryPrice }}</p>
 		</div>
 
 		<!-- 订单合计 -->
 		<div class="total">
-			<div class="total-left">
-				&#165;49
-			</div>
-			<div class="total-right" @click="toPayment">
-				去支付
-			</div>
+			<div class="total-left">&#165;{{ totalPrice }}</div>
+			<div class="total-right" @click="toPayment">去支付</div>
 		</div>
 	</div>
 </template>
 
 <script>
 	export default {
-		name: 'Order',
+		name: 'Orders',
 		data() {
-
-		},
-		methods: {
-			toPayment() {
-				this.$router.push('/payment');
+			return{
+				businessId:this.$route.query.businessId,
+				business:{},
+				user:{},
+				cartArr:[],
+				deliveryaddress:{}
 			}
-		}
+		},
+
+		created(){
+			this.user=this.$getSessionStorage('user');
+			this.deliveryaddress=this.$getLocalStorage(this.user.userId);
+
+			//查询当前商家
+			this.$axios.post('BusinessController/getBusinessById',this.$qs.stringify({
+				businessId:this.businessId
+			})).then(response=>{
+				this.business=response.data;
+			}).catch(error=>{
+				console.error(error);
+			});
+
+			//查询当前用户在购物车中的商家食品列表
+			this.$axios.post('CartController/listCart',this.$qs.stringify({
+				userId:this.user.userId,
+				businessId:this.businessId
+			})).then(response=>{
+				this.cartArr=response.data;
+			}).catch(error=>{
+				console.error(error);
+			});
+		},
+
+		methods: {
+			// toPayment() {
+			// 	this.$router.push('/payment');
+			// },
+			toUserAddress(){
+				this.$router.push({path:'/userAddress'})
+			}
+		},
+
+		computed:{
+			totalPrice(){
+				let totalPrice=0;
+				for(let cartItem of this.cartArr){
+					totalPrice+=cartItem.food.foodPrice*cartItem.quantity;
+				}
+				totalPrice+=this.business.deliveryPrice;
+				return totalPrice;
+			},
+			userSex() {
+				return this.user.userSex === 1 ? '先生' : '女士';
+			}
+		},
+
 	}
 </script>
 
