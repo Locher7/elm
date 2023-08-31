@@ -3,6 +3,7 @@ import {
 } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { API_URL } from './config';
 
 
 import 'font-awesome/css/font-awesome.min.css'
@@ -61,3 +62,6 @@ router.beforeEach(function(to, from, next) {
 });
 
 createApp(App).use(router).mount('#app')
+
+Vue.config.productionTip = false;
+console.log('API URL:', API_URL);
