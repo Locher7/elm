@@ -9,55 +9,25 @@
 		<!-- 订单列表 -->
 		<h3>未支付订单信息 : </h3>
 		<ul class="order">
-			<li>
+				<li v-for="item in unpaidOrders" :key="item.id">
 				<div class="order-info">
 					<p>
-						万家饺子(软件园E18店)
-						<i class="fa fa-caret-down"></i>
+						{{ item.business.businessName }}
+						<i class="fa fa-caret-down" @click="detailetShow(item)"></i>
 					</p>
 					<div class="order-info-right">
-						<p>&#165;49</p>
+						<p>&#165;{{ item.orderTotal }}</p>
 						<div class="order-info-right-icon">去支付</div>
 					</div>
 				</div>
-				<ul class="order-detailed">
-					<li>
-						<p>纯肉鲜肉(水饺) x 2</p>
-						<p>&#165;30</p>
-					</li>
-					<li>
-						<p>玉米鲜肉(水饺) x 1</p>
-						<p>&#165;16</p>
+				<ul class="order-detailed" v-show="item.isShowDetailet">
+					<li v-for="odItem in item.list" :key="odItem.id">
+						<p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
+						<p>&#165;{{ odItem.food.foodPrice*odItem.quantity }}</p>
 					</li>
 					<li>
 						<p>配送费</p>
-						<p>&#165;3</p>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<div class="order-info">
-					<p>
-						小锅饭豆腐馆(全运店)
-						<i class="fa fa-caret-down"></i>
-					</p>
-					<div class="order-info-right">
-						<p>&#165;49</p>
-						<div class="order-info-right-icon">去支付</div>
-					</div>
-				</div>
-				<ul class="order-detailed">
-					<li>
-						<p>纯肉鲜肉(水饺) x 2</p>
-						<p>&#165;30</p>
-					</li>
-					<li>
-						<p>玉米鲜肉(水饺) x 1</p>
-						<p>&#165;16</p>
-					</li>
-					<li>
-						<p>配送费</p>
-						<p>&#165;3</p>
+						<p>&#165;{{ item.business.deliveryPrice }}</p>
 					</li>
 				</ul>
 			</li>
@@ -65,53 +35,24 @@
 
 		<h3>已支付订单信息 : </h3>
 		<ul class="order">
-			<li>
+			<li v-for="item in paidOrders" :key="item.id">
 				<div class="order-info">
 					<p>
-						万家饺子(软件园E18店)
-						<i class="fa fa-caret-down"></i>
+						{{ item.business.businessName }}
+						<i class="fa fa-caret-down" @click="detailetShow(item)"></i>
 					</p>
 					<div class="order-info-right">
-						<p>&#165;49</p>
+						<p>&#165;{{ item.orderTotal }}</p>
 					</div>
 				</div>
-				<ul class="order-detailed">
-					<li>
-						<p>纯肉鲜肉(水饺) x 2</p>
-						<p>&#165;30</p>
-					</li>
-					<li>
-						<p>玉米鲜肉(水饺) x 1</p>
-						<p>&#165;16</p>
+				<ul class="order-detailed" v-show="item.isShowDetailet">
+					<li v-for="odItem in item.list" :key="odItem.id">
+						<p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
+						<p>&#165;{{ odItem.food.foodPrice*odItem.quantity }}</p>
 					</li>
 					<li>
 						<p>配送费</p>
-						<p>&#165;3</p>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<div class="order-info">
-					<p>
-						小锅饭豆腐馆(全运店)
-						<i class="fa fa-caret-down"></i>
-					</p>
-					<div class="order-info-right">
-						<p>&#165;49</p>
-					</div>
-				</div>
-				<ul class="order-detailed">
-					<li>
-						<p>纯肉鲜肉(水饺) x 2</p>
-						<p>&#165;30</p>
-					</li>
-					<li>
-						<p>玉米鲜肉(水饺) x 1</p>
-						<p>&#165;16</p>
-					</li>
-					<li>
-						<p>配送费</p>
-						<p>&#165;3</p>
+						<p>&#165;{{ item.business.deliveryPrice }}</p>
 					</li>
 				</ul>
 			</li>
@@ -127,6 +68,44 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'OrderList',
+		data(){
+			return{
+				orderArr:[],
+				user:{}
+			}
+		},
+
+		created(){
+			this.user=this.$getSessionStorage('user');
+			//根据businessId查询商家信息
+			this.$axios.post('OrdersController/listOrdersByUserId',this.$qs.stringify({
+				UserId:this.UserId
+			})).then(response=>{
+				let result =response.data
+				for(let orders of result){
+					orders.isShowDetailet=false;
+				}
+				this.orderArr=result;
+			}).catch(error=>{
+				console.error(error);
+			});
+		},
+
+		computed: {
+			unpaidOrders() {
+				return this.orderArr.filter(item => item.orderState === 0);
+			},
+			paidOrders() {
+				return this.orderArr.filter(item => item.orderState === 1);
+			}
+		},
+
+		methods:{
+			detailetShow(orders){
+				orders.isShowDetailet=!orders.isShowDetailet
+			}
+		},
+
 		components: {
 			Footer
 		},

@@ -11,6 +11,7 @@ import Register from '../views/Register.vue';
 import Payment from '../views/Payment.vue';
 import OrderList from '../views/OrderList.vue';
 import UserAddress from '../views/UserAddress.vue';
+import AddUserAddress from '../views/AddUserAddress.vue';
 
 const routes = [{
 		path: '/',
@@ -61,6 +62,11 @@ const routes = [{
 		path: '/userAddress',
 		name: 'UserAddress',
 		component: UserAddress
+	},
+	{
+		path: '/addUserAddress',
+		name: 'AddUserAddress',
+		component: AddUserAddress
 	}
 ];
 

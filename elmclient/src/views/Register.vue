@@ -12,7 +12,7 @@
 					手机号码:
 				</div>
 				<div class="content">
-					<input type="text" placeholder="请输入手机号码">
+					<input type="text" @blur="checkUserId" v-model="user.userId" placeholder="请输入手机号码">
 				</div>
 			</li>
 			<li>
@@ -20,7 +20,7 @@
 					密码:
 				</div>
 				<div class="content">
-					<input type="password" placeholder="请输入密码">
+					<input type="password" v-model="user.password" placeholder="请输入密码">
 				</div>
 			</li>
 			<li>
@@ -28,22 +28,28 @@
 					确认密码:
 				</div>
 				<div class="content">
-					<input type="password" placeholder="请确认密码">
+					<input type="password" v-model="confirmPassword" placeholder="请确认密码">
 				</div>
 			</li>
 			<li>
 				<div class="title">
-					性别:
+					用户名称:
 				</div>
+				<div class="content">
+					<input type="password" v-model="user.userName" placeholder="请输入用户名称">
+				</div>
+			</li>
+			<li>
+				<div class="title">性别:</div>
 				<div class="content" style="font-size: 3vw;">
-					<input type="radio" name="sex" checked style="width: 6vw;height: 3.2vw;">男
-					<input type="radio" name="sex" style="width: 6vw;height: 3.2vw;">女
+					<input type="radio" v-model="user.userSex" value="1" style="width: 6vw;height: 3.2vw;">男
+					<input type="radio" v-model="user.userSex" value="0" style="width: 6vw;height: 3.2vw;">女
 				</div>
 			</li>
 		</ul>
 
 		<div class="button-register">
-			<button @click="toLogin">注册</button>
+			<button @click="register">注册</button>
 		</div>
 
 		<!-- 底部菜单 -->
@@ -57,16 +63,74 @@
 	export default {
 		name: 'Register',
 		data() {
-
+			return {
+				user:{
+					userId:'',
+					password:'',
+					userName:'',
+					userSex:1
+				},
+				confirmPassword:''
+			}
 		},
+
 		components: {
 			Footer
 		},
+
 		methods: {
-			toLogin() {
-				this.$router.push('/login');
-			}
-		}
+
+			checkUserId(){
+				this.$axios.post('UserController/getUserById',this.$qs.stringify({
+					userId: this.user.userId,
+				})).then(response=>{
+					let user=response.data;
+					if(response.data==1){
+						this.user.userId='';
+						alert('此手机号码已存在!')
+					}
+				}).catch(error=>{
+					console.error(error);
+				});
+			},
+
+			register(){
+				if(this.user.userId==''){
+					alert('手机号码不能为空!');
+					return;
+				}
+				if(this.user.password==''){
+					alert('密码不能为空!');
+					return;
+				}
+				if(this.user.password !=this.confirmPassword){
+					alert('两次输入的密码不一致!');
+					return;
+				}
+				if(this.user.userName==''){
+					alert('用户名称不能为空!');
+					return;
+				}
+
+				// 创建一个包含 user 属性的对象
+				const userData = {
+					user: this.user,
+				};
+				
+				//注册请求
+				this.$axios.post('UserController/saveUser',this.$qs.stringify(userData)).then(response=>{
+					if(response.data>0){
+						alert('注册成功!');
+						this.$router.go(-1);
+					}else{
+						alert('注册失败!');
+					}
+				}).catch(error=>{
+					console.error(error);
+				});
+			},
+			
+		},
 	}
 </script>
 

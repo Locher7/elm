@@ -35,7 +35,7 @@
 			<div class="line"></div>
 		</div>
 		<div class="button-register">
-			<button @click="toRegister">注册</button>
+			<button @click="register">注册</button>
 		</div>
 
 		<!-- 底部菜单 -->
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { setSessionStorage } from '@/common';
+	import { setSessionStorage } from '@/common';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Login',
@@ -86,7 +86,7 @@ import { setSessionStorage } from '@/common';
 					console.error(error);
 				});
 			},
-			toRegister() {
+			register() {
 				this.$router.push('/register');
 			}
 		},

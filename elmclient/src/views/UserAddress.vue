@@ -23,7 +23,7 @@
 			</ul>
 			
 			<!-- 新增地址 -->
-			<div class="address-new">
+			<div class="address-new" @click="toAddUserAddress">
 				<i class="fa fa-plus-circle"></i>
 				<p>新增收货地址</p>
 			</div>
@@ -78,7 +78,10 @@
                 //把用户选择的默认送货地址存储到localStorage
                 this.$setLocalStorage(this.user.userId,deliveryAddress);
                 this.$router.push({path:'/orders',query:{businessId:this.businessId}});
-            }
+            },
+			toAddUserAddress(){
+				this.$router.push({path:'/addUserAddress',query:{businessId:this.businessId}});
+			}
         }
     }
 </script>
