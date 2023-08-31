@@ -16,7 +16,7 @@
 						<p>{{ item.address }}</p>
 					</div>
 					<div class="address-icon">
-						<i class="fa fa-edit"></i>
+						<i class="fa fa-edit" @click="editUserAddress(item.daId)"></i>
 						<i class="fa fa-remove"></i>
 					</div>
 				</li>
@@ -79,8 +79,13 @@
                 this.$setLocalStorage(this.user.userId,deliveryAddress);
                 this.$router.push({path:'/orders',query:{businessId:this.businessId}});
             },
+
 			toAddUserAddress(){
 				this.$router.push({path:'/addUserAddress',query:{businessId:this.businessId}});
+			},
+
+			editUserAddress(daId){
+				this.$router.push({path:'/editUserAddress',query:{businessId:this.businessId,daId:daId}});
 			}
         }
     }

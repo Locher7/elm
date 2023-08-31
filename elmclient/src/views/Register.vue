@@ -112,13 +112,10 @@
 					return;
 				}
 
-				// 创建一个包含 user 属性的对象
-				const userData = {
-					user: this.user,
-				};
-				
 				//注册请求
-				this.$axios.post('UserController/saveUser',this.$qs.stringify(userData)).then(response=>{
+				this.$axios.post('UserController/saveUser',this.$qs.stringify(
+					this.user
+				)).then(response=>{
 					if(response.data>0){
 						alert('注册成功!');
 						this.$router.go(-1);
@@ -162,7 +159,7 @@
 		height: 20vh;
 		width: 50vw;
 		display: block;
-  		margin: 20vw auto 0vw auto;
+		margin: 20vw auto 0vw auto;
 	}
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
