@@ -9,7 +9,7 @@
 		<!-- 订单列表 -->
 		<h3>未支付订单信息 : </h3>
 		<ul class="order">
-				<li v-for="item in unpaidOrders" :key="item.id">
+			<li v-for="item in unpaidOrders" :key="item.id">
 				<div class="order-info">
 					<p>
 						{{ item.business.businessName }}
@@ -68,25 +68,25 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'OrderList',
-		data(){
-			return{
-				orderArr:[],
-				user:{}
+		data() {
+			return {
+				orderArr: [],
+				user: {}
 			}
 		},
 
-		created(){
-			this.user=this.$getSessionStorage('user');
+		created() {
+			this.user = this.$getSessionStorage('user');
 			//根据businessId查询商家信息
-			this.$axios.post('OrdersController/listOrdersByUserId',this.$qs.stringify({
-				UserId:this.UserId
-			})).then(response=>{
-				let result =response.data
-				for(let orders of result){
-					orders.isShowDetailet=false;
+			this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
+				UserId: this.UserId
+			})).then(response => {
+				let result = response.data
+				for (let orders of result) {
+					orders.isShowDetailet = false;
 				}
-				this.orderArr=result;
-			}).catch(error=>{
+				this.orderArr = result;
+			}).catch(error => {
 				console.error(error);
 			});
 		},
@@ -100,9 +100,9 @@
 			}
 		},
 
-		methods:{
-			detailetShow(orders){
-				orders.isShowDetailet=!orders.isShowDetailet
+		methods: {
+			detailetShow(orders) {
+				orders.isShowDetailet = !orders.isShowDetailet
 			}
 		},
 

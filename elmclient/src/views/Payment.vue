@@ -21,7 +21,7 @@
 				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
-			
+
 			<li>
 				<p>配送费</p>
 				<p>&#165;{{ orders.business.deliveryPrice }}</p>
@@ -50,47 +50,47 @@
 
 <script>
 	import Footer from '../components/Footer.vue';
-	
+
 	export default {
 		name: 'Payment',
 		data() {
-			return{
-				orderId:this.$route.query.orderId,
-				order:{
-					business:{}
+			return {
+				orderId: this.$route.query.orderId,
+				order: {
+					business: {}
 				},
-				isShowDetailet:false
+				isShowDetailet: false
 			}
 		},
 
-		created(){
-			this.$axios.post('OrderController/getOrderById',this.$qs.stringify({
-				orderId:this.orderId
-			})).then(response=>{
-				this.orders=response.data;
+		created() {
+			this.$axios.post('OrderController/getOrderById', this.$qs.stringify({
+				orderId: this.orderId
+			})).then(response => {
+				this.orders = response.data;
 				console.log(this.orders)
-			}).catch(error=>{
+			}).catch(error => {
 				console.error(error);
 			});
 		},
 
-		mounted(){
+		mounted() {
 			//一旦路由到在线支付组件，就不能回到订单确认组件
 			//先将当前url添加到history对象中
-			history.pushState(null,null,document.URL);
+			history.pushState(null, null, document.URL);
 			//popstate事件能够监听history对象的变化
-			window.onpopstate=()=>{
+			window.onpopstate = () => {
 				this.$router.push('/index');
 			}
 		},
 
-		destroyed(){
-			window.onpopstate=null;
+		destroyed() {
+			window.onpopstate = null;
 		},
 
-		methods:{
-			detailetShow(){
-				this.isShowDetailet=!this.isShowDetailet;
+		methods: {
+			detailetShow() {
+				this.isShowDetailet = !this.isShowDetailet;
 			}
 		},
 

@@ -44,76 +44,86 @@
 	export default {
 		name: 'Orders',
 		data() {
-			return{
-				businessId:this.$route.query.businessId,
-				business:{},
-				user:{},
-				cartArr:[],
-				deliveryaddress:{}
+			return {
+				businessId: this.$route.query.businessId,
+				business: {},
+				user: {},
+				cartArr: [],
+				deliveryaddress: {}
 			}
 		},
 
-		created(){
-			this.user=this.$getSessionStorage('user');
-			this.deliveryaddress=this.$getLocalStorage(this.user.userId);
+		created() {
+			this.user = this.$getSessionStorage('user');
+			this.deliveryaddress = this.$getLocalStorage(this.user.userId);
 
 			//查询当前商家
-			this.$axios.post('BusinessController/getBusinessById',this.$qs.stringify({
-				businessId:this.businessId
-			})).then(response=>{
-				this.business=response.data;
-			}).catch(error=>{
+			this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
+				businessId: this.businessId
+			})).then(response => {
+				this.business = response.data;
+			}).catch(error => {
 				console.error(error);
 			});
 
 			//查询当前用户在购物车中的商家食品列表
-			this.$axios.post('CartController/listCart',this.$qs.stringify({
-				userId:this.user.userId,
-				businessId:this.businessId
-			})).then(response=>{
-				this.cartArr=response.data;
-			}).catch(error=>{
+			this.$axios.post('CartController/listCart', this.$qs.stringify({
+				userId: this.user.userId,
+				businessId: this.businessId
+			})).then(response => {
+				this.cartArr = response.data;
+			}).catch(error => {
 				console.error(error);
 			});
 		},
 
 		methods: {
-			toUserAddress(){
-				this.$router.push({path:'/userAddress',query:{businessId:this.businessId}});
+			toUserAddress() {
+				this.$router.push({
+					path: '/userAddress',
+					query: {
+						businessId: this.businessId
+					}
+				});
 			},
 			toPayment() {
-				if(this.deliveryaddress==null){
+				if (this.deliveryaddress == null) {
 					alert('请选择送货地址');
 					return;
 				}
-				
+
 				//创建订单
-				this.$axios.post('OrderController/createOrders',this.$qs.stringify({
-					userId:this.user.userId,
-					businessId:this.businessId,
-					daId:this.deliveryaddress,
-					orderTotal:this.totalPrice
-				})).then(response=>{
-					let orderId=response.data;
-					if(orderId>0){
-						this.$router.push({path:'/payment',query:{orderId:orderId}});
-					}else{
+				this.$axios.post('OrderController/createOrders', this.$qs.stringify({
+					userId: this.user.userId,
+					businessId: this.businessId,
+					daId: this.deliveryaddress,
+					orderTotal: this.totalPrice
+				})).then(response => {
+					let orderId = response.data;
+					if (orderId > 0) {
+						this.$router.push({
+							path: '/payment',
+							query: {
+								orderId: orderId
+							}
+						});
+					} else {
 						alter('创建订单失败');
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					console.error(error);
 				});
-					
-				},
+
+			},
 		},
 
-		computed:{
-			totalPrice(){
-				let totalPrice=0;
-				for(let cartItem of this.cartArr){
-					totalPrice+=cartItem.food.foodPrice*cartItem.quantity;
+		computed: {
+			totalPrice() {
+				let totalPrice = 0;
+				for (let cartItem of this.cartArr) {
+					totalPrice += cartItem.food.foodPrice * cartItem.quantity;
 				}
-				totalPrice+=this.business.deliveryPrice;
+				totalPrice += this.business.deliveryPrice;
 				return totalPrice;
 			},
 			userSex() {

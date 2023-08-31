@@ -12,7 +12,7 @@
 					手机号码:
 				</div>
 				<div class="content">
-					<input type="text"  v-model="userId" placeholder="请输入手机号">
+					<input type="text" v-model="userId" placeholder="请输入手机号">
 				</div>
 			</li>
 			<li>
@@ -44,7 +44,9 @@
 </template>
 
 <script>
-	import { setSessionStorage } from '@/common';
+	import {
+		setSessionStorage
+	} from '@/common';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Login',
@@ -58,31 +60,31 @@
 			Footer
 		},
 		methods: {
-			login(){
-				if(this.userId==''){
+			login() {
+				if (this.userId == '') {
 					alert('手机号码不能为空');
 					return;
 				}
-				if(this.password==''){
+				if (this.password == '') {
 					alert('密码不能为空');
 					return;
 				}
 
 				//登录请求
-				this.$axios.post('UserController/getUserByIdByPass',this.$qs.stringify({
-					userId:this.userId,
-					password:this.password
-				})).then(response=>{
-					let user=response.data;
-					if(user==null){
+				this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
+					userId: this.userId,
+					password: this.password
+				})).then(response => {
+					let user = response.data;
+					if (user == null) {
 						alert('用户名或密码不正确!');
-					}else{
+					} else {
 						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中
-						user.userImg='';
-						this.$setSessionStorage('user',user);
+						user.userImg = '';
+						this.$setSessionStorage('user', user);
 						this.$go(-1);
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					console.error(error);
 				});
 			},
@@ -98,9 +100,9 @@
 	.wrapper {
 		width: 100%;
 		height: 100%;
-		
+
 	}
-	
+
 	/****************** header ****************/
 	.wrapper header {
 		width: 100%;
@@ -118,12 +120,14 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.wrapper img{
+
+	.wrapper img {
 		height: 20vh;
 		width: 50vw;
 		display: block;
 		margin: 20vw auto 0vw auto;
 	}
+
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
 		width: 100%;
@@ -200,16 +204,18 @@
 	}
 
 
-	.wrapper .divider{
+	.wrapper .divider {
 		display: flex;
 		margin: 5vw 6vw;
 	}
+
 	.wrapper .line {
 		height: 1px;
 		width: 30vw;
 		background-color: #d6d2d2;
 		margin: 3vw 6vw 0vw 6vw;
 	}
+
 	.wrapper .text {
 		height: 100%;
 		width: 34px;

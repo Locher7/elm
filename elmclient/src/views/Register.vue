@@ -64,13 +64,13 @@
 		name: 'Register',
 		data() {
 			return {
-				user:{
-					userId:'',
-					password:'',
-					userName:'',
-					userSex:1
+				user: {
+					userId: '',
+					password: '',
+					userName: '',
+					userSex: 1
 				},
-				confirmPassword:''
+				confirmPassword: ''
 			}
 		},
 
@@ -80,53 +80,53 @@
 
 		methods: {
 
-			checkUserId(){
-				this.$axios.post('UserController/getUserById',this.$qs.stringify({
+			checkUserId() {
+				this.$axios.post('UserController/getUserById', this.$qs.stringify({
 					userId: this.user.userId,
-				})).then(response=>{
-					let user=response.data;
-					if(response.data==1){
-						this.user.userId='';
+				})).then(response => {
+					let user = response.data;
+					if (response.data == 1) {
+						this.user.userId = '';
 						alert('此手机号码已存在!')
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					console.error(error);
 				});
 			},
 
-			register(){
-				if(this.user.userId==''){
+			register() {
+				if (this.user.userId == '') {
 					alert('手机号码不能为空!');
 					return;
 				}
-				if(this.user.password==''){
+				if (this.user.password == '') {
 					alert('密码不能为空!');
 					return;
 				}
-				if(this.user.password !=this.confirmPassword){
+				if (this.user.password != this.confirmPassword) {
 					alert('两次输入的密码不一致!');
 					return;
 				}
-				if(this.user.userName==''){
+				if (this.user.userName == '') {
 					alert('用户名称不能为空!');
 					return;
 				}
 
 				//注册请求
-				this.$axios.post('UserController/saveUser',this.$qs.stringify(
+				this.$axios.post('UserController/saveUser', this.$qs.stringify(
 					this.user
-				)).then(response=>{
-					if(response.data>0){
+				)).then(response => {
+					if (response.data > 0) {
 						alert('注册成功!');
 						this.$router.go(-1);
-					}else{
+					} else {
 						alert('注册失败!');
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					console.error(error);
 				});
 			},
-			
+
 		},
 	}
 </script>
@@ -155,12 +155,14 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.wrapper img{
+
+	.wrapper img {
 		height: 20vh;
 		width: 50vw;
 		display: block;
 		margin: 20vw auto 0vw auto;
 	}
+
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
 		width: 100%;

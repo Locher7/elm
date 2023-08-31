@@ -69,8 +69,7 @@ const routes = [{
 		path: '/addUserAddress',
 		name: 'AddUserAddress',
 		component: AddUserAddress
-	}
-	,
+	},
 	{
 		path: '/editUserAddress',
 		name: 'EditUserAddress',
