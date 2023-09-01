@@ -383,6 +383,11 @@
 
 	export default {
 		name: 'Index',
+		data() {
+			return {
+				orderTypeId:1
+			}
+		},
 		mounted() {
 			document.onscroll = () => {
 				//获取滚动条位置
@@ -412,7 +417,7 @@
 			Footer
 		},
 		methods: {
-			toBusinessList(orderTypedId) {
+			toBusinessList(orderTypeId) {
 				this.$router.push({
 					path: '/businessList',
 					query: {

@@ -13,14 +13,14 @@ import {
 	getCurDate,
 	setSessionStorage,
 	getSessionStorage,
-	removeSessionStorage,
+	removeSessionStorage,   
 	setLocalStorage,
 	getLocalStorage,
 	removeLocalStorage
 } from './common.js'
 
 //设置axios的基础url部分
-axios.defaults.baseURL = 'http://localhost:8081/elm/';
+axios.defaults.baseURL = 'http://localhost:8080/JavaWeb/';
 
 //原vue2代码
 //将axios挂载到vue实例上，使用时就可以this.$axios这样使用了
@@ -37,6 +37,7 @@ axios.defaults.baseURL = 'http://localhost:8081/elm/';
 // 注册全局属性和方法
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
+app.config.globalProperties.$qs = qs;
 app.config.globalProperties.$getCurDate = getCurDate;
 app.config.globalProperties.$setSessionStorage = setSessionStorage;
 app.config.globalProperties.$getSessionStorage = getSessionStorage;
@@ -44,6 +45,7 @@ app.config.globalProperties.$removeSessionStorage = removeSessionStorage;
 app.config.globalProperties.$setLocalStorage = setLocalStorage;
 app.config.globalProperties.$getLocalStorage = getLocalStorage;
 app.config.globalProperties.$removeLocalStorage = removeLocalStorage;
+
 
 //导航守卫
 router.beforeEach(function(to, from, next) {
@@ -61,7 +63,7 @@ router.beforeEach(function(to, from, next) {
 	}
 });
 
-createApp(App).use(router).mount('#app')
+app.use(router).mount('#app')
 
-Vue.config.productionTip = false;
+app.config.productionTip = false;
 console.log('API URL:', API_URL);

@@ -44,9 +44,6 @@
 </template>
 
 <script>
-	import {
-		setSessionStorage
-	} from '@/common';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Login',

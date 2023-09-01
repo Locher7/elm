@@ -32,7 +32,7 @@
 		name: 'BusinessList',
 		data() {
 			return {
-				orderTypedId: this.$route.query.orderTypedId,
+				orderTypeId: this.$route.query.orderTypeId,
 				businessArr: [],
 				user: {}
 			}
@@ -42,7 +42,7 @@
 
 			//根据orderTypeId查询商家信息
 			this.$axios.post('BusinessController/listBusinessByOrderTypeId', this.$qs.stringify({
-				orderTypedId: this.orderTypedId
+				orderTypeId: this.orderTypeId
 			})).then(response => {
 				this.businessArr = response.data;
 
@@ -90,13 +90,13 @@
 			}
 		},
 
-		mounted() {
-			console.log('Component is mounted');
-			document.onscroll = () => {
-				// 这里添加滚动事件的处理逻辑
-				console.log('Scroll event triggered');
-			}
-		},
+		// mounted() {
+		// 	console.log('Component is mounted');
+		// 	document.onscroll = () => {
+		// 		// 这里添加滚动事件的处理逻辑
+		// 		console.log('Scroll event triggered');
+		// 	}
+		// },
 	}
 </script>
 
