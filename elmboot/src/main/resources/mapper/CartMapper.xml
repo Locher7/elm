@@ -7,7 +7,7 @@
 
 	<resultMap type = "Cart" id = "cartResultMap">
 		<id column = "cartId" property = "cartId"/>
-		<result column = foodId"" property = "foodId"/>
+		<result column = "foodId" property = "foodId"/>
 		<result column = "businessId" property = "businessId"/>
 		<result column = "userId" property = "userId"/>
 		<result column = "quantity" property = "quantity"/>
@@ -28,4 +28,15 @@
 		</where>
 		order by cartId
 	</select>
+	
+	
+	<delete id = "removeCart" parameterType = "Cart">
+		delete from cart 
+		<where>
+			userId = #{userId} and businessId = #{businessId}
+			<if test = "foodId != null and foodId != ''">
+				and foodId = #{foodId}
+			</if>
+		</where> 
+	</delete>
 </mapper>

@@ -18,6 +18,7 @@ public class FoodController {
 	
 	@RequestMapping("/listFoodByBusinessId")
 	public List<Food> listFoodByBusinessId (Food food) throws Exception{
+
 		return foodService.listFoodByBusinessId(food.getBusinessId());
 	}
 

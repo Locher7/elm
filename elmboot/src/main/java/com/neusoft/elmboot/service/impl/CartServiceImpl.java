@@ -25,5 +25,15 @@ public class CartServiceImpl implements CartService{
 	public int saveCart(Cart cart) {
 		return cartMapper.saveCart(cart);
 	}
+	
+	@Override
+	public int updateCart(Cart cart) {
+		return cartMapper.updateCart(cart);
+	}
+	
+	@Override
+	public int removeCart(Cart cart) {
+		return cartMapper.removeCart(cart);
+	}
 
 }
