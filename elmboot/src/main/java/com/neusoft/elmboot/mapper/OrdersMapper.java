@@ -1,5 +1,7 @@
 package com.neusoft.elmboot.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -15,4 +17,7 @@ public interface OrdersMapper {
 	
 	
 	public Orders getOrdersById (Integer orderId);
+	
+	public List<Orders> listOrdersByUserId (String userId);
+
 }
