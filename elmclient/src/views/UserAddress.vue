@@ -77,7 +77,8 @@
 
 			setDeliveryAddress(item) {
 				//把用户选择的默认送货地址存储到localStorage
-				this.$setLocalStorage(this.user.userId, deliveryAddress);
+				// this.$setLocalStorage(this.user.userId, deliveryAddress);
+				this.$setLocalStorage(this.user.userId, item);
 				this.$router.push({
 					path: '/orders',
 					query: {
@@ -85,6 +86,7 @@
 					}
 				});
 			},
+			
 
 			toAddUserAddress() {
 				this.$router.push({
@@ -110,7 +112,7 @@
 					return;
 				}
 
-				this.$axios.post('DeliveryAddressController/removeDeliveryAddressByUserId', this.$qs.stringify({
+				this.$axios.post('DeliveryAddressController/removeDeliveryAddress', this.$qs.stringify({
 					daId: daId
 				})).then(response => {
 					if (response.data > 0) {

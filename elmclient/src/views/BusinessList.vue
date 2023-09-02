@@ -7,14 +7,14 @@
 
 		<!-- 商家列表 -->
 		<ul class="business">
-			<li v-for="item in businessArr" :key="item.id">
+			<li v-for="item in businessArr" :key="item.id" @click="toBusinessInfo(item.businessId)">
 				<div class="business-img">
-					<img src="item.businessImg">
+					<img :src="item.businessImg">
 					<div class="business-img-quantity" v-show="item.quantity>0">{{ item.quantity }}</div>
 				</div>
 				<div class="business-info">
 					<h3>{{ item.businessName }}</h3>
-					<p>&#165;{{ item.starPrice }}起送 | &#165;{{ deliveryPrice }}配送</p>
+					<p>&#165;{{ item.starPrice }}起送 | &#165;{{ item.deliveryPrice }}配送</p>
 					<p>{{ item.businessExplain }}</p>
 				</div>
 			</li>
@@ -33,7 +33,26 @@
 		data() {
 			return {
 				orderTypeId: this.$route.query.orderTypeId,
-				businessArr: [],
+				businessArr: [
+					// 	{
+					// 	id: 1,
+					// 	businessName: '商家1',
+					// 	businessImg: 'path_to_image1.jpg',
+					// 	starPrice: 10.00,
+					// 	deliveryPrice: 2.00,
+					// 	businessExplain: '这是商家1的说明',
+					// 	quantity: 3, // 假设有3个商品在购物车中
+					// },
+					// 	{
+					// 	id: 2,
+					// 	businessName: '商家2',
+					// 	businessImg: 'path_to_image2.jpg',
+					// 	starPrice: 12.00,
+					// 	deliveryPrice: 2.50,
+					// 	businessExplain: '这是商家2的说明',
+					// 	quantity: 0, // 假设购物车中没有商品
+					// },
+				],
 				user: {}
 			}
 		},
@@ -54,6 +73,8 @@
 			}).catch(error => {
 				console.error(error);
 			});
+
+			console.log(this.$route.query);
 		},
 		components: {
 			Footer
@@ -90,13 +111,13 @@
 			}
 		},
 
-		// mounted() {
-		// 	console.log('Component is mounted');
-		// 	document.onscroll = () => {
-		// 		// 这里添加滚动事件的处理逻辑
-		// 		console.log('Scroll event triggered');
-		// 	}
-		// },
+		mounted() {
+			console.log('Component is mounted');
+			document.onscroll = () => {
+				// 这里添加滚动事件的处理逻辑
+				console.log('Scroll event triggered');
+			}
+		},
 	}
 </script>
 

@@ -15,7 +15,7 @@
 			<p>{{ user.userName }}{{ userSex }} {{ user.userId }}</p>
 		</div>
 
-		<h3>{{ business.businessName }}</h3>
+		<h3>{{ business ? business.businessName : '' }}</h3>
 
 		<!-- 订单明细 -->
 		<ul class="order-detailed">
@@ -24,7 +24,7 @@
 					<img :src="item.food.foodImg">
 					<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				</div>
-				<p>&#165;3{{ item.food.foodPrice*item.quantity }}</p>
+				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
 		</ul>
 		<div class="order-deliveryfee">
@@ -93,10 +93,10 @@
 				}
 
 				//创建订单
-				this.$axios.post('OrderController/createOrders', this.$qs.stringify({
+				this.$axios.post('OrdersController/createOrders', this.$qs.stringify({
 					userId: this.user.userId,
 					businessId: this.businessId,
-					daId: this.deliveryaddress,
+					daId: this.deliveryaddress.daId,
 					orderTotal: this.totalPrice
 				})).then(response => {
 					let orderId = response.data;

@@ -71,15 +71,17 @@
 		data() {
 			return {
 				orderArr: [],
-				user: {}
+				user: {},
+				userId:null
 			}
 		},
 
 		created() {
 			this.user = this.$getSessionStorage('user');
+			console.log('User:', this.user);
 			//根据businessId查询商家信息
 			this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
-				UserId: this.UserId
+				userId: this.user.userId
 			})).then(response => {
 				let result = response.data
 				for (let orders of result) {

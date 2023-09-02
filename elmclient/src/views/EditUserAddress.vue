@@ -53,7 +53,14 @@
 				businessId: this.$route.query.businessId,
 				daId: this.$route.query.daId,
 				user: {},
-				deliveryAddress: {}
+				deliveryAddress: {
+					// deliveryAddress: {
+  					// contactName: '', // 初始化联系人姓名
+  					// contactSex: '',  // 初始化性别
+  					// contactTel: '',  // 初始化电话
+  					// address: '',     // 初始化收货地址
+					// },
+				}
 			}
 		},
 
@@ -76,15 +83,15 @@
 
 		methods: {
 			editUserAddress() {
-				if (this.deliveryAddressArr.contactName == '') {
+				if (this.deliveryAddress.contactName == '') {
 					alert('联系人姓名不能为空');
 					return;
 				}
-				if (this.deliveryAddressArr.contactTel == '') {
+				if (this.deliveryAddress.contactTel == '') {
 					alert('联系人电话不能为空');
 					return;
 				}
-				if (this.deliveryAddressArr.address == '') {
+				if (this.deliveryAddress.address == '') {
 					alert('联系人地址不能为空');
 					return;
 				}

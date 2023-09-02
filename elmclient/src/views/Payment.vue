@@ -16,8 +16,8 @@
 		</div>
 
 		<!-- 订单明细 -->
-		<ul class="order-detailed" v-show="isShowDetailet">
-			<li v-for="item in orders.list" :key="item.id">
+		<!-- <ul class="order-detailed" v-show="isShowDetailet">
+			<li v-for="item in orders.listOrderdetailet" :key="item.id">
 				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
@@ -26,7 +26,7 @@
 				<p>配送费</p>
 				<p>&#165;{{ orders.business.deliveryPrice }}</p>
 			</li>
-		</ul>
+		</ul> -->
 
 		<!-- 支付方式 -->
 		<ul class="payment-type">
@@ -56,7 +56,7 @@
 		data() {
 			return {
 				orderId: this.$route.query.orderId,
-				order: {
+				orders: {
 					business: {}
 				},
 				isShowDetailet: false
@@ -64,7 +64,7 @@
 		},
 
 		created() {
-			this.$axios.post('OrderController/getOrderById', this.$qs.stringify({
+			this.$axios.post('OrdersController/getOrdersById', this.$qs.stringify({
 				orderId: this.orderId
 			})).then(response => {
 				this.orders = response.data;

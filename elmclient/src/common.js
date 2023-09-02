@@ -30,7 +30,7 @@ export function removeSessionStorage(keyStr) {
 }
 
 //向永久存储localStorage中存储一个JSON对象
-export function setLocalStorage(keyStr) {
+export function setLocalStorage(keyStr,value) {
 	localStorage.setItem(keyStr, JSON.stringify(value));
 }
 

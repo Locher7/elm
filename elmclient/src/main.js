@@ -6,6 +6,7 @@ import router from './router'
 import { API_URL } from './config';
 
 
+
 import 'font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
 import qs from 'qs'
@@ -20,7 +21,9 @@ import {
 } from './common.js'
 
 //设置axios的基础url部分
-axios.defaults.baseURL = 'http://localhost:8080/JavaWeb/';
+// axios.defaults.baseURL = 'http://172.18.244.243:8080/JavaWeb/';
+axios.defaults.baseURL = 'http://172.18.134.166:8080/elm/';
+// axios.defaults.baseURL = 'http://localhost:8080/JavaWeb/';
 
 //原vue2代码
 //将axios挂载到vue实例上，使用时就可以this.$axios这样使用了
@@ -34,8 +37,8 @@ axios.defaults.baseURL = 'http://localhost:8080/JavaWeb/';
 // Vue.prototype.$removeLocalStorage = removeLocalStorage;
 
 
-// 注册全局属性和方法
 const app = createApp(App);
+// 注册全局属性和方法
 app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$qs = qs;
 app.config.globalProperties.$getCurDate = getCurDate;
@@ -67,3 +70,4 @@ app.use(router).mount('#app')
 
 app.config.productionTip = false;
 console.log('API URL:', API_URL);
+

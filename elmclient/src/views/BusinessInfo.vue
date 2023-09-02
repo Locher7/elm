@@ -40,23 +40,22 @@
 			</li>
 		</ul>
 
-		<!-- 购物车 -->
 		<div class="cart">
 			<div class="cart-left">
 				<div class="cart-left-icon" :style="totalQuantity==0?'background-color:#505051;':'background-color:#3190E8;'">
 					<i class="fa fa-shopping-cart"></i>
-					<div class="cart-left-icon-quantity" v-show="totalQuantity!=0">{{ totalQuantity }}</div>
+					<div class="cart-left-icon-quantity" v-show="totalQuantity!=0">{{totalQuantity}}</div>
 				</div>
 				<div class="cart-left-info">
-					<p>&#165;{{ totalPrice }}</p>
-					<p>另需配送费{{ business.deliveryPrice }}元</p>
+					<p>&#165;{{totalPrice}}</p>
+					<p>另需配送费{{business.deliveryPrice}}元</p>
 				</div>
-			</div>
-			<div class="cart-right">
-				<!-- 不够起送费 -->
-				<div class="cart-right-item" v-show="totalSettle<business.starPrice" style="background-color: #535356;cursor: default;">&#165;{{ business.starPrice }}起送</div>
-				<!-- 达到起送费 -->
-				<div class="cart-right-item" @click="toOrder" v-show="totalSettle>=business.starPrice">去结算</div>
+				<div class="cart-right">
+					<!--不够配送费-->
+					<div class="cart-right-item" v-show="totalSettle<business.starPrice" style="background-color: #535356;cursor: default;">&#165;{{business.starPrice}}起送</div>
+					<!--达到配送费-->
+					<div class="cart-right-item" @click="toOrder" v-show="totalSettle>=business.starPrice">去结算</div>
+				</div>
 			</div>
 		</div>
 
@@ -68,7 +67,7 @@
 		name: 'BusinessInfo',
 		data() {
 			return {
-				businessId: this.$query.businessId,
+				businessId: this.$route.query.businessId,
 				business: {},
 				foodArr: [],
 				user: {}
@@ -76,18 +75,22 @@
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
+			console.log('用户信息：', this.user);
+			
 			//根据businessId查询商家信息
 			this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
-				businessId: this.businessId
+				businessId: this.businessId,
+				
 			})).then(response => {
 				this.business = response.data;
+				console.log('商家信息：', this.business);
 			}).catch(error => {
 				console.error(error);
 			});
-
+			console.log('商家信息：', this.business)
 			//根据businessId查询所属食品信息
 			this.$axios.post('FoodController/listFoodByBusinessId', this.$qs.stringify({
-				businessId: this.businessId
+				businessId:this.businessId
 			})).then(response => {
 				this.foodArr = response.data;
 				for (let i = 0; i < this.foodArr.length; i++) {
@@ -98,6 +101,7 @@
 				if (this.user != null) {
 					this.listCart();
 				}
+				console.log('食品列表：', this.foodArr);
 			}).catch(error => {
 				console.error(error);
 			});
@@ -111,6 +115,7 @@
 					}
 				});
 			},
+
 
 			listCart() {
 				this.$axios.post('CartController/listCart', this.$qs.stringify({
@@ -143,7 +148,7 @@
 
 				if (this.foodArr[index].quantity == 0) {
 					//做insert
-					this.savaCart(index);
+					this.saveCart(index);
 				} else {
 					//做update
 					this.updateCart(index, 1);
@@ -151,6 +156,10 @@
 			},
 
 			minus(index) {
+				if (this.user == null) {
+					this.$router.push('/login');
+					return
+				}
 				if (this.foodArr[index].quantity > 1) {
 					//做update
 					this.updateCart(index, -1);
@@ -162,19 +171,18 @@
 
 			//封装函数
 			//增加一个食品
-			savaCart(index) {
-				this.$axios.post('CartController/savaCart', this.$qs.stringify({
+			saveCart(index) {
+				this.$axios.post('CartController/saveCart', this.$qs.stringify({
 					businessId: this.businessId,
 					userId: this.user.userId,
 					foodId: this.foodArr[index].foodId
 				})).then(response => {
 					if (response.data == 1) {
-						//此食品数量要更新为1；
+						//此食品数量要更新为1
 						this.foodArr[index].quantity = 1;
-						//让vue监听数量变化
 						this.foodArr.sort();
 					} else {
-						alert('向购物车中添加食品失败!')
+						alert('向购物车中添加食品失败！');
 					}
 				}).catch(error => {
 					console.error(error);
@@ -222,14 +230,19 @@
 				});
 			},
 
-			//计算属性
-			computed: {
+			
+
+		},
+
+		//计算属性
+		computed: {
 				//食品总价格
 				totalPrice() {
 					let total = 0;
 					for (let item of this.foodArr) {
 						total += item.foodPrice * item.quantity;
 					}
+					console.log('totalPrice:', total);
 					return total;
 				},
 				//食品总数量
@@ -238,6 +251,7 @@
 					for (let item of this.foodArr) {
 						quantity += item.quantity;
 					}
+					console.log('totalQuantity:', quantity);
 					return quantity;
 				},
 				//结算总价格
@@ -245,8 +259,6 @@
 					return this.totalPrice + this.business.deliveryPrice;
 				}
 			},
-
-		},
 	}
 </script>
 
@@ -458,15 +470,15 @@
 
 	/*达到起送费时的样式*/
 	.wrapper .cart .cart-right .cart-right-item {
-		width: 100%;
+		width: 50%;
 		height: 100%;
-		background-color: #38ca73;
+		background-color: #38CA73;
 		color: #fff;
 		font-size: 4.5vw;
 		font-weight: 700;
 		user-select: none;
 		cursor: pointer;
-
+		margin-left: 50%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
