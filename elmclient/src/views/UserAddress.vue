@@ -7,10 +7,10 @@
 
 		<!-- 地址列表 -->
 		<ul class="address">
-			<li v-for="item in deliveryAddressArr" :key="item.id">
+			<li v-for="(item,index) in deliveryAddressArr" :key="item.id">
 				<div class="address-info" @click="setDeliveryAddress(item)">
 					<div class="address-info-detailed">
-						<p>{{ item.contactName }}{{ userSex }}</p>
+						<p>{{ item.contactName }}{{ contactSex(index) }}</p>
 						<p>{{ item.contactTel }}</p>
 					</div>
 					<p>{{ item.address }}</p>
@@ -52,24 +52,25 @@
 		created() {
 			this.user = this.$getSessionStorage('user');
 			this.listDeliveryAddressByUserId();
+			console.log('用户信息:', this.user);
 		},
 
 		components: {
 			Footer
 		},
 
-		computed: {
-			userSex() {
-				return this.user.userSex === 1 ? '先生' : '女士';
-			}
+		methods: {
+			contactSex(index) {
+			return this.deliveryAddressArr[index].contactSex === 1 ? '先生' : '女士';
 		},
 
-		methods: {
+
 			listDeliveryAddressByUserId() {
 				this.$axios.post('DeliveryAddressController/listDeliveryAddressByUserId', this.$qs.stringify({
 					userId: this.user.userId
 				})).then(response => {
 					this.deliveryAddressArr = response.data;
+					console.log('地址信息:', this.deliveryAddressArr);
 				}).catch(error => {
 					console.error(error);
 				});

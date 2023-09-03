@@ -16,19 +16,17 @@
 		</div>
 
 		<!-- 订单明细 -->
-		<ul class="order">
-			<ul class="order-detailed" v-if="isShowDetailet">
-				<li v-for="odItem in unpaidOrders.list" :key="odItem.id">
-					<p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
-					<p>&#165;{{ odItem.food.foodPrice*odItem.quantity }}</p>
-				</li>
-				<li>
-					<p>配送费</p>
-					<p>&#165;{{ unpaidOrders.business.deliveryPrice }}</p>
-				</li>
-			</ul>
-		</ul>
+		<ul class="order-detailed" v-show="isShowDetailet">
+			<li v-for="item in orders.list" :key="item.id">
+				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
+				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
+			</li>
 
+			<li>
+				<p>配送费</p>
+				<p>&#165;{{ orders.business.deliveryPrice }}</p>
+			</li>
+		</ul>
 
 		<!-- 支付方式 -->
 		<ul class="payment-type">
@@ -59,10 +57,9 @@
 			return {
 				orderId: this.$route.query.orderId,
 				orders: {
-					business: {},
+					business: {}
 				},
-				isShowDetailet: false,
-				unpaidOrders: {},
+				isShowDetailet: false
 			}
 		},
 
@@ -71,9 +68,7 @@
 				orderId: this.orderId
 			})).then(response => {
 				this.orders = response.data;
-				console.log(response.data)
-				this.unpaidOrders = response.data;
-				console.log(this.unpaidOrders);
+				console.log(this.orders)
 			}).catch(error => {
 				console.error(error);
 			});
@@ -88,6 +83,13 @@
 				this.$router.push('/index');
 			}
 		},
+
+		// beforeRouteLeave(to, from, next) {
+  		// // 在离开该路由前，手动保存历史状态
+		// history.replaceState(history.state, '', document.URL);
+		// next();
+		// },
+
 
 		destroyed() {
 			window.onpopstate = null;

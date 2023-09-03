@@ -12,7 +12,8 @@
 				<p>{{ deliveryaddress != null ? deliveryaddress.address : '请选择收货地址' }}</p>
 				<i class="fa fa-angle-right"></i>
 			</div>
-			<p>{{ user.userName }}{{ userSex }} {{ user.userId }}</p>
+			<p>{{ deliveryaddress ? deliveryaddress.contactName : '' }}{{ contactSex!=null? contactSex : ''}} {{ deliveryaddress ? deliveryaddress.contactTel : '' }}</p>
+			
 		</div>
 
 		<h3>{{ business ? business.businessName : '' }}</h3>
@@ -57,6 +58,10 @@
 			this.user = this.$getSessionStorage('user');
 			this.deliveryaddress = this.$getLocalStorage(this.user.userId);
 
+			// 输出用户和地址信息，确保它们被正确加载
+			console.log('用户信息:', this.user);
+			console.log('收货地址信息:', this.deliveryaddress);
+
 			//查询当前商家
 			this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
 				businessId: this.businessId
@@ -72,6 +77,7 @@
 				businessId: this.businessId
 			})).then(response => {
 				this.cartArr = response.data;
+				console.log('购物车信息:', this.cartArr);
 			}).catch(error => {
 				console.error(error);
 			});
@@ -126,8 +132,13 @@
 				totalPrice += this.business.deliveryPrice;
 				return totalPrice;
 			},
-			userSex() {
-				return this.user.userSex === 1 ? '先生' : '女士';
+			contactSex() {
+				if(this.deliveryaddress==null){
+					return;
+				}else{
+					return this.deliveryaddress.contactSex === 1 ? '先生' : '女士';
+				}
+				
 			}
 		},
 
