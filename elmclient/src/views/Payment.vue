@@ -16,17 +16,19 @@
 		</div>
 
 		<!-- 订单明细 -->
-		<!-- <ul class="order-detailed" v-show="isShowDetailet">
-			<li v-for="item in orders.listOrderdetailet" :key="item.id">
-				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
-				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
-			</li>
+		<ul class="order">
+			<ul class="order-detailed" v-if="isShowDetailet">
+				<li v-for="odItem in unpaidOrders.list" :key="odItem.id">
+					<p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
+					<p>&#165;{{ odItem.food.foodPrice*odItem.quantity }}</p>
+				</li>
+				<li>
+					<p>配送费</p>
+					<p>&#165;{{ unpaidOrders.business.deliveryPrice }}</p>
+				</li>
+			</ul>
+		</ul>
 
-			<li>
-				<p>配送费</p>
-				<p>&#165;{{ orders.business.deliveryPrice }}</p>
-			</li>
-		</ul> -->
 
 		<!-- 支付方式 -->
 		<ul class="payment-type">
@@ -57,9 +59,10 @@
 			return {
 				orderId: this.$route.query.orderId,
 				orders: {
-					business: {}
+					business: {},
 				},
-				isShowDetailet: false
+				isShowDetailet: false,
+				unpaidOrders: {},
 			}
 		},
 
@@ -68,7 +71,9 @@
 				orderId: this.orderId
 			})).then(response => {
 				this.orders = response.data;
-				console.log(this.orders)
+				console.log(response.data)
+				this.unpaidOrders = response.data;
+				console.log(this.unpaidOrders);
 			}).catch(error => {
 				console.error(error);
 			});

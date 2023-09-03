@@ -36,7 +36,7 @@
 					用户名称:
 				</div>
 				<div class="content">
-					<input type="password" v-model="user.userName" placeholder="请输入用户名称">
+					<input type="text" v-model="user.userName" placeholder="请输入用户名称">
 				</div>
 			</li>
 			<li>
@@ -127,6 +127,14 @@
 				});
 			},
 
+		},
+
+		mounted() {
+			console.log('Component is mounted');
+			document.onscroll = () => {
+				// 这里添加滚动事件的处理逻辑
+				console.log('Scroll event triggered');
+			}
 		},
 	}
 </script>
