@@ -18,7 +18,7 @@
 
 		<!-- Navigation Section -->
 		<nav class="nav-section">
-			<div class="nav-item-left" @click="toPipeitongzhi">
+			<div class="nav-item-left" @click="toMyAddress">
 				<img src="../assets/myAddress.png">
 				<p>地址管理</p>
 			</div>
@@ -65,6 +65,11 @@
 		components: {
 			Footer
 		},
+		methods:{
+			toMyAddress() {
+				this.$router.push('/myAddress');
+			},
+		}
 	}
 </script>
 

@@ -14,6 +14,7 @@ import UserAddress from '../views/UserAddress.vue';
 import AddUserAddress from '../views/AddUserAddress.vue';
 import EditUserAddress from '../views/EditUserAddress.vue';
 import MyInfo from '../views/MyInfo.vue';
+import MyAddress from '../views/MyAddress.vue';
 
 
 const routes = [{
@@ -80,6 +81,11 @@ const routes = [{
 		path: '/myInfo',
 		name: 'MyInfo',
 		component: MyInfo
+	},
+	{
+		path: '/myAddress',
+		name: 'MyAddress',
+		component: MyAddress
 	}
 ];
 

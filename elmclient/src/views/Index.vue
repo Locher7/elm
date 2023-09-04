@@ -369,6 +369,8 @@
 			</li>
 		</ul>
 
+		
+
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
 
@@ -385,7 +387,9 @@
 		name: 'Index',
 		data() {
 			return {
-				orderTypeId:1
+				orderTypeId:1,
+				businessArr:[],
+				user:{},
 			}
 		},
 		mounted() {
@@ -409,6 +413,26 @@
 				}
 			}
 		},
+		created() {
+			this.user = this.$getSessionStorage('user');
+
+			//根据orderTypeId查询商家信息
+			this.$axios.post('BusinessController/listBusinessByOrderTypeId', this.$qs.stringify({
+				orderTypeId: this.orderTypeId
+			})).then(response => {
+				this.businessArr = response.data;
+
+				//判断是否登录
+				if (this.user != null) {
+					this.listCart();
+				}
+
+			}).catch(error => {
+				console.error(error);
+			});
+
+			console.log(this.$route.query);
+		},
 		destroyed() {
 			//当切换到其他主件时，就不需要document滚动条事件，所以将此事件去掉
 			document.onscroll = null;
@@ -424,6 +448,41 @@
 						orderTypeId: orderTypeId
 					}
 				});
+			},
+			listCart() {
+				this.$axios.post('CartController/listCart', this.$qs.stringify({
+					userId: this.user.userId,
+				})).then(response => {
+					let cartArr = response.data;
+					//遍历所有食品列表
+					for (let businessItem of this.businessArr) {
+						businessItem.quantity = 0;
+						for (let cartItem of cartArr) {
+							if (cartItem.businessId == businessItem.businessId) {
+								businessItem.quantity += cartItem.quantity;
+							}
+						}
+					}
+					this.businessArr.sort();
+				}).catch(error => {
+					console.error(error);
+				});
+			},
+
+			toBusinessInfo(businessId) {
+				this.$router.push({
+					path: '/businessInfo',
+					query: {
+						businessId: businessId
+					}
+				});
+			}
+		},
+		mounted() {
+			console.log('Component is mounted');
+			document.onscroll = () => {
+				// 这里添加滚动事件的处理逻辑
+				console.log('Scroll event triggered');
 			}
 		},
 	}

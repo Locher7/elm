@@ -100,12 +100,7 @@
 					this.deliveryAddress
 				)).then(response => {
 					if (response.data > 0) {
-						this.$router.push({
-							path: '/userAddress',
-							query: {
-								businessId: this.businessId
-							}
-						});
+						this.$router.go(-1);
 					} else {
 						alert('更新地址失败!')
 					}
