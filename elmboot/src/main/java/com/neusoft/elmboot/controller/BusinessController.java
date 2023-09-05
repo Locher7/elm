@@ -20,7 +20,7 @@ public class BusinessController {
 	
 	@RequestMapping("/listBusinessByOrderTypeId")
 	public List<Business> listBusinessByOrderTypeId(Business business) throws Exception{
-		System.out.println("%%%%%%%^^^^^^^^^^");
+		//System.out.println("%%%%%%%^^^^^^^^^^");
 		return businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
 	}
 	
