@@ -28,11 +28,7 @@
 			</li>
 		</ul>
 
-		<!-- ai-chat -->
-		<ul class="ai-chat">
-			<img src="aiImg">
-			<div class="ai-text"></div>
-		</ul>
+		
 
 		<!-- 支付方式 -->
 		<ul class="payment-type">

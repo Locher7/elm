@@ -33,6 +33,12 @@
 			<p>&#165;{{ business.deliveryPrice }}</p>
 		</div>
 
+		<!-- ai聊天框 -->
+		<ul class="ai-chat">
+			<img src="../assets/aiImg.png">
+			<div class="ai-text"></div>
+		</ul>
+
 		<!-- 订单合计 -->
 		<div class="total">
 			<div class="total-left">&#165;{{ totalPrice }}</div>
