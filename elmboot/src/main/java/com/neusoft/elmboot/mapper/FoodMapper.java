@@ -14,6 +14,6 @@ public interface FoodMapper {
 	public List<Food> listFoodByBusinessId (Integer businessId);
 	
 	@Select("select * from food where foodId = #{foodId}")
-	public FoodMapper getFoodById (Integer foodId);
+	public Food getFoodById (Integer foodId);
 
 }
