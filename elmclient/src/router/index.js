@@ -15,6 +15,8 @@ import AddUserAddress from '../views/AddUserAddress.vue';
 import EditUserAddress from '../views/EditUserAddress.vue';
 import MyInfo from '../views/MyInfo.vue';
 import MyAddress from '../views/MyAddress.vue';
+import Credit from '../views/Credit.vue';
+import EditInfo from '../views/EditInfo.vue';
 
 
 const routes = [{
@@ -86,6 +88,16 @@ const routes = [{
 		path: '/myAddress',
 		name: 'MyAddress',
 		component: MyAddress
+	},
+	{
+		path: '/credit',
+		name: 'Credit',
+		component: Credit
+	},
+	{
+		path: '/editInfo',
+		name: 'EditInfo',
+		component: EditInfo
 	}
 ];
 

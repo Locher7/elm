@@ -16,21 +16,25 @@
 			</div>
 		</section>
 
-		<!-- Navigation Section -->
-		<nav class="nav-section">
-			<div class="nav-item-left" @click="toMyAddress">
-				<img src="../assets/myAddress.png">
-				<p>地址管理</p>
-			</div>
-			<div class="nav-item-right" @click="toWodefabu">
-				<img src="../assets/editInfo.png">
-				<p>修改信息</p>
-			</div>
-		</nav>
+		
+
+<nav class="nav-section">
+	<div class="nav-item" @click="toMyAddress">
+		<i class="fa fa-list icon"></i>  <!-- 替换成 Font Awesome 的家图标 -->
+		<p>地址管理</p>
+	</div>
+	<div class="nav-item" @click="toEditInfo">
+		<i class="fa fa-clock-o icon"></i>  <!-- 替换成 Font Awesome 的编辑图标 -->
+		<p>修改信息</p>
+	</div>
+</nav>
+
+
+
 
 		<!-- Instructions Section -->
 		<section class="instructions">
-			<div class="instruction-item" @click="tosysm">
+			<div class="instruction-item" @click="toCredit">
 				<p>我的积分</p>
 				<div class="arrow-icon"></div>
 			</div>
@@ -48,7 +52,7 @@
 			</div>
 		</section>
 
-		<button type="danger">退出登录</button>
+		<button type="danger" @click="logout()">退出登录</button>
 
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
@@ -65,30 +69,47 @@
 		components: {
 			Footer
 		},
-		methods:{
+		methods: {
 			toMyAddress() {
 				this.$router.push('/myAddress');
+			},
+			logout() {
+				// 清除sessionStorage的用户信息
+				this.$removeSessionStorage('user');
+				this.$router.push('/login');
+			},
+			toCredit() {
+				this.$router.push('/credit');
+			},
+			toEditInfo() {
+				this.$router.push('/editInfo');
 			},
 		}
 	}
 </script>
 
 <style scoped>
+	/* 通用样式 */
+	* {
+		box-sizing: border-box;
+	}
+
 	.wrapper {
 		height: 100%;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		background: rgb(246, 243, 243);
-		overflow: scroll;
+		background: #f5f5f7;
+		/* 更加淡雅的背景 */
+		overflow: auto;
 	}
 
 	.header {
 		background-color: white;
-		padding: 10px 0 10px 0;
+		padding: 20px;
 		text-align: center;
 		font-weight: bold;
-		font-size: 0.8rem;
+		font-size: 0.9rem;
 		color: #0097ff;
 		font-family: SourceHanSansCN-Bold;
 	}
@@ -96,81 +117,64 @@
 	.user-info {
 		display: flex;
 		align-items: center;
-		padding: 30px 35px;
+		padding: 20px;
 		background-color: #0097ff;
 	}
 
 	.avatar img {
-		height: 90px;
-		width: 90px;
+		height: 80px;
+		width: 80px;
 		border-radius: 50%;
-		overflow: hidden;
-		margin: 0 10px;
+		margin-right: 20px;
 	}
 
 	.user-details {
-		margin: 10px 20px;
-		white-space: nowrap;
-		color: white;
+		color: #ffffff;
+		/* 白色文字 */
 	}
 
 	.user-details .username {
-		margin: 10px 0;
-		font-size: 1.3rem;
-		font-weight: medium;
-	}
-
-	.user-details .student-id {
-		margin: 10px 0;
-		font-size: 1rem;
-		font-weight: medium;
+		font-size: 1.2rem;
+		margin-bottom: 10px;
 	}
 
 	.nav-section {
 		display: flex;
-		justify-content: space-around;
-		margin: 15px;
-		background-color: white;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		border-radius: 10px;
+		justify-content: space-between;
+		margin: 20px 20px;
+		background-color: #ffffff;
+		padding: 15px 0;
+		border-radius: 15px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	}
 
-	.nav-item-left {
+	.nav-item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		color: #4e4e4e;
 		padding: 10px;
+		flex: 1;
+		text-align: center;
 	}
 
-	.nav-item-right {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: #4e4e4e;
-		padding: 10px;
-	}
+	
+	.icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #4e4e4e;
+}
 
-	.nav-item-left img {
-		height: 3.5vh;
-		width: 10vw;
-		margin: 13px 0 5px 0;
-	}
 
-	.nav-item-right img {
-		height: 3.1vh;
-		width: 6vw;
-		margin: 15px 0 8px 0;
-	}
 
 	.instructions {
 		display: flex;
 		flex-direction: column;
-		padding: 10px 10px 15px 10px;
-		margin: 0 15px;
-		background-color: white;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		border-radius: 10px;
+		margin: 0 20px 20px 20px;
+		background-color: #ffffff;
+		padding: 15px 0;
+		border-radius: 15px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	}
 
 	.instruction-item {
@@ -178,24 +182,31 @@
 		justify-content: space-between;
 		padding: 10px 20px;
 		border-bottom: 1px solid #dfd8d8;
+		cursor: pointer;
+		/* 指示这是可点击的 */
 	}
 
-	.instruction-item p{
-		color: #4e4e4e;
-		font-size: 0.9rem;
-		font-weight: medium;
+	.instruction-item:last-child {
+		border-bottom: none;
+		/* 去除最后一个元素的底部边框 */
 	}
 
-	
 	.wrapper button {
-		height: 13vw;
-		font-size: 4vw;
-		font-weight: 700;
-		margin: 20px;
+		height: 45px;
+		width: calc(100% - 40px);
+		margin: 20px 20px 0 20px;
+		font-size: 1rem;
 		color: #fff;
-		background-color: #0097ff;
-		border-radius: 50px;
+		background-color: #e57373;
+		/* 突出的红色按钮 */
+		border-radius: 25px;
 		border: none;
-		outline: none;
+		cursor: pointer;
+		transition: background-color 0.3s;
+	}
+
+	.wrapper button:hover {
+		background-color: #ef5350;
+		/* 悬浮时颜色 */
 	}
 </style>

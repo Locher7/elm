@@ -34,7 +34,7 @@ export function setLocalStorage(keyStr,value) {
 	localStorage.setItem(keyStr, JSON.stringify(value));
 }
 
-//从slocalStorage中获取一个JSON对象（取不到时返回null）
+//从localStorage中获取一个JSON对象（取不到时返回null）
 export function getLocalStorage(keyStr) {
 	var str = localStorage.getItem(keyStr);
 	if (str == '' || str == null || str == 'null' || str == undefined) {
