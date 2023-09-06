@@ -11,23 +11,34 @@
 				<img src="../assets/userImg/yhtx04.png">
 			</div>
 			<div class="user-details">
-				<h2 class="username">用户名称</h2>
-				<p class="student-id">手机号码</p>
+				<h2 class="username" @click="showModal = true">{{ user.userName }}</h2>
+				<p class="student-id">{{ user.userId }}</p>
 			</div>
+
+			<!-- 修改用户名称弹窗 -->
+			<div v-if="showModal" class="modal-overlay">
+				<div class="modal-window">
+					<h3>修改用户名称</h3>
+					<input v-model="newUsername" type="text" placeholder="输入新的用户名称">
+					<button @click="updateUsername">保存</button>
+					<button @click="showModal = false">取消</button>
+				</div>
+			</div>
+
 		</section>
 
-		
 
-<nav class="nav-section">
-	<div class="nav-item" @click="toMyAddress">
-		<i class="fa fa-list icon"></i>  <!-- 替换成 Font Awesome 的家图标 -->
-		<p>地址管理</p>
-	</div>
-	<div class="nav-item" @click="toCredit">
-		<i class="fa fa-clock-o icon"></i>  <!-- 替换成 Font Awesome 的编辑图标 -->
-		<p>我的积分</p>
-	</div>
-</nav>
+
+		<nav class="nav-section">
+			<div class="nav-item" @click="toMyAddress">
+				<i class="fa fa-list icon"></i> <!-- 替换成 Font Awesome 的家图标 -->
+				<p>地址管理</p>
+			</div>
+			<div class="nav-item" @click="toCredit">
+				<i class="fa fa-clock-o icon"></i> <!-- 替换成 Font Awesome 的编辑图标 -->
+				<p>我的积分</p>
+			</div>
+		</nav>
 
 
 
@@ -65,7 +76,13 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'MyInfo',
-		data() {},
+		data() {
+			return {
+				user: {},
+				showModal: false,
+				newUsername: ''
+			}
+		},
 		components: {
 			Footer
 		},
@@ -84,6 +101,28 @@
 			toEditInfo() {
 				this.$router.push('/editInfo');
 			},
+			updateUsername() {
+				this.user.userName = this.newUsername;
+				this.showModal = false;
+				// 修改密码
+				this.$axios.post('UserController/editUserNameByUserId', this.$qs.stringify({
+					userId: this.user.userId,
+					userName: this.newUsername
+				})).then((response) => {
+					// 根据你的后端响应来处理结果
+					if (response.data.success) {
+						alert('修改用户昵称成功!');
+					} else {
+						alert('修改用户昵称失败!');
+					}
+				}).catch((error) => {
+					console.error('请求出错:', error);
+					alert('请求出错，请稍后重试!');
+				});
+			}
+		},
+		created() {
+			this.user = this.$getSessionStorage('user');
 		}
 	}
 </script>
@@ -117,7 +156,7 @@
 	.user-info {
 		display: flex;
 		align-items: center;
-		padding: 20px;
+		padding: 20px 20px 20px 30px;
 		background-color: #0097ff;
 	}
 
@@ -158,12 +197,12 @@
 		text-align: center;
 	}
 
-	
+
 	.icon {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #4e4e4e;
-}
+		font-size: 24px;
+		margin-bottom: 10px;
+		color: #4e4e4e;
+	}
 
 
 	.instructions {
@@ -215,4 +254,66 @@
 		background-color: #ef5350;
 		/* 悬浮时颜色 */
 	}
+
+
+	/* 弹出修改用户昵称框 */
+	.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);  /* 半透明背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;  /* 保证在其他元素之上 */
+}
+
+.modal-window {
+    width: 80%;
+    max-width: 400px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 15px;  /* 圆角 */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);  /* 阴影效果 */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;  /* 间距 */
+}
+
+.modal-window h3 {
+    color: #0097ff;  /* 饿了么的蓝色 */
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.modal-window input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    outline: none;  /* 去除焦点时的蓝色边框 */
+}
+
+.modal-window input:focus {
+    border-color: #0097ff;  /* 焦点时的蓝色边框 */
+}
+
+.modal-window button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #0097ff;  /* 饿了么的蓝色 */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-window button:hover {
+    background-color: #0076c2;  /* 深蓝色 */
+}
+
 </style>

@@ -1,55 +1,54 @@
 <template>
 	<div class="wrapper">
-		<img src="../assets/elm-brand.png">
-		<!-- header -->
-		<header>
-			<p>用户注册</p>
-		</header>
-		<!-- 表单部分 -->
-		<div class="register">
-			<h2>手机号注册</h2>
-			
-		</div>
-		<ul class="form-box">
-			<li>
-				<div class="content">
-					<input type="text" @blur="checkUserId" v-model="user.userId" placeholder="请输入手机号码">
-				</div>
-			</li>
-			<li>
-				<div class="content">
-					<input type="password" v-model="user.password" placeholder="请输入密码">
-				</div>
-			</li>
-			<li>
-				<div class="content">
-					<input type="password" v-model="confirmPassword" placeholder="请确认密码">
-				</div>
-			</li>
-			<li>
-				<div class="content">
-					<input type="text" v-model="user.userName" placeholder="请输入用户名称">
-				</div>
-			</li>
-			<li>
-				<div class="title">
-					请选择性别：
-				</div>
-				<div class="content" style="font-size: 3vw;">
-					<input type="radio" v-model="user.userSex" value="1" style="width: 6vw;height: 3.2vw;">男
-					<input type="radio" v-model="user.userSex" value="0" style="width: 6vw;height: 3.2vw;">女
-				</div>
-			</li>
-		</ul>
+			<!-- header -->
+			<header>
+				<p>用户注册</p>
+			</header>
+			<!-- 表单部分 -->
+			<div class="register">
+				<h2>手机号注册</h2>
+				<img src="../assets/elm-brand.png">
+			</div>
+			<ul class="form-box">
+				<li>
+					<div class="content">
+						<input type="text" @blur="checkUserId" v-model="user.userId" placeholder="请输入手机号码">
+					</div>
+				</li>
+				<li>
+					<div class="content">
+						<input type="password" v-model="user.password" placeholder="请输入密码">
+					</div>
+				</li>
+				<li>
+					<div class="content">
+						<input type="password" v-model="confirmPassword" placeholder="请确认密码">
+					</div>
+				</li>
+				<li>
+					<div class="content">
+						<input type="text" v-model="user.userName" placeholder="请输入用户名称">
+					</div>
+				</li>
+				<li>
+					<div class="title">
+						请选择性别：
+					</div>
+					<div class="content" style="font-size: 3vw;">
+						<input type="radio" v-model="user.userSex" value="1" style="width: 6vw;height: 3.2vw;">男
+						<input type="radio" v-model="user.userSex" value="0" style="width: 6vw;height: 3.2vw;">女
+					</div>
+				</li>
+			</ul>
 
-		<div class="button-register">
-			<button @click="register">注册</button>
-		</div>
-		<div class="brand">
-			<img src="../assets/brand.png">
-		</div>
+			<div class="button-register">
+				<button @click="register">注册</button>
+			</div>
+			<div class="brand">
+				<img src="../assets/brand.png">
+			</div>
 
-	</div>
+		</div>
 </template>
 
 <script>
@@ -134,7 +133,7 @@
 </script>
 
 <style scoped>
-	/****************** 总容器 ****************/
+			/****************** 总容器 ****************/
 	.wrapper {
 		width: 100%;
 		height: 100%;
@@ -161,6 +160,7 @@
 
 	.wrapper .register {
 		margin: 30vw 0 2vw 12vw;
+		position: relative;
 	}
 
 	.wrapper .register h2 {
@@ -168,12 +168,12 @@
 		margin-bottom: 1vw;
 	}
 
-	.wrapper  img {
+	.wrapper .register img {
 		width: 60vw;
 		opacity: 15%;
 		position: absolute;
-		top: 26%;
-		left: 20%;
+		top: 260%;
+		left: 10%;
 		z-index: -1;
 	}
 
@@ -217,7 +217,6 @@
 
 	.wrapper .button-register {
 		width: 100%;
-		margin: 10px;
 		box-sizing: border-box;
 		padding: 10vw 10vw 0 10vw;
 	}
@@ -233,6 +232,8 @@
 
 		border: none;
 		outline: none;
+		
+		position: relative;
 	}
 
 	.wrapper .brand {

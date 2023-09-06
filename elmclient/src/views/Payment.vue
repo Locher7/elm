@@ -28,22 +28,22 @@
 			</li>
 		</ul>
 
-<!-- 积分抵扣 -->
+		<!-- 积分抵扣 -->
 
-<div class="credit-deduction">
-    <div class="credit-info">
-        <p>剩余{{credit}}积分</p>
-        <p v-if="useCredit" class="credit-used-text">使用{{ amount }}积分，抵扣<label class="orangered">{{amount/100}}</label>&#165;</p>
-    </div>
-    <div class="credit-toggle">
-        <span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
-        <i class="fa" :class="useCredit ? 'fa-toggle-on' : 'fa-toggle-off'" @click="toggleCreditUse"></i>
-    </div>
-</div>
+		<div class="credit-deduction">
+			<div class="credit-info">
+				<p>剩余{{credit}}积分</p>
+				<p v-if="useCredit" class="credit-used-text">使用{{ this.orders.orderTotal }}积分，抵扣<label class="orangered">{{ this.orders.orderTotal/10 }}</label>&#165;</p>
+			</div>
+			<div class="credit-toggle">
+				<span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
+				<i class="fa" :class="useCredit ? 'fa-toggle-on' : 'fa-toggle-off'" @click="toggleCreditUse"></i>
+			</div>
+		</div>
 
-<div class="current-total">
-    <p>总金额: <span>&#165;{{ orders.orderTotal - amount/100 }}</span></p>
-</div>
+		<div class="current-total">
+			<p>总金额: <span>&#165;{{ discountedTotal }}</span></p>
+		</div>
 
 		<!-- 支付方式 -->
 		<ul class="payment-type">
@@ -55,7 +55,7 @@
 				<img src="../assets/wechat.png">
 			</li>
 		</ul>
-		<div class="payment-button">
+		<div class="payment-button" @click="pay">
 			<button>确认支付</button>
 		</div>
 
@@ -73,35 +73,41 @@
 		name: 'Payment',
 		data() {
 			return {
+				user:{},
 				orderId: this.$route.query.orderId,
 				orders: {
 					business: {}
 				},
 				isShowDetailet: false,
 				credit: '',
-				amount: '',
 				useCredit: false,
+				discountedTotal: 0,
+				useIntegration: 0
 			}
 		},
 
 		created() {
+			this.user = this.$getSessionStorage('user');
+
 			//查询订单
 			this.$axios.post('OrdersController/getOrdersById', this.$qs.stringify({
 				orderId: this.orderId
 			})).then(response => {
 				this.orders = response.data;
+				this.discountedTotal = this.orders.orderTotal;
 				console.log(this.orders)
 			}).catch(error => {
 				console.error(error);
 			});
-			//查询积分
-			// this.$axios.post('PointController/getBalanceByUserId', this.$qs.stringify({
-			// 	userId: this.user.userId,
-			// })).then(response => {
-			// 	this.credit = response.data;
-			// }).catch(error => {
-			// 	console.error(error);
-			// });
+
+			//查询总积分
+			this.$axios.post('IntegrationController/getCreditByUserId', this.$qs.stringify({
+				userId: this.user.userId,
+			})).then(response => {
+				this.credit = response.data;
+			}).catch(error => {
+				console.error(error);
+			});
 		},
 
 		mounted() {
@@ -114,52 +120,54 @@
 			}
 		},
 
-		// beforeRouteLeave(to, from, next) {
-  		// // 在离开该路由前，手动保存历史状态
-		// history.replaceState(history.state, '', document.URL);
-		// next();
-		// },
-
-
 		destroyed() {
 			window.onpopstate = null;
 		},
 
 		methods: {
+			//是否展示订单明细
 			detailetShow() {
 				this.isShowDetailet = !this.isShowDetailet;
 			},
-			pay(){
-				this.$axios.post('OrdersController/payByVirtualWallet', this.$qs.stringify({
+			//支付
+			pay() {
+				if (this.toggleCreditUse == true) {
+					this.useIntegration = 1;
+				}
+				this.$axios.post('IntegrationController/payCredit', this.$qs.stringify({
 					userId: this.user.userId,
-					orderId: this.orderId,
-					pointAmount: this.amount,
+					pointAmount: this.orders.orderTotal,
+					useIntegration: this.useIntegration
 				})).then(response => {
-					let result = response.data;
-					if(result == 200){
-						alert('支付成功！');
-					}else if(result == 1){
-						alert('积分余额不足！');
-					}else if(result == 2){
-						alert('支付失败，订单已支付！');
-					}else{
-						alert('未知错误！');
+					if(response.data==1){
+						alert("支付成功")
+						this.$router.push('/index');
+					}
+					if(response.data==0){
+						alert("支付失败")
+						this.$router.push('/index');
 					}
 				}).catch(error => {
 					console.error(error);
+					alert("请求出错，请稍后重试!")
 				});
+
 			},
 
 			toggleCreditUse() {
-        this.useCredit = !this.useCredit;
-        if(!this.useCredit) {
-            // 如果用户选择不使用积分，那么抵扣金额为0
-            this.amount = 0;
-        } else {
-            // 否则，你可以根据你的积分计算规则设置抵扣金额
-            this.amount = 0;
-        }
-    },
+				if (this.credit < this.orders.orderTotal) {
+					alert("剩余积分不足");
+				} else {
+					this.useCredit = !this.useCredit;
+				}
+				// this.useCredit = !this.useCredit;
+				if (!this.useCredit) {
+					this.discountedTotal = this.orders.orderTotal;
+				} else {
+					this.discountedTotal = this.orders.orderTotal - this.orders.orderTotal / 10;
+				}
+			},
+
 		},
 
 		components: {
@@ -282,73 +290,83 @@
 
 	}
 
-	
-	
-
-/****************** 积分抵扣 ****************/
-.wrapper .credit-deduction {
-    margin: 6vw 4vw;
-    padding: 2vw;
-    border: 1px solid #e0e0e0;  /* 添加细边框 */
-    border-radius: 1vw;
-    background-color: #ffffff;  /* 更换为白色背景 */
-    box-shadow: 0 1vw 2vw rgba(0,0,0,0.1);  /* 更为细微的阴影效果 */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.wrapper .credit-deduction .credit-info {
-    display: flex;
-    flex-direction: column; /* 垂直排列 */
-}
-
-.wrapper .credit-deduction p {
-    margin: 0;
-    font-size: 4vw;
-    color: #666;  /* 深蓝色文字 */
-}
-
-.wrapper .credit-deduction .credit-used-text {
-    margin-top: 1vw;
-}
-
-.wrapper .credit-deduction label {
-    color: orangered;
-}
-
-.wrapper .credit-deduction .credit-toggle {
-    display: flex;
-    align-items: center;
-}
-
-.wrapper .credit-deduction .credit-toggle .credit-use {
-    margin-right: 1vw;
-    font-size: 3.5vw;
-    color: #666;
-}
-
-.wrapper .credit-deduction .credit-toggle .fa {
-    font-size: 5vw;
-    color: white;
-    background-color: #666;  /* 蓝色背景 */
-    border-radius: 50%;  /* 圆形按钮 */
-    padding: 0.5vw;
-    transition: transform 0.3s;  /* 平滑的移动效果 */
-}
 
 
-/****************** 总金额 ******************/
-.wrapper .current-total {
-    margin:4vw 4vw;
-    text-align: right;  /* 靠右显示 */
-    font-size: 4vw;
-    color: #555;
-}
 
-.wrapper .current-total span {
-    color: orangered;  /* 高亮显示金额部分 */
-    font-weight: bold;
-}
+	/****************** 积分抵扣 ****************/
+	.wrapper .credit-deduction {
+		margin: 6vw 4vw;
+		padding: 2vw;
+		border: 1px solid #e0e0e0;
+		/* 添加细边框 */
+		border-radius: 1vw;
+		background-color: #ffffff;
+		/* 更换为白色背景 */
+		box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
+		/* 更为细微的阴影效果 */
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
+	.wrapper .credit-deduction .credit-info {
+		display: flex;
+		flex-direction: column;
+		/* 垂直排列 */
+	}
+
+	.wrapper .credit-deduction p {
+		margin: 0;
+		font-size: 4vw;
+		color: #666;
+		/* 深蓝色文字 */
+	}
+
+	.wrapper .credit-deduction .credit-used-text {
+		margin-top: 3vw;
+		font-size: 3.5vw;
+	}
+
+	.wrapper .credit-deduction label {
+		color: orangered;
+	}
+
+	.wrapper .credit-deduction .credit-toggle {
+		display: flex;
+		align-items: center;
+	}
+
+	.wrapper .credit-deduction .credit-toggle .credit-use {
+		margin-right: 1vw;
+		font-size: 3.5vw;
+		color: #666;
+	}
+
+	.wrapper .credit-deduction .credit-toggle .fa {
+		font-size: 5vw;
+		color: white;
+		background-color: #666;
+		/* 蓝色背景 */
+		border-radius: 50%;
+		/* 圆形按钮 */
+		padding: 0.5vw;
+		transition: transform 0.3s;
+		/* 平滑的移动效果 */
+	}
+
+
+	/****************** 总金额 ******************/
+	.wrapper .current-total {
+		margin: 4vw 4vw;
+		text-align: right;
+		/* 靠右显示 */
+		font-size: 4vw;
+		color: #555;
+	}
+
+	.wrapper .current-total span {
+		color: orangered;
+		/* 高亮显示金额部分 */
+		font-weight: bold;
+	}
 </style>

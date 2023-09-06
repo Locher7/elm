@@ -10,75 +10,74 @@
 			<div class="credit-icon"><i class="fa fa-gift"></i></div>
 			<h2>26</h2>
 			<p>总积分</p>
-			<!-- <div class="credit-use-icons">
-				<div class="credit-detail-icon">
-					<i class="fa fa-list"></i>
-					<p>积分明细</p>
-				</div>
-				<div class="credit-divider"></div>
-				<div class="credit-expire-icon">
-					<i class="fa fa-clock-o"></i>
-					<p>过期积分</p>
-				</div>
-			</div> -->
 			<div class="credit-use">
 				<button @click="toIndex">去使用</button>
 			</div>
 		</div>
 		<!-- 积分明细 -->
-		<h3>积分明细</h3>
-		<ul class="credit-detailed">
-			<li>
-				<div class="credit-detailed-left">
-					<p>使用积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>-9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>获得积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>+9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>使用积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>-9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>获得积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>+9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>使用积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>-9</p>
-				</div>
-			</li>
-		</ul>
+		<h3>
+			积分明细
+			<span class="credit-rule" @click="showRuleModal">
+				积分规则
+				<i class="fa fa-question-circle"></i>
+			</span>
+		</h3>
 
+		<ul class="credit-detailed">
+			<li v-for="item in detailArr" :key="item.id">
+				<div class="credit-detailed-left">
+					<p>{{ item.detail }}</p>
+					<p>{{ item.time }}</p>
+				</div>
+				<div class="credit-detailed-right">
+					<p>{{ item.amount }}</p>
+				</div>
+			</li>
+			<!-- <li>
+				<div class="credit-detailed-left">
+					<p>使用积分</p>
+					<p>2023-08-14 17:21:33</p>
+				</div>
+				<div class="credit-detailed-right">
+					<p>-9</p>
+				</div>
+			</li>
+			<li>
+				<div class="credit-detailed-left">
+					<p>获得积分</p>
+					<p>2023-08-14 17:21:33</p>
+				</div>
+				<div class="credit-detailed-right">
+					<p>+9</p>
+				</div>
+			</li>
+			<li>
+				<div class="credit-detailed-left">
+					<p>积分过期</p>
+					<p>2023-08-14 17:21:33</p>
+				</div>
+				<div class="credit-detailed-right">
+					<p>-9</p>
+				</div>
+			</li> -->
+		</ul>
+		<div v-if="isRuleModalVisible" class="rule-modal-overlay" @click="closeRuleModal">
+			<div class="rule-modal-content" @click.stop>
+				<h4>积分规则</h4>
+				<p>这里写上您的积分规则详情。</p>
+			</div>
+		</div>
 
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
 	</div>
+	<div v-if="isRuleModalVisible" class="rule-modal-overlay" @click="closeRuleModal">
+		<div class="rule-modal-content" @click.stop>
+			<h4>积分规则</h4>
+			<p>这里写上您的积分规则详情。</p>
+		</div>
+	</div>
+
 </template>
 
 <script>
@@ -86,20 +85,35 @@
 	export default {
 		name: 'Credit',
 		data() {
-			return{
+			return {
 				detailArr: [],
 				user: {},
+				isRuleModalVisible: false
 			}
 		},
 		methods: {
 			toIndex() {
 				this.$router.push('/index');
 			},
+			showRuleModal() {
+				this.isRuleModalVisible = true;
+			},
+			closeRuleModal() {
+				this.isRuleModalVisible = false;
+			},
 		},
-		created(){
+		created() {
 			this.user = this.$getSessionStorage('user');
-			//查询积分信息
-			this.$axios.post('PointController/getDetailsByUserId', this.$qs.stringify({
+			//查询总积分
+			this.$axios.post('IntegrationController/getCreditByUserId', this.$qs.stringify({
+				userId: this.user.userId,
+			})).then(response => {
+				this.credit = response.data;
+			}).catch(error => {
+				console.error(error);
+			});
+			//查询积分明细
+			this.$axios.post('IntegrationController/getDetailsByUserId', this.$qs.stringify({
 				userId: this.user.userId,
 			})).then(response => {
 				this.detailArr = response.data;
@@ -246,34 +260,61 @@
 		color: red;
 	}
 
-	/* ***************** Credit Use Icons *************** */
-	/* .wrapper .credit-use-icons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 2vw;
+	.credit-rule {
+    font-size: 2.6vw;
+    margin-left: 2vw;
+    color: #5d5f60;
+    cursor: pointer;
 }
 
-.wrapper .credit-detail-icon, 
-.wrapper .credit-expire-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 45%;
-    font-size: 3.8vw;
-}
+	/* 积分规则弹窗 */
+	.credit-rule i {
+		margin-left: 1vw;
+		font-size: 2vw;
+		color: grey;
+	}
 
-.wrapper .credit-detail-icon i, 
-.wrapper .credit-expire-icon i {
+	.rule-modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.6);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+	}
+
+	.rule-modal-content {
+		background-color: #fff;
+		padding: 4vw;
+		border-radius: 2.5vw;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+		max-width: 85vw;
+		width: 100%;
+		position: relative;
+	}
+
+	.rule-modal-content h4 {
     font-size: 4.5vw;
-    margin-bottom: 1vw;
+    margin-bottom: 1.5vw;
+    font-weight: 600;    
+    border-bottom: 2px solid #dedede;
+    padding-bottom: 1vw;
+    text-align: center; 
+    color: #333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+	border-image: linear-gradient(to right, #aaa, #333, #aaa);
+    border-image-slice: 1;
 }
 
-.wrapper .credit-divider {
-    height: 6vw;
-    width: 1px;
-    background-color: rgba(0,0,0,0.1);
-    margin-top: -1vw;
-} */
+
+
+	.rule-modal-content p {
+		font-size: 3.6vw;
+		line-height: 5vw;
+		color: #666;
+	}
 </style>

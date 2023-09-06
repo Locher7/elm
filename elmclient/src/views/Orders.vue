@@ -42,7 +42,8 @@
 			</div>
 			<div class="ai-chat">
 				<img src="../assets/aiImg.png">
-				<div class="ai-text">{{ aiString }}</div>
+				<!-- <pre class="ai-text">{{ aiString }}</pre> -->
+				<pre class="ai-text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</pre>
 			</div>
 		</div>
 
@@ -336,6 +337,7 @@
 
 	.wrapper .ai-chat {
 		display: flex;
+		margin-bottom: 50px;
 	}
 
 	.wrapper .ai-chat img {
@@ -357,6 +359,8 @@
 		font-family: 'Arial', sans-serif;
 		text-align: left;
 		position: relative;
+		white-space: pre-wrap;
+    max-height: XXvw;
 	}
 
 	.wrapper .ai-chat .ai-text:after {
