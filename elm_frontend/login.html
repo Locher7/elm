@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<link  href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-		<link  href="framework/reset.css" rel="stylesheet">
-		<link  href="css/login.css" rel="stylesheet">
+		<link href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		<link href="framework/reset.css" rel="stylesheet">
+		<link href="css/login.css" rel="stylesheet">
 		<title>饿了么 用户登录</title>
 	</head>
 	<body>
@@ -15,53 +15,40 @@
 				<p>用户登录</p>
 			</header>
 			
+			<div class="login">
+				<h2>密码登录</h2>
+				<img src="img/elm-brand.png">
+			</div>
 			<!-- 表单部分 -->
 			<ul class="form-box">
 				<li>
-					<div class="title">
-						手机号码: 
-					</div>
 					<div class="content">
-						<input type="text" placeholder="手机号码">
+						<input type="text" v-model="userId" placeholder="请输入手机号">
 					</div>
 				</li>
 				<li>
-					<div class="title">
-						密码: 
-					</div>
 					<div class="content">
-						<input type="password" placeholder="密码">
+						<input type="password" v-model="password" placeholder="请输入密码">
 					</div>
 				</li>
 			</ul>
-			
+
 			<div class="button-login">
-				<button>登录</button>
+				<button @click="login">登录</button>
+			</div>
+
+			<div class="divider">
+				<div class="line"></div>
+				<div class="text">OR</div>
+				<div class="line"></div>
 			</div>
 			<div class="button-register">
-				<button onclick="location.href='register.html'">去注册</button>
+				<button @click="register">注册</button>
 			</div>
-			
-			<!-- 底部菜单 -->
-			<ul class="footer">
-				<li onclick="location.href='index.html'">
-					<i class="fa fa-home"></i>
-					<p>首页</p>
-				</li>
-				<li>
-					<i class="fa fa-compass"></i>
-					<p>发现</p>
-				</li>
-				<li onclick="location.href='orderList.html'">
-					<i class="fa fa-file-text-o"></i>
-					<p>订单</p>
-				</li>
-				<li>
-					<i class="fa fa-user-o"></i>
-					<p>我的</p>
-				</li>
-			</ul>
-			
+
+			<div class="brand">
+				<img src="img/brand.png">
+			</div>
 		</div>
 	</body>
 </html>
