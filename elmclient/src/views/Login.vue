@@ -4,21 +4,19 @@
 		<header>
 			<p>用户登录</p>
 		</header>
-		<img src="../assets/brand.png">
+
+		<div class="login">
+			<h2>密码登录</h2>
+			<img src="img/elm-brand.png">
+		</div>
 		<!-- 表单部分 -->
 		<ul class="form-box">
 			<li>
-				<div class="title">
-					手机号码:
-				</div>
 				<div class="content">
 					<input type="text" v-model="userId" placeholder="请输入手机号">
 				</div>
 			</li>
 			<li>
-				<div class="title">
-					密码:
-				</div>
 				<div class="content">
 					<input type="password" v-model="password" placeholder="请输入密码">
 				</div>
@@ -38,8 +36,9 @@
 			<button @click="register">注册</button>
 		</div>
 
-		<!-- 底部菜单 -->
-		<Footer></Footer>
+		<div class="brand">
+			<img src="img/brand.png">
+		</div>
 	</div>
 </template>
 
@@ -97,7 +96,7 @@
 	.wrapper {
 		width: 100%;
 		height: 100%;
-
+		overflow: auto;
 	}
 
 	/****************** header ****************/
@@ -118,16 +117,22 @@
 		align-items: center;
 	}
 
-	.wrapper img {
-		height: 20vh;
-		width: 50vw;
-		display: block;
-		margin: 20vw auto 0vw auto;
+	.wrapper .login {
+		margin: 30vw 0 10vw 12vw;
+	}
+
+	.wrapper .login img {
+		width: 40vw;
+		opacity: 15%;
+		position: absolute;
+		top: 22%;
+		left: 30%;
 	}
 
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
 		width: 100%;
+		margin-bottom: 10vw;
 	}
 
 	.wrapper .form-box li {
@@ -139,17 +144,8 @@
 		border-width: 0px 0px 1.8px 0px;
 	}
 
-	.wrapper .form-box li .title {
-		margin: 2vw 0vw;
-		flex: 0 0 18vw;
-		font-size: 3.8vw;
-		font-weight: 550;
-		color: #666;
-	}
-
 	.wrapper .form-box li .content {
-		flex: 1;
-		margin: 2vw 0vw 2vw 2vw;
+		margin: 2vw 1vw 2vw 2vw;
 	}
 
 	.wrapper .form-box li .content input {
@@ -157,7 +153,7 @@
 		outline: none;
 		width: 100%;
 		height: 4vw;
-		font-size: 3.5vw;
+		font-size: 4vw;
 		background-color: transparent;
 	}
 
@@ -169,7 +165,7 @@
 
 	.wrapper .button-login button {
 		width: 100%;
-		height: 13vw;
+		height: 11vw;
 		font-size: 5vw;
 		font-weight: 700;
 		color: #fff;
@@ -188,7 +184,7 @@
 
 	.wrapper .button-register button {
 		width: 100%;
-		height: 13vw;
+		height: 11vw;
 		font-size: 5vw;
 		font-weight: 700;
 		color: #666;
@@ -222,5 +218,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.wrapper .brand {
+		position: absolute;
+		bottom: 0;
+		left: 37.5vw;
+	}
+
+	.wrapper .brand img {
+		width: 25vw;
 	}
 </style>

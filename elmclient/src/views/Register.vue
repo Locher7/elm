@@ -4,43 +4,36 @@
 		<header>
 			<p>用户注册</p>
 		</header>
-		<img src="../assets/brand.png">
 		<!-- 表单部分 -->
+		<div class="register">
+			<h2>手机号注册</h2>
+			<img src="img/elm-brand.png">
+		</div>
 		<ul class="form-box">
 			<li>
-				<div class="title">
-					手机号码:
-				</div>
 				<div class="content">
 					<input type="text" @blur="checkUserId" v-model="user.userId" placeholder="请输入手机号码">
 				</div>
 			</li>
 			<li>
-				<div class="title">
-					密码:
-				</div>
 				<div class="content">
 					<input type="password" v-model="user.password" placeholder="请输入密码">
 				</div>
 			</li>
 			<li>
-				<div class="title">
-					确认密码:
-				</div>
 				<div class="content">
 					<input type="password" v-model="confirmPassword" placeholder="请确认密码">
 				</div>
 			</li>
 			<li>
-				<div class="title">
-					用户名称:
-				</div>
 				<div class="content">
 					<input type="text" v-model="user.userName" placeholder="请输入用户名称">
 				</div>
 			</li>
 			<li>
-				<div class="title">性别:</div>
+				<div class="title">
+					请选择性别：
+				</div>
 				<div class="content" style="font-size: 3vw;">
 					<input type="radio" v-model="user.userSex" value="1" style="width: 6vw;height: 3.2vw;">男
 					<input type="radio" v-model="user.userSex" value="0" style="width: 6vw;height: 3.2vw;">女
@@ -51,9 +44,9 @@
 		<div class="button-register">
 			<button @click="register">注册</button>
 		</div>
-
-		<!-- 底部菜单 -->
-		<Footer></Footer>
+		<div class="brand">
+			<img src="img/brand.png">
+		</div>
 
 	</div>
 </template>
@@ -144,6 +137,7 @@
 	.wrapper {
 		width: 100%;
 		height: 100%;
+		overflow: auto;
 	}
 
 	/****************** header ****************/
@@ -164,17 +158,27 @@
 		align-items: center;
 	}
 
-	.wrapper img {
-		height: 20vh;
-		width: 50vw;
-		display: block;
-		margin: 20vw auto 0vw auto;
+	.wrapper .register {
+		margin: 30vw 0 2vw 12vw;
+	}
+
+	.wrapper .register h2 {
+		font-weight: 550;
+		margin-bottom: 1vw;
+	}
+
+	.wrapper .register img {
+		width: 60vw;
+		opacity: 15%;
+		position: absolute;
+		top: 26%;
+		left: 20%;
 	}
 
 	/****************** 表单部分 ****************/
 	.wrapper .form-box {
 		width: 100%;
-		margin-top: 12vw;
+		margin-top: 9vw;
 	}
 
 	.wrapper .form-box li {
@@ -188,7 +192,7 @@
 
 	.wrapper .form-box li .title {
 		margin: 2vw 0vw;
-		flex: 0 0 18vw;
+		flex: 0 0 24vw;
 		font-size: 3.8vw;
 		font-weight: 700;
 		color: #666;
@@ -204,7 +208,7 @@
 		outline: none;
 		width: 100%;
 		height: 4vw;
-		font-size: 3.5vw;
+		font-size: 4vw;
 		background-color: transparent;
 	}
 
@@ -216,7 +220,7 @@
 
 	.wrapper .button-register button {
 		width: 100%;
-		height: 13vw;
+		height: 11vw;
 		font-size: 5vw;
 		font-weight: 550;
 		color: #fff;
@@ -225,5 +229,15 @@
 
 		border: none;
 		outline: none;
+	}
+
+	.wrapper .brand {
+		position: absolute;
+		bottom: 0;
+		left: 37.5vw;
+	}
+
+	.wrapper .brand img {
+		width: 25vw;
 	}
 </style>
