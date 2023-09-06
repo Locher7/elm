@@ -34,15 +34,23 @@
 		</div>
 
 		<!-- ai聊天框 -->
-		<div class="ai-header">AI健康助手</div>
-		<div class="ai-chat">
-			<img src="../assets/aiImg.png">
-			<div class="ai-text">
-				您好，我是您的AI健康助手。<br>
-				您本餐选购了，预计摄入 卡路里。<br>
-				您需要进行  公里的慢跑或者 小时的游泳可消耗这些热量。
-			</div>
+		<!-- ai聊天框 -->
+<div class="ai-section">
+	<div class="ai-header">
+		<div class="ai-header-text">AI健康助手</div>
+		
+		<button @click="refreshPage" class="refresh-btn">重新生成</button>
+	</div>
+	<div class="ai-chat">
+		<img src="../assets/aiImg.png">
+		<div class="ai-text">
+			您好，我是您的AI健康助手。<br>
+			您本餐选购了，预计摄入 卡路里。<br>
+			您需要进行  公里的慢跑或者 小时的游泳可消耗这些热量。
 		</div>
+	</div>
+</div>
+
 
 		<!-- 订单合计 -->
 		<div class="total">
@@ -61,7 +69,8 @@
 				business: {},
 				user: {},
 				cartArr: [],
-				deliveryaddress: {}
+				deliveryaddress: {},
+				aiString:''
 			}
 		},
 
@@ -84,15 +93,25 @@
 
 			//查询当前用户在购物车中的商家食品列表
 			this.$axios.post('CartController/listCart', this.$qs.stringify({
-				userId: this.user.userId,
-				businessId: this.businessId
-			})).then(response => {
-				this.cartArr = response.data;
-				console.log('购物车信息:', this.cartArr);
-			}).catch(error => {
-				console.error(error);
-			});
+	userId: this.user.userId,
+	businessId: this.businessId
+})).then(response => {
+	this.cartArr = response.data;
+	console.log('购物车信息:', this.cartArr);
+
+	// 在这里查询AI语音
+	return this.$axios.post('CartController/aiSuggestion', this.$qs.stringify({
+		cartArr:this.cartArr
+	}));
+
+}).then(response => {
+	this.aiString = response.data;
+	console.log('ai语言:', this.aiString);
+}).catch(error => {
+	console.error(error);
+});
 		},
+
 
 		methods: {
 			toUserAddress() {
@@ -132,6 +151,9 @@
 				});
 
 			},
+			refreshPage() {
+        location.reload();
+    },
 		},
 
 		computed: {
@@ -277,6 +299,43 @@
 		align-items: center;
 		font-size: 3.5vw;
 	}
+/* ai健康助手 */
+	.wrapper .ai-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper .ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wrapper .ai-header-text {
+    margin: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    background: linear-gradient(90deg, #5DBBE8, #62C7A9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.wrapper .ai-header-text:before {
+    content: '\f2be';
+    font-family: 'FontAwesome';
+    margin-right: 10px;
+}
+
+.wrapper .ai-header-text:hover {
+    background: linear-gradient(90deg, #62C7A9, #5DBBE8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
 
 	.wrapper .ai-chat{
 		display: flex;
@@ -317,32 +376,21 @@
 
 
 
-.wrapper .ai-header {
-    margin: 20px;
-    font-family: 'Arial', sans-serif;
-    font-size: 18px;
-    background: linear-gradient(90deg, #5DBBE8, #62C7A9);
+.refresh-btn {
+    background: #62C7A9;
+	margin: 10px;  /* 选择一个与页面相搭配的颜色 */
     color: #fff;
-    padding: 10px 20px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    padding: 5px 15px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-
-.wrapper .ai-header:before {
-    content: '\f2be';
-    font-family: 'FontAwesome';
-    margin-right: 10px;
+.refresh-btn:hover {
+    background: #5DBBE8;  /* 悬停时的颜色，与页面相搭配 */
 }
 
-.wrapper .ai-header:hover {
-    background: linear-gradient(90deg, #62C7A9, #5DBBE8);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
 
 
 

@@ -23,9 +23,9 @@
 		<i class="fa fa-list icon"></i>  <!-- 替换成 Font Awesome 的家图标 -->
 		<p>地址管理</p>
 	</div>
-	<div class="nav-item" @click="toEditInfo">
+	<div class="nav-item" @click="toCredit">
 		<i class="fa fa-clock-o icon"></i>  <!-- 替换成 Font Awesome 的编辑图标 -->
-		<p>修改信息</p>
+		<p>我的积分</p>
 	</div>
 </nav>
 
@@ -34,21 +34,21 @@
 
 		<!-- Instructions Section -->
 		<section class="instructions">
-			<div class="instruction-item" @click="toCredit">
-				<p>我的积分</p>
-				<div class="arrow-icon"></div>
+			<div class="instruction-item" @click="toEditInfo">
+				<p>修改密码</p>
+				<img src="../assets/more-icon.png">
 			</div>
-			<div class="instruction-item" @click="feedbackQ">
+			<div class="instruction-item" >
 				<p>使用说明</p>
-				<div class="arrow-icon"></div>
+				<img src="../assets/more-icon.png">
 			</div>
-			<div class="instruction-item" @click="editInfo">
+			<div class="instruction-item">
 				<p>问题反馈</p>
-				<div class="arrow-icon"></div>
+				<img src="../assets/more-icon.png">
 			</div>
-			<div class="instruction-item" @click="toCheck">
+			<div class="instruction-item">
 				<p>检查更新</p>
-				<div class="arrow-icon"></div>
+				<img src="../assets/more-icon.png">
 			</div>
 		</section>
 
@@ -166,24 +166,30 @@
 }
 
 
-
 	.instructions {
 		display: flex;
 		flex-direction: column;
 		margin: 0 20px 20px 20px;
 		background-color: #ffffff;
-		padding: 15px 0;
+		padding: 10px 0;
 		border-radius: 15px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	}
 
 	.instruction-item {
+		margin: 0 15px;
 		display: flex;
 		justify-content: space-between;
 		padding: 10px 20px;
 		border-bottom: 1px solid #dfd8d8;
 		cursor: pointer;
 		/* 指示这是可点击的 */
+	}
+
+	.instruction-item img {
+		height: 2vh;
+		width: 2.5vw;
+		margin-top: 2px;
 	}
 
 	.instruction-item:last-child {
