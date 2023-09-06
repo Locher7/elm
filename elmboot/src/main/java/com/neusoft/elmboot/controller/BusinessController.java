@@ -11,7 +11,7 @@ import com.neusoft.elmboot.po.Business;
 import com.neusoft.elmboot.service.BusinessService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081") // 允许来自此域的请求
+@CrossOrigin(origins = "http://localhost:8080") // 允许来自此域的请求
 @RequestMapping("/BusinessController")
 public class BusinessController {
 	
@@ -20,7 +20,6 @@ public class BusinessController {
 	
 	@RequestMapping("/listBusinessByOrderTypeId")
 	public List<Business> listBusinessByOrderTypeId(Business business) throws Exception{
-		System.out.println("%%%%%%%^^^^^^^^^^");
 		return businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
 	}
 	

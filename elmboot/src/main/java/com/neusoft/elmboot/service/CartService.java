@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.neusoft.elmboot.mapper.CartMapper;
@@ -14,5 +15,7 @@ public interface CartService {
 	public int updateCart(Cart cart);
 	
 	public int removeCart(Cart cart);
+	
+	public String aiSuggestion (Cart cart) throws IOException;
 
 }
