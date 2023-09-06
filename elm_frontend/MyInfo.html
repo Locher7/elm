@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		<link href="framework/reset.css" rel="stylesheet">
+		<link href="css/MyInfo.css" rel="stylesheet">
+		<title></title>
+	</head>
+	<body>
+		<div class="wrapper">
+			<!-- Header -->
+			<header class="header">
+				<h1 class="title">个人中心</h1>
+			</header>
+		
+			<!-- User Info Section -->
+			<section class="user-info">
+				<div class="avatar">
+					<img src="img/userImg/yhtx04.png">
+				</div>
+				<div class="user-details">
+					<h2 class="username">用户名称</h2>
+					<p class="student-id">手机号码</p>
+				</div>
+			</section>
+		
+			<nav class="nav-section">
+				<div class="nav-item" @click="toMyAddress">
+					<i class="fa fa-home"></i> <!-- 替换成 Font Awesome 的家图标 -->
+					<p>地址管理</p>
+				</div>
+				<div class="nav-item" @click="toEditInfo">
+					<i class="fa fa-edit"></i> <!-- 替换成 Font Awesome 的编辑图标 -->
+					<p>修改信息</p>
+				</div>
+			</nav>
+		
+			<!-- Instructions Section -->
+			<section class="instructions">
+				<div class="instruction-item" @click="toCredit">
+					<p>我的积分</p>
+					<div class="arrow-icon"></div>
+				</div>
+				<div class="instruction-item" @click="feedbackQ">
+					<p>使用说明</p>
+					<div class="arrow-icon"></div>
+				</div>
+				<div class="instruction-item" @click="editInfo">
+					<p>问题反馈</p>
+					<div class="arrow-icon"></div>
+				</div>
+				<div class="instruction-item" @click="toCheck">
+					<p>检查更新</p>
+					<div class="arrow-icon"></div>
+				</div>
+			</section>
+		
+			<button type="danger" @click="logout()">退出登录</button>
+	</body>
+</html>
