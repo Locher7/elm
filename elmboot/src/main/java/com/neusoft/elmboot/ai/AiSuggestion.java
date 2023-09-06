@@ -24,12 +24,12 @@ public class AiSuggestion {
 
     	CartMapper cartMapper;
     	
-    	// List<Cart> list = cartMapper.listCart(cart);
+
     	
-    	String food;
+    	String foodlist = "1份猪肉水饺   2份蛋炒饭";
     	String quantity;
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"messages\":[{\"role\":\"user\",\"content\":\"我这一顿吃了100份纯肉鲜肉（水饺），计算我摄入了多少热量，特别注意，只需要告诉我数值即可，不要其他的废话。我的年龄、身高、体重为20岁、180cm、75kg，计算我需要做多少运动（跑步或者游泳或者骑自行车）才能消耗掉这些热量。 特别特别特别需要注意的是，请用下面的形式进行输出：您好，我是您的健康AI助手。换行 您本餐选购了，预计摄入 卡路里。换行 您需要进行  公里的慢跑或者 小时的游泳可消耗这些热量。\"}]}");
+        RequestBody body = RequestBody.create(mediaType, "{\"messages\":[{\"role\":\"user\",\"content\":\"我这一顿吃了" + foodlist + "，计算我摄入了多少热量，特别注意，只需要告诉我数值即可，不要其他的废话，计算我需要做多少运动（跑步或者游泳或者骑自行车）才能消耗掉这些热量。 特别特别特别需要注意的是，请用下面的形式进行输出：您好，我是您的AI健康助手。换行 您本餐选购了" + foodlist + "，预计摄入 卡路里。换行 您需要进行 _公里的慢跑或者_小时的游泳可消耗这些热量。\"}]}");
         Request request = new Request.Builder()
             .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + getAccessToken())
             .method("POST", body)

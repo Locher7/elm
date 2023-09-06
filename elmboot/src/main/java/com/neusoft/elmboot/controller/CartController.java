@@ -35,4 +35,11 @@ public class CartController {
 	public int removeCart(Cart cart) throws Exception{
 		return cartService.removeCart(cart);
 	}
+	
+	@RequestMapping("/aiSuggestion")
+	public String aiSuggestion (Cart cart) throws Exception{
+		List <Cart> list = cartService.listCart(cart);
+		return cartService.aiSuggestion(list);
+	 
+	}
 }
