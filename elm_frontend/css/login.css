@@ -29,9 +29,11 @@
 .wrapper .login img{
 	width: 40vw;
 	opacity: 15%;
+	
 	position: absolute;
 	top: 22%;
 	left: 30%;
+	
 }
 /****************** 表单部分 ****************/
 .wrapper .form-box {
@@ -46,6 +48,8 @@
 	align-items: center;
 	border: #f4eeee solid;
 	border-width: 0px 0px 1.8px 0px;
+	
+	position: relative;
 }
 
 .wrapper .form-box li .content {
