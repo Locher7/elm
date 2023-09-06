@@ -1,5 +1,6 @@
 <template>
 	<div class="wrapper">
+		<img src="../assets/elm-brand.png">
 		<!-- header -->
 		<header>
 			<p>用户注册</p>
@@ -7,7 +8,7 @@
 		<!-- 表单部分 -->
 		<div class="register">
 			<h2>手机号注册</h2>
-			<img src="img/elm-brand.png">
+			
 		</div>
 		<ul class="form-box">
 			<li>
@@ -45,7 +46,7 @@
 			<button @click="register">注册</button>
 		</div>
 		<div class="brand">
-			<img src="img/brand.png">
+			<img src="../assets/brand.png">
 		</div>
 
 	</div>
@@ -167,12 +168,13 @@
 		margin-bottom: 1vw;
 	}
 
-	.wrapper .register img {
+	.wrapper  img {
 		width: 60vw;
 		opacity: 15%;
 		position: absolute;
 		top: 26%;
 		left: 20%;
+		z-index: -1;
 	}
 
 	/****************** 表单部分 ****************/
@@ -199,6 +201,7 @@
 	}
 
 	.wrapper .form-box li .content {
+		width: 100%;
 		flex: 1;
 		margin: 2vw 0vw 2vw 2vw;
 	}
@@ -214,6 +217,7 @@
 
 	.wrapper .button-register {
 		width: 100%;
+		margin: 10px;
 		box-sizing: border-box;
 		padding: 10vw 10vw 0 10vw;
 	}

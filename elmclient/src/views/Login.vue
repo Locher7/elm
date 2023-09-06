@@ -1,5 +1,6 @@
 <template>
 	<div class="wrapper">
+		<img src="../assets/elm-brand.png">
 		<!-- header -->
 		<header>
 			<p>用户登录</p>
@@ -7,7 +8,7 @@
 
 		<div class="login">
 			<h2>密码登录</h2>
-			<img src="img/elm-brand.png">
+			
 		</div>
 		<!-- 表单部分 -->
 		<ul class="form-box">
@@ -37,7 +38,7 @@
 		</div>
 
 		<div class="brand">
-			<img src="img/brand.png">
+			<img src="../assets/brand.png">
 		</div>
 	</div>
 </template>
@@ -106,12 +107,10 @@
 		background-color: #0097ff;
 		color: #fff;
 		font-size: 4.8vw;
-
 		position: fixed;
 		left: 0;
 		top: 0;
 		z-index: 1000;
-
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -121,12 +120,13 @@
 		margin: 30vw 0 10vw 12vw;
 	}
 
-	.wrapper .login img {
+	.wrapper  img {
 		width: 40vw;
 		opacity: 15%;
 		position: absolute;
 		top: 22%;
 		left: 30%;
+		z-index: -1;
 	}
 
 	/****************** 表单部分 ****************/
@@ -145,6 +145,7 @@
 	}
 
 	.wrapper .form-box li .content {
+		width: 100%;
 		margin: 2vw 1vw 2vw 2vw;
 	}
 
