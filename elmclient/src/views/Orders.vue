@@ -13,7 +13,7 @@
 				<i class="fa fa-angle-right"></i>
 			</div>
 			<p>{{ deliveryaddress ? deliveryaddress.contactName : '' }}{{ contactSex!=null? contactSex : ''}} {{ deliveryaddress ? deliveryaddress.contactTel : '' }}</p>
-			
+
 		</div>
 
 		<h3>{{ business ? business.businessName : '' }}</h3>
@@ -34,22 +34,17 @@
 		</div>
 
 		<!-- ai聊天框 -->
-		<!-- ai聊天框 -->
-<div class="ai-section">
-	<div class="ai-header">
-		<div class="ai-header-text">AI健康助手</div>
-		
-		<button @click="refreshPage" class="refresh-btn">重新生成</button>
-	</div>
-	<div class="ai-chat">
-		<img src="../assets/aiImg.png">
-		<div class="ai-text">
-			您好，我是您的AI健康助手。<br>
-			您本餐选购了，预计摄入 卡路里。<br>
-			您需要进行  公里的慢跑或者 小时的游泳可消耗这些热量。
+		<div class="ai-section">
+			<div class="ai-header">
+				<div class="ai-header-text">AI健康助手</div>
+
+				<button @click="refreshPage" class="refresh-btn">重新生成</button>
+			</div>
+			<div class="ai-chat">
+				<img src="../assets/aiImg.png">
+				<div class="ai-text">{{ aiString }}</div>
+			</div>
 		</div>
-	</div>
-</div>
 
 
 		<!-- 订单合计 -->
@@ -70,7 +65,7 @@
 				user: {},
 				cartArr: [],
 				deliveryaddress: {},
-				aiString:''
+				aiString: ''
 			}
 		},
 
@@ -93,24 +88,23 @@
 
 			//查询当前用户在购物车中的商家食品列表
 			this.$axios.post('CartController/listCart', this.$qs.stringify({
-	userId: this.user.userId,
-	businessId: this.businessId
-})).then(response => {
-	this.cartArr = response.data;
-	console.log('购物车信息:', this.cartArr);
+				userId: this.user.userId,
+				businessId: this.businessId
+			})).then(response => {
+				this.cartArr = response.data;
+				console.log('购物车信息:', this.cartArr);
+				// 在这里查询AI语音
+				return this.$axios.post('CartController/aiSuggestion', this.$qs.stringify({
+					userId: this.user.userId,
+					businessId: this.businessId
+				}));
 
-	// 在这里查询AI语音
-	return this.$axios.post('CartController/aiSuggestion', this.$qs.stringify({
-		userId: this.user.userId,
-	businessId: this.businessId
-	}));
-
-}).then(response => {
-	this.aiString = response.data;
-	console.log('ai语言:', this.aiString);
-}).catch(error => {
-	console.error(error);
-});
+			}).then(response => {
+				this.aiString = response.data;
+				console.log('ai语言:', this.aiString);
+			}).catch(error => {
+				console.error(error);
+			});
 		},
 
 
@@ -153,8 +147,8 @@
 
 			},
 			refreshPage() {
-        location.reload();
-    },
+				location.reload();
+			},
 		},
 
 		computed: {
@@ -167,12 +161,12 @@
 				return totalPrice;
 			},
 			contactSex() {
-				if(this.deliveryaddress==null){
+				if (this.deliveryaddress == null) {
 					return;
-				}else{
+				} else {
 					return this.deliveryaddress.contactSex === 1 ? '先生' : '女士';
 				}
-				
+
 			}
 		},
 
@@ -300,97 +294,102 @@
 		align-items: center;
 		font-size: 3.5vw;
 	}
-/* ai健康助手 */
+
+	/* ai健康助手 */
 	.wrapper .ai-section {
-    display: flex;
-    flex-direction: column;
-}
+		display: flex;
+		flex-direction: column;
+	}
 
-.wrapper .ai-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.wrapper .ai-header-text {
-    margin: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 18px;
-    background: linear-gradient(90deg, #5DBBE8, #62C7A9);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-	display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+	.wrapper .ai-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.wrapper .ai-header-text {
+		margin: 10px;
+		font-family: 'Arial', sans-serif;
+		font-size: 18px;
+		background: linear-gradient(90deg, #5DBBE8, #62C7A9);
+		color: #fff;
+		padding: 10px 20px;
+		border-radius: 20px;
+		box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
 
-.wrapper .ai-header-text:before {
-    content: '\f2be';
-    font-family: 'FontAwesome';
-    margin-right: 10px;
-}
+	.wrapper .ai-header-text:before {
+		content: '\f2be';
+		font-family: 'FontAwesome';
+		margin-right: 10px;
+	}
 
-.wrapper .ai-header-text:hover {
-    background: linear-gradient(90deg, #62C7A9, #5DBBE8);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
+	.wrapper .ai-header-text:hover {
+		background: linear-gradient(90deg, #62C7A9, #5DBBE8);
+		transform: translateY(-2px);
+		box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	}
 
-	.wrapper .ai-chat{
+	.wrapper .ai-chat {
 		display: flex;
 	}
-	.wrapper .ai-chat img{
+
+	.wrapper .ai-chat img {
 		height: 15vw;
 		width: 15vw;
 		margin: 5px;
 	}
 
 	.wrapper .ai-chat .ai-text {
-    margin: 10px 50px 20px 10px;
-	padding: 15px;
-    background: rgba(255, 255, 255, 0.9); 
-    border-radius: 8px;
-    box-shadow: 
-        0 4px 8px rgba(0, 0, 0, 0.1),
-        0 8px 16px rgba(0, 0, 0, 0.2),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.05);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9));
-    font-family: 'Arial', sans-serif;
-    text-align: left;
-    position: relative;
-}
+		margin: 10px 50px 20px 10px;
+		padding: 15px;
+		background: rgba(255, 255, 255, 0.9);
+		border-radius: 8px;
+		box-shadow:
+			0 4px 8px rgba(0, 0, 0, 0.1),
+			0 8px 16px rgba(0, 0, 0, 0.2),
+			inset 0 -4px 8px rgba(0, 0, 0, 0.05);
+		background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(230, 230, 230, 0.9));
+		font-family: 'Arial', sans-serif;
+		text-align: left;
+		position: relative;
+	}
 
-.wrapper .ai-chat .ai-text:after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-right: 15px solid rgba(230, 230, 230, 0.9);
-    position: absolute;
-    top: 10px;
-    left: 0;
-    transform: translateX(-100%);
-}
+	.wrapper .ai-chat .ai-text:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 15px solid transparent;
+		border-bottom: 15px solid transparent;
+		border-right: 15px solid rgba(230, 230, 230, 0.9);
+		position: absolute;
+		top: 10px;
+		left: 0;
+		transform: translateX(-100%);
+	}
 
 
 
-.refresh-btn {
-    background: #62C7A9;
-	margin: 10px;  /* 选择一个与页面相搭配的颜色 */
-    color: #fff;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+	.refresh-btn {
+		background: #62C7A9;
+		margin: 10px;
+		/* 选择一个与页面相搭配的颜色 */
+		color: #fff;
+		padding: 5px 15px;
+		border: none;
+		border-radius: 15px;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
 
-.refresh-btn:hover {
-    background: #5DBBE8;  /* 悬停时的颜色，与页面相搭配 */
-}
+	.refresh-btn:hover {
+		background: #5DBBE8;
+		/* 悬停时的颜色，与页面相搭配 */
+	}
 
 
 
