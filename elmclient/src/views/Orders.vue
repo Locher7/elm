@@ -101,7 +101,8 @@
 
 	// 在这里查询AI语音
 	return this.$axios.post('CartController/aiSuggestion', this.$qs.stringify({
-		cartArr:this.cartArr
+		userId: this.user.userId,
+	businessId: this.businessId
 	}));
 
 }).then(response => {
