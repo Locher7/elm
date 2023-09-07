@@ -14,7 +14,7 @@ export function setSessionStorage(keyStr, value) {
 	sessionStorage.setItem(keyStr, JSON.stringify(value));
 }
 
-//从setsessionStorage中获取一个JSON对象（取不到时返回null）
+//从sessionStorage中获取一个JSON对象（取不到时返回null）
 export function getSessionStorage(keyStr) {
 	var str = sessionStorage.getItem(keyStr);
 	if (str == '' || str == null || str == 'null' || str == undefined) {
