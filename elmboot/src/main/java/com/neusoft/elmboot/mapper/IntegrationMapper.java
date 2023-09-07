@@ -14,6 +14,9 @@ public interface IntegrationMapper {
 	
 	//public List<Integration> listIntegration(Integration integration);
 	
+	@Select("select * from integration where userId = #{userId} and integrationState = #{integrationState} order by integrationId")
+	public List<Integration> listIntegration(Integration integration);
+	
 	@Select("select * from integration where userId = #{userId} order by integrationId desc")
 	public List<Integration> getDetailByUserId(String userId);
 	
