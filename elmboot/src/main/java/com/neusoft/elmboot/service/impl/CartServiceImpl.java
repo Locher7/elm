@@ -61,13 +61,13 @@ public class CartServiceImpl implements CartService{
 	    	Food food = foodMapper.getFoodById(cart1.getFoodId());
 	    	String foodname = food.getFoodName();
 	    	Integer quantity = cart1.getQuantity();
-	    	foodlist.append(quantity.toString() + "份" + foodname + "  ");
+	    	foodlist.append(quantity.toString() + "份" + foodname + " ");
 	    }
 	    
         System.out.println(foodlist.toString() );
     	
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"messages\":[{\"role\":\"user\",\"content\":\"我这一顿吃了" + foodlist.toString() + "，计算我摄入了多少热量，特别注意，只需要告诉我数值即可，不要其他的废话，计算我需要做多少运动（跑步或者游泳或者骑自行车）才能消耗掉这些热量。 特别特别特别需要注意的是，请用下面的形式进行输出：您好，我是您的AI健康助手。换行 您本餐选购了" + foodlist.toString() + "  预计摄入 卡路里。换行 您需要进行_公里的慢跑或者_小时的游泳可消耗这些热量。\"}]}");
+        RequestBody body = RequestBody.create(mediaType, "{\"messages\":[{\"role\":\"user\",\"content\":\"我这一顿吃了" + foodlist.toString() + "，计算我摄入了多少热量，以及还摄入了哪些营养元素，以及还需要摄入哪些食物来保持营养均衡。特别注意，只需要告诉我数值即可，不要其他的废话，计算我需要做多少运动（跑步或者游泳或者骑自行车）才能消耗掉这些热量。 特别特别特别需要注意的是，请用下面的形式进行输出：您好，我是您的AI健康助手。换行 您本餐选购了" + foodlist.toString() + "预计摄入 卡路里。换行 您需要进行_公里的慢跑或者_小时的游泳可消耗这些热量。 换行 您本餐还缺少 营养元素（注意：不超过三种），推荐您再选购 （注意：不超过三种）来保持营养平衡。 \"}]}");
         Request request = new Request.Builder()
             .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + getAccessToken())
             .method("POST", body)
