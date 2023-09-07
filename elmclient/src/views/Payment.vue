@@ -21,7 +21,6 @@
 				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
 			</li>
-
 			<li>
 				<p>配送费</p>
 				<p>&#165;{{ orders.business.deliveryPrice }}</p>
@@ -131,12 +130,13 @@
 			},
 			//支付
 			pay() {
-				if (this.toggleCreditUse == true) {
+				if (this.useCredit == true) {
 					this.useIntegration = 1;
 				}
 				this.$axios.post('IntegrationController/payCredit', this.$qs.stringify({
 					userId: this.user.userId,
-					pointAmount: this.orders.orderTotal,
+					points: this.orders.orderTotal,
+					usedPoints:this.orderId,
 					useIntegration: this.useIntegration
 				})).then(response => {
 					if(response.data==1){

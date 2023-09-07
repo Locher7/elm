@@ -8,7 +8,7 @@
 		<!-- 总积分 -->
 		<div class="credit">
 			<div class="credit-icon"><i class="fa fa-gift"></i></div>
-			<h2>26</h2>
+			<h2>{{ credit }}</h2>
 			<p>总积分</p>
 			<div class="credit-use">
 				<button @click="toIndex">去使用</button>
@@ -24,15 +24,24 @@
 		</h3>
 
 		<ul class="credit-detailed">
-			<li v-for="item in detailArr" :key="item.id">
-				<div class="credit-detailed-left">
-					<p>{{ item.detail }}</p>
-					<p>{{ item.time }}</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>{{ item.amount }}</p>
-				</div>
-			</li>
+			<ul class="credit-detailed">
+				<li v-for="item in detailArr" :key="item.id">
+					<div class="credit-detailed-left" v-if="item.Points > 0">
+						<p>获得积分</p>
+						<p>{{ item.integrationDate }}</p>
+					</div>
+					<div class="credit-detailed-left" v-else-if="item.Points < 0 && item.integrationState==1">
+						<p>积分过期</p>
+					</div>
+					<div class="credit-detailed-left" v-else-if="item.Points < 0">
+						<p>使用积分</p>
+						<p>{{ item.integrationDate }}</p>
+					</div>
+					<div class="credit-detailed-right">
+						<p>{{ item.Points }}</p>
+					</div>
+				</li>
+			</ul>
 			<!-- <li>
 				<div class="credit-detailed-left">
 					<p>使用积分</p>
@@ -78,8 +87,8 @@
 			<p>&nbsp;&nbsp;&nbsp;用户每完成一个订单，将获得与订单总金额相同数量的积分。例如：订单金额为100元，用户将获得100积分。<br></p>
 			<p class="rule-modal-content-title">2.积分使用</p>
 			<p>&nbsp;&nbsp;&nbsp;当用户进行支付时，积分可以抵扣订单金额的十分之一数量的钱。例如：若用户拥有1000积分，最多可以抵扣100元。
-			若用户的积分少于订单金额，则该订单不可使用积分抵扣。
-			使用积分抵扣的金额部分不会再获得积分。</p>
+				若用户的积分少于订单金额，则该订单不可使用积分抵扣。
+				使用积分抵扣的金额部分不会再获得积分。</p>
 			<p class="rule-modal-content-title">3.积分有效期</p>
 			<p>&nbsp;&nbsp;&nbsp;所有在本年9月份获得的积分，将在下一年的10月底过期。例如：2023年9月获得的积分，会在2024年10月31日过期。<br></p>
 			<p class="rule-modal-content-title">4.积分查询</p>
@@ -100,7 +109,8 @@
 			return {
 				detailArr: [],
 				user: {},
-				isRuleModalVisible: false
+				isRuleModalVisible: false,
+				credit:0,
 			}
 		},
 		methods: {
@@ -137,6 +147,9 @@
 		components: {
 			Footer
 		},
+		computed() {
+
+		}
 	}
 </script>
 
@@ -214,7 +227,6 @@
 		color: #fff;
 		background-color: #0097ff;
 		border-radius: 50px;
-
 		border: none;
 		outline: none;
 	}
@@ -309,7 +321,7 @@
 		position: relative;
 	}
 
-	
+
 	.rule-modal-content h4 {
 		font-size: 5vw;
 		margin-bottom: 1.5vw;
@@ -326,27 +338,27 @@
 
 
 	.rule-modal-content p {
-    font-size: 4vw;
-    line-height: 5.5vw;
-    color: #666;
-    margin-bottom: 1.2vw;
-}
+		font-size: 4vw;
+		line-height: 5.5vw;
+		color: #666;
+		margin-bottom: 1.2vw;
+	}
 
 
 	.rule-modal-content-title {
-    font-size: 4.5vw;
-    color: black;
-    font-weight: bold;
-    margin-bottom: 1.5vw;
-}
-.rule-modal-content-bottom {
-    font-size: 4.5vw;
-    font-weight: 500;
-    color: #444; 
-    margin-top: 2vw;
-    padding-left: 1.5vw;
-    border-top: 1px solid #dedede;
-    padding-top: 1.5vw;
-}
+		font-size: 4.5vw;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 1.5vw;
+	}
 
+	.rule-modal-content-bottom {
+		font-size: 4.5vw;
+		font-weight: 500;
+		color: #444;
+		margin-top: 2vw;
+		padding-left: 1.5vw;
+		border-top: 1px solid #dedede;
+		padding-top: 1.5vw;
+	}
 </style>
