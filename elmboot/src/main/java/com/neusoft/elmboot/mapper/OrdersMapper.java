@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Update;
 
+import com.neusoft.elmboot.po.Integration;
 import com.neusoft.elmboot.po.Orders;
 
 @Mapper
@@ -17,6 +19,9 @@ public interface OrdersMapper {
 	
 	
 	public Orders getOrdersById (Integer orderId);
+	
+	@Update("update orders set orderState = #{orderState} where orderId = #{orderId}")
+	public int updateOrders(Orders orders);
 	
 	public List<Orders> listOrdersByUserId (String userId);
 

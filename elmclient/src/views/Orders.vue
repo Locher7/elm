@@ -42,8 +42,8 @@
 			</div>
 			<div class="ai-chat">
 				<img src="../assets/aiImg.png">
-				<pre class="ai-text">{{ aiString }}</pre>
-				<!-- <pre class="ai-text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</pre> -->
+				<!-- <pre class="ai-text">{{ aiString }}</pre> -->
+				<pre class="ai-text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</pre>
 			</div>
 		</div>
 
