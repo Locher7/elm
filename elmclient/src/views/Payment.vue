@@ -131,13 +131,14 @@
 			},
 			//支付
 			pay() {
-				if (this.toggleCreditUse == true) {
+				if (this.useCredit == true) {
 					this.useIntegration = 1;
 				}
 				this.$axios.post('IntegrationController/payCredit', this.$qs.stringify({
 					userId: this.user.userId,
-					pointAmount: this.orders.orderTotal,
-					useIntegration: this.useIntegration
+					points: Math.round(this.orders.orderTotal),
+					usedPoints: this.orderId,
+					integrationState: this.useIntegration
 				})).then(response => {
 					if(response.data==1){
 						alert("支付成功")
