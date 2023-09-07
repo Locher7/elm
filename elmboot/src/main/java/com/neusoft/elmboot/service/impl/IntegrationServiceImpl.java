@@ -69,13 +69,14 @@ public class IntegrationServiceImpl implements IntegrationService {
 		Integer flag = integration.getIntegrationState();
 		integration.setUsedPoints(0);
 		integration.setIntegrationDate(nowDate);
+		integration.setIntegrationState(0);
 		
 		if(flag == 1) { // 表示使用积分
 			
 			//System.out.println("进入");
-			List<Integration> list = integrationMapper.getDetailByUserId(integration.getUserId());
+			List<Integration> list = integrationMapper.listIntegration(integration);
 			// 得到历史账单 并从前往后遍历
-			Collections.reverse(list);
+			//Collections.reverse(list);
 			Iterator<Integration> it = list.iterator();
 			
 			while(it.hasNext() && costPoints != 0) {
