@@ -28,4 +28,19 @@ public class UserController {
 	public int saveUser(User user) throws Exception{
 		return userService.saveUser(user);
 	}
+	
+	@RequestMapping("/editPasswordByUserId")
+	public int editPasswordByUserId(User user) throws Exception {
+		return userService.editPasswordByUserId(user.getUserId(), user.getPassword());
+	}
+	
+	@RequestMapping("/editUserNameByUserId")
+	public int editUserNameByUserId(User user) throws Exception {
+		return userService.editUserNamedByUserId(user.getUserId(), user.getUserName());
+	}
+	
+	@RequestMapping("/editUserImgByUserId")
+	public int editUserImgByUserId(User user) throws Exception {
+		return userService.editUserImgByUserId(user.getUserId(), user.getUserImg());
+	}
 }
