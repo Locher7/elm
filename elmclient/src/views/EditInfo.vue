@@ -99,7 +99,7 @@
 					password: this.password
 				})).then((response) => {
 					// 根据你的后端响应来处理结果
-					if (response.data.success) {
+					if (response.data==1) {
 						alert('修改密码成功!');
 					} else {
 						alert('修改密码失败!');

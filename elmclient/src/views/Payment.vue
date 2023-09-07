@@ -142,10 +142,8 @@
 					if(response.data==1){
 						alert("支付成功")
 						this.$router.push('/index');
-					}
-					if(response.data==0){
+					}else{
 						alert("支付失败")
-						this.$router.push('/index');
 					}
 				}).catch(error => {
 					console.error(error);

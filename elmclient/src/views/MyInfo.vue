@@ -38,19 +38,16 @@
 
 		<nav class="nav-section">
 			<div class="nav-item" @click="toMyAddress">
-				<i class="fa fa-list icon"></i> <!-- 替换成 Font Awesome 的家图标 -->
+				<i class="fa fa-list icon"></i>
 				<p>地址管理</p>
 			</div>
 			<div class="nav-item" @click="toCredit">
-				<i class="fa fa-clock-o icon"></i> <!-- 替换成 Font Awesome 的编辑图标 -->
+				<i class="fa fa-clock-o icon"></i>
 				<p>我的积分</p>
 			</div>
 		</nav>
 
 
-
-
-		<!-- Instructions Section -->
 		<section class="instructions">
 			<div class="instruction-item" @click="toEditInfo">
 				<p>修改信息</p>
@@ -125,7 +122,7 @@
 					userName: this.user.userName,
 				})).then((response) => {
 					// 根据你的后端响应来处理结果
-					if (response.data.success) {
+					if (response.data==1) {
 						alert('修改用户昵称成功!');
 					} else {
 						alert('修改用户昵称失败!');
