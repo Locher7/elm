@@ -26,19 +26,19 @@
 		<ul class="credit-detailed">
 			<ul class="credit-detailed">
 				<li v-for="item in detailArr" :key="item.id">
-					<div class="credit-detailed-left" v-if="item.Points > 0">
+					<div class="credit-detailed-left" v-if="item.points > 0">
 						<p>获得积分</p>
 						<p>{{ item.integrationDate }}</p>
 					</div>
-					<div class="credit-detailed-left" v-else-if="item.Points < 0 && item.integrationState==1">
+					<div class="credit-detailed-left" v-if="item.points < 0 && item.integrationState==1">
 						<p>积分过期</p>
 					</div>
-					<div class="credit-detailed-left" v-else-if="item.Points < 0">
+					<div class="credit-detailed-left" v-if="item.points < 0">
 						<p>使用积分</p>
 						<p>{{ item.integrationDate }}</p>
 					</div>
 					<div class="credit-detailed-right">
-						<p>{{ item.Points }}</p>
+						<p><span v-if="item.points > 0">+</span>{{ item.points }}</p>
 					</div>
 				</li>
 			</ul>
@@ -88,15 +88,17 @@
 			<p class="rule-modal-content-title">2.积分使用</p>
 			<p>&nbsp;&nbsp;&nbsp;当用户进行支付时，积分可以抵扣订单金额的十分之一数量的钱。例如：若用户拥有1000积分，最多可以抵扣100元。
 				若用户的积分少于订单金额，则该订单不可使用积分抵扣。
-				使用积分抵扣的金额部分不会再获得积分。</p>
+				使用积分抵扣的金额部分不会再获得积分。<br>
+				积分抵扣金额按照四舍五入进行计算。例如：如果金额为24.5元，则使用25的积分，抵扣2.5元。</p>
 			<p class="rule-modal-content-title">3.积分有效期</p>
-			<p>&nbsp;&nbsp;&nbsp;所有在本年9月份获得的积分，将在下一年的10月底过期。例如：2023年9月获得的积分，会在2024年10月31日过期。<br></p>
+			<p>&nbsp;&nbsp;&nbsp;获得的积分具有一年的有效期。例如：2023年9月1日获得的积分，将会在2024年9月1日过期。<br></p>
 			<p class="rule-modal-content-title">4.积分查询</p>
 			<p>&nbsp;&nbsp;&nbsp;用户可以在“我的” -> “我的积分”中查看剩余积分和积分明细。</p>
 			<p class="rule-modal-content-title">5.其他</p>
 			<p>&nbsp;&nbsp;&nbsp;饿了么保留在法律允许范围内更改、暂停或终止此积分规则的权利，用户需定期查看以了解最新规则。</p>
 			<p class="rule-modal-content-bottom">&nbsp;&nbsp;&nbsp;感谢您选择饿了么，我们将不断努力为您带来更好的服务和更多的优惠！</p>
 		</div>
+
 	</div>
 
 </template>
@@ -110,7 +112,7 @@
 				detailArr: [],
 				user: {},
 				isRuleModalVisible: false,
-				credit:0,
+				credit: 0,
 			}
 		},
 		methods: {
@@ -216,7 +218,7 @@
 	.wrapper .credit .credit-use {
 		width: 100%;
 		box-sizing: border-box;
-		padding: 10vw 10vw 0vw 10vw;
+		padding: 5vw 10vw 10vw 10vw;
 	}
 
 	.wrapper .credit .credit-use button {

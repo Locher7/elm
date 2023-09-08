@@ -122,7 +122,7 @@
 					userName: this.user.userName,
 				})).then((response) => {
 					// 根据你的后端响应来处理结果
-					if (response.data==1) {
+					if (response.data == 1) {
 						alert('修改用户昵称成功!');
 					} else {
 						alert('修改用户昵称失败!');
@@ -139,16 +139,16 @@
 			console.log('用户信息：', this.user);
 		},
 		computed: {
-    avatarStyle() {
-        if (this.user.userImg) {
-            return {
-                backgroundImage: `url(${this.user.userImg})`,
-                backgroundSize: 'cover'
-            };
-        }
-        return {};
-    }
-}
+			avatarStyle() {
+				if (this.user.userImg) {
+					return {
+						backgroundImage: `url(${this.user.userImg})`,
+						backgroundSize: 'cover'
+					};
+				}
+				return {};
+			}
+		}
 
 	}
 </script>
@@ -183,6 +183,7 @@
 		padding: 20px 20px 20px 30px;
 		background-color: #0097ff;
 	}
+
 	.user-details {
 		color: #ffffff;
 		margin: 0 20px;
@@ -343,21 +344,22 @@
 		z-index: 1001;
 	}
 
-	
 
-.avatar-display, .enlarged-avatar-display {
-    border-radius: 50%;
-    background-color: #eee; /* Default gray background */
-}
 
-.avatar-display {
-    width: 80px;
-    height: 80px;
-}
+	.avatar-display,
+	.enlarged-avatar-display {
+		border-radius: 50%;
+		background-color: #eee;
+		/* Default gray background */
+	}
 
-.enlarged-avatar-display {
-    max-width: 95%;
-    max-height: 95%;
-}
+	.avatar-display {
+		width: 80px;
+		height: 80px;
+	}
 
+	.enlarged-avatar-display {
+		max-width: 95%;
+		max-height: 95%;
+	}
 </style>

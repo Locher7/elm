@@ -6,9 +6,9 @@
 		<div class="head">
 			<!-- 显示灰色块 -->
 			<div v-if="!this.user.userImg || this.user.userImg === ''" class="default-avatar" @click="openModal"></div>
-        <!-- 如果有图片则显示图片 -->
-        <img v-else :src="this.user.userImg" @click="openModal">
-        <p @click="openModal">更换头像</p>
+			<!-- 如果有图片则显示图片 -->
+			<img v-else :src="this.user.userImg" @click="openModal">
+			<p @click="openModal">更换头像</p>
 		</div>
 		<ul class="info-section">
 			<!-- <li class="info-item">
@@ -62,7 +62,7 @@
 			return {
 				confirmPassword: '',
 				user: {},
-				password:'',
+				password: '',
 				showModal: false,
 				images: [
 					require('../assets/userImg/yhtx01.png'),
@@ -99,7 +99,7 @@
 					password: this.password
 				})).then((response) => {
 					// 根据你的后端响应来处理结果
-					if (response.data==1) {
+					if (response.data == 1) {
 						alert('修改密码成功!');
 					} else {
 						alert('修改密码失败!');
@@ -198,7 +198,7 @@
 	}
 
 	.head p {
-		margin-top:20px;
+		margin-top: 20px;
 		font-size: 4.8vw;
 		color: #6d6d6d;
 	}
@@ -321,11 +321,13 @@
 		transform: translateY(-3px);
 		/* 鼠标悬停时稍微上移 */
 	}
-	.default-avatar {
-    width: 30vw;
-    height: 30vw;
-    background-color: #D3D3D3;  /* 灰色 */
-    border-radius: 50%;  /* 使其成为一个圆形 */
-}
 
+	.default-avatar {
+		width: 30vw;
+		height: 30vw;
+		background-color: #D3D3D3;
+		/* 灰色 */
+		border-radius: 50%;
+		/* 使其成为一个圆形 */
+	}
 </style>

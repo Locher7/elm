@@ -32,7 +32,7 @@
 		<div class="credit-deduction">
 			<div class="credit-info">
 				<p>剩余{{credit}}积分</p>
-				<p v-if="useCredit" class="credit-used-text">使用{{ this.orders.orderTotal }}积分，抵扣<label class="orangered">{{ this.orders.orderTotal/10 }}</label>&#165;</p>
+				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(this.orders.orderTotal) }}积分，抵扣<label class="orangered">{{ Math.round(this.orders.orderTotal)/10 }}</label>&#165;</p>
 			</div>
 			<div class="credit-toggle">
 				<span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
@@ -71,19 +71,21 @@
 	export default {
 		name: 'Payment',
 		data() {
-			return {
-				user:{},
-				orderId: this.$route.query.orderId,
-				orders: {
-					business: {}
-				},
-				isShowDetailet: false,
-				credit: '',
-				useCredit: false,
-				discountedTotal: 0,
-				useIntegration: 0
-			}
+    return {
+        user: {},
+        orderId: this.$route.query.orderId,
+        orders: {
+			business: {	
+			},
 		},
+        isShowDetailet: false,
+        credit: '',
+        useCredit: false,
+        discountedTotal: 0,
+        useIntegration: 0
+    }
+},
+
 
 		created() {
 			this.user = this.$getSessionStorage('user');
@@ -130,6 +132,8 @@
 			},
 			//支付
 			pay() {
+
+
 				if (this.useCredit == true) {
 					this.useIntegration = 1;
 				}
@@ -139,30 +143,30 @@
 					usedPoints: this.orderId,
 					integrationState: this.useIntegration
 				})).then(response => {
-					if(response.data==1){
+					if (response.data == 1) {
 						alert("支付成功")
 						this.$router.push('/index');
-					}else{
+					} else {
 						alert("支付失败")
 					}
 				}).catch(error => {
 					console.error(error);
 					alert("请求出错，请稍后重试!")
 				});
-
 			},
 
 			toggleCreditUse() {
-				if (this.credit < this.orders.orderTotal) {
+				if (this.credit < Math.round(this.orders.orderTotal)) {
 					alert("剩余积分不足");
 				} else {
 					this.useCredit = !this.useCredit;
 				}
 				// this.useCredit = !this.useCredit;
 				if (!this.useCredit) {
+
 					this.discountedTotal = this.orders.orderTotal;
 				} else {
-					this.discountedTotal = this.orders.orderTotal - this.orders.orderTotal / 10;
+					this.discountedTotal = this.orders.orderTotal - Math.round(this.orders.orderTotal) / 10;
 				}
 			},
 
