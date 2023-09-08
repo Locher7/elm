@@ -48,5 +48,10 @@ public class UserServiceImpl implements UserService{
 		user.setUserImg(userImg);
 		return userMapper.updateUserImg(user);
 	}
+	
+	@Override
+	public User getUserMessById(String userId) {
+		return userMapper.getUserMessById(userId);
+	}
 
 }
