@@ -16,6 +16,7 @@ public class UserController {
 	
 	@RequestMapping("/getUserByIdByPass")
 	public User getUserByIdByPass(User user) throws Exception{
+		System.out.println(user.getPassword());
 		return userService.getUserByIdByPass(user);
 	}
 	
