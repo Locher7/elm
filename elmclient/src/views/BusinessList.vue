@@ -64,7 +64,7 @@
 				orderTypeId: this.orderTypeId
 			})).then(response => {
 				this.businessArr = response.data;
-
+				console.log(this.businessArr)
 				//判断是否登录
 				if (this.user != null) {
 					this.listCart();

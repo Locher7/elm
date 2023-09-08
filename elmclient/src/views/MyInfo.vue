@@ -5,18 +5,19 @@
 			<h1 class="title">个人中心</h1>
 		</header>
 
-		<!-- User Info Section -->
+
 		<section class="user-info">
 			<div class="avatar" @click="toggleAvatarModal">
-				<div class="avatar-display" :style="avatarStyle"></div>
+				<img :src="user.userImg ? user.userImg : require('../assets/userImg/yhtx01.png')">
 			</div>
+
 			<div class="user-details">
-				<h2 class="username" @click="showModal = true">{{ user.userName }}</h2>
+				<h2 class="username" @click="editNameShowModal = true">{{ user.userName }}</h2>
 				<p class="student-id">{{ user.userId }}</p>
 			</div>
 
 			<!-- 修改用户名称弹窗 -->
-			<div v-if="showModal" class="modal-overlay">
+			<div v-if="editNameShowModal" class="modal-overlay">
 				<div class="modal-window">
 					<h3>修改用户名称</h3>
 					<input v-model="newUserName" type="text" placeholder="输入新的用户名称">
@@ -25,19 +26,44 @@
 				</div>
 			</div>
 
+
 			<!-- 点击放大头像 -->
 			<div v-if="showAvatarModal" class="avatar-modal-overlay" @click="toggleAvatarModal">
-				<div class="enlarged-avatar-display" :style="avatarStyle"></div>
+				<div class="avatar-modal">
+					<img class="enlarged-avatar-display" :src="user.userImg ? user.userImg : require('../assets/userImg/yhtx01.png')">
+					<p @click="openModal">更换头像</p>
+				</div>
+			</div>
+
+
+			<!-- 更改头像方法 -->
+			<div class="modal" v-if="editImgShowModal">
+				<div class="modal-content">
+					<h2>选择头像</h2>
+					<div class="images-grid">
+						<img v-for="(img, index) in images" :key="index" :src="img" @click="selectImage(img)" alt="user-avatar" />
+					</div>
+					<button @click="editImgShowModal = false">关闭</button>
+				</div>
 			</div>
 
 			<!-- 昵称修改成功弹窗 -->
-			<div v-if="editNameshowModal" class="modal-overlay">
-    <div class="modal-content">
-		<i class="fa fa-check-circle" aria-hidden="true"></i>
+			<div v-if="successNameShowModal" class="modal-overlay">
+				<div class="modal-content">
+					<i class="fa fa-check-circle" aria-hidden="true"></i>
 
-      <p>您的昵称已成功修改！</p>
-    </div>
-  </div>
+					<p>您的昵称已成功修改！</p>
+				</div>
+			</div>
+
+			<!-- 头像修改成功弹窗 -->
+			<div v-if="successImgShowModal" class="modal-overlay">
+				<div class="modal-content">
+					<i class="fa fa-check-circle" aria-hidden="true"></i>
+
+					<p>您的头像已成功修改！</p>
+				</div>
+			</div>
 
 
 		</section>
@@ -58,7 +84,7 @@
 
 		<section class="instructions">
 			<div class="instruction-item" @click="toEditInfo">
-				<p>修改信息</p>
+				<p>修改密码</p>
 				<img src="../assets/more-icon.png">
 			</div>
 			<div class="instruction-item" @click="toggleRulesModal">
@@ -119,16 +145,30 @@
 
 <script>
 	import Footer from '../components/Footer.vue';
+
 	export default {
 		name: 'MyInfo',
 		data() {
 			return {
 				user: {},
-				showModal: false,
+				editNameShowModal: false,
 				showAvatarModal: false,
 				showRulesModal: false,
 				newUserName: '',
-				editNameshowModal: false
+				successNameShowModal: false,
+				editImgShowModal: false,
+				successImgShowModal:false,
+				images: [
+					require('../assets/userImg/yhtx01.png'),
+					require('../assets/userImg/yhtx02.png'),
+					require('../assets/userImg/yhtx03.png'),
+					require('../assets/userImg/yhtx04.png'),
+					require('../assets/userImg/yhtx05.png'),
+					require('../assets/userImg/yhtx06.png'),
+					require('../assets/userImg/yhtx07.png'),
+					require('../assets/userImg/yhtx08.png'),
+					require('../assets/userImg/yhtx09.png'),
+				]
 			}
 		},
 		components: {
@@ -154,7 +194,7 @@
 			},
 			updateUsername() {
 				this.user.userName = this.newUsername;
-				this.showModal = false;
+				this.editNameShowModal = false;
 				if (this.user.userName == '') {
 					alert('用户名称不能为空!');
 					return;
@@ -166,13 +206,12 @@
 					userName: this.newUserName,
 				})).then((response) => {
 					if (response.data == 1) {
-						this.editNameshowModal = true;
-      setTimeout(() => {
-        this.editNameshowModal = false;
-        location.reload();
-      }, 3000);
-    }
-					 else {
+						this.successNameShowModal = true;
+						setTimeout(() => {
+							this.successNameShowModal = false;
+							location.reload();
+						}, 1000);
+					} else {
 						alert('修改用户昵称失败!');
 					}
 					location.reload();
@@ -181,28 +220,73 @@
 					alert('请求出错，请稍后重试!');
 				});
 
-				
+
+			},
+
+			//修改用户头像
+			selectImage(imgPath) {
+				let img = new Image();
+				img.onload = () => {
+					let canvas = document.createElement("canvas");
+					canvas.width = img.width;
+					canvas.height = img.height;
+					let ctx = canvas.getContext("2d");
+					ctx.drawImage(img, 0, 0);
+					let base64String = canvas.toDataURL("image/png").split(",")[1];
+					let imageData = "data:image/png;base64," + base64String;
+					// 调用后端API
+					this.uploadImage(imageData);
+
+					// 将图片设置为用户的头像
+					this.user.userImg = imgPath;
+					this.editImgShowModal = false;
+				};
+				img.src = imgPath;
+			},
+
+			openModal() {
+				this.editImgShowModal = true;
 			},
 
 
 			toggleRulesModal() {
 				this.showRulesModal = !this.showRulesModal;
+			},
+			uploadImage(base64String) {
+				this.$axios.post('UserController/editUserImgByUserId', this.$qs.stringify({
+					UserImg: base64String,
+					userId: this.user.userId
+				})).then(response => {
+					if (response.data == 1) {
+						this.editImgShowModal = false,
+						this.successImgShowModal = true;
+						setTimeout(() => {
+							this.successImgShowModal = false;
+						}, 1000);
+
+					} else {
+						alert("上传失败，请稍后重试!");
+					}
+				}).catch(error => {
+					console.error("请求出错:", error);
+					alert("请求出错，请稍后重试!");
+				});
 			}
 		},
 		created() {
 			this.user = this.$getSessionStorage("user");
 
 			this.$axios.post('UserController/getUserMessById', this.$qs.stringify({
-					userId: this.user.userId,
-				})).then((response) => {
-					this.user=response.data
-					console.log('用户信息:', this.user);
-				}).catch((error) => {
-					console.error('请求出错:', error);
-					alert('请求出错，请稍后重试!');
-				});
+				userId: this.user.userId,
+			})).then((response) => {
+				this.user = response.data
+				console.log('用户信息:', this.user);
+			}).catch((error) => {
+				console.error('请求出错:', error);
+				alert('请求出错，请稍后重试!');
+			});
 
-			},
+		},
 
 		computed: {
 			avatarStyle() {
@@ -397,7 +481,7 @@
 	}
 
 	/* 放大头像框框 */
-	.avatar-modal-overlay {
+	.avatar-modal {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -405,11 +489,24 @@
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.8);
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		z-index: 1001;
 	}
 
+	.avatar-modal p {
+		margin: 50px;
+		font-size: 1rem;
+		color: white;
+	}
+
+	.avatar img {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		background-color: #eee;
+	}
 
 
 	.avatar-display,
@@ -501,26 +598,96 @@
 	}
 
 	.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
+	.modal-content {
+		background-color: #fff;
+		padding: 20px;
+		text-align: center;
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	}
 
-.icon {
-  width: 50px;
-}
+	.icon {
+		width: 50px;
+	}
+
+	/* 选择头像框框 */
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.modal-content {
+		width: 80%;
+		background-color: #fff;
+		padding: 20px 30px;
+		/* 增加水平填充以获得更好的间距 */
+		border-radius: 12px;
+		/* 更大的圆角 */
+		text-align: center;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		/* 添加阴影 */
+	}
+
+	.images-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.images-grid img {
+		width: 30%;
+		margin-top: 15px;
+		cursor: pointer;
+	}
+
+	.modal-content button {
+		margin-top: 20px;
+		padding: 10px 40px;
+		background-color: #eee;
+		border: none;
+		border-radius: 25px;
+		/* 圆角边 */
+		color: #333;
+		font-size: 18px;
+		font-weight: 500;
+		cursor: pointer;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		/* 添加阴影 */
+		transition: background-color 0.3s, transform 0.3s;
+		/* 添加过渡效果 */
+	}
+
+	.modal-content button:hover {
+		background-color: #007ccd;
+		/* 鼠标悬停时颜色稍微变深 */
+		transform: translateY(-3px);
+		/* 鼠标悬停时稍微上移 */
+	}
+
+	.default-avatar {
+		width: 30vw;
+		height: 30vw;
+		background-color: #D3D3D3;
+		/* 灰色 */
+		border-radius: 50%;
+		/* 使其成为一个圆形 */
+	}
 </style>

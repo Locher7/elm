@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import md5 from 'js-md5';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Login',
@@ -70,7 +71,7 @@
 				//登录请求
 				this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
 					userId: this.userId,
-					password: this.password
+					password: md5(this.password)
 				})).then(response => {
 					let user = response.data;
 					console.log(typeof user);  // 查看 user 的类型

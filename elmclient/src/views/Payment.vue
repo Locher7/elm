@@ -1,5 +1,5 @@
 <template>
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<div class="wrapper">
 		<!-- header -->
 		<header>
@@ -92,7 +92,7 @@
         useCredit: false,
         discountedTotal: 0,
         useIntegration: 0,
-		showModal: true
+		showModal: false
     }
 },
 
@@ -143,7 +143,6 @@
 			//支付
 			pay() {
 
-
 				if (this.useCredit == true) {
 					this.useIntegration = 1;
 				}
@@ -154,7 +153,7 @@
 					integrationState: this.useIntegration
 				})).then(response => {
 					if (response.data == 1) {
-                this.showPaymentSuccessPopup = true;
+                this.showModal = true;
                 setTimeout(() => {
                     this.$router.push('/index');
                 }, 1000);

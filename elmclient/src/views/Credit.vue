@@ -33,12 +33,14 @@
 					<div class="credit-detailed-left" v-if="item.points < 0 && item.integrationState==1">
 						<p>积分过期</p>
 					</div>
-					<div class="credit-detailed-left" v-if="item.points < 0">
+
+					<div class="credit-detailed-left" v-if="item.points < 0 && item.integrationState==2">
 						<p>使用积分</p>
 						<p>{{ item.integrationDate }}</p>
 					</div>
 					<div class="credit-detailed-right">
-						<p><span v-if="item.points > 0">+</span>{{ item.points }}</p>
+						<p :style="{color: item.points > 0 ? 'green' : 'red'}"><span v-if="item.points > 0">+</span>{{ item.points }}</p>
+
 					</div>
 				</li>
 			</ul>
@@ -128,7 +130,12 @@
 			this.$axios.post('IntegrationController/getCreditByUserId', this.$qs.stringify({
 				userId: this.user.userId,
 			})).then(response => {
+				if(response.data==''){
+					this.credit =0;
+				}else{
 				this.credit = response.data;
+			}
+				console.log('总积分:',this.credit)
 			}).catch(error => {
 				console.error(error);
 			});
@@ -145,9 +152,13 @@
 		components: {
 			Footer
 		},
-		computed() {
-
-		}
+		mounted() {
+			console.log('Component is mounted');
+			document.onscroll = () => {
+				// 这里添加滚动事件的处理逻辑
+				console.log('Scroll event triggered');
+			}
+		},
 	}
 </script>
 
@@ -160,7 +171,7 @@
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		padding-bottom:85vw;
+		padding-bottom: 85vw;
 	}
 
 	/****************** header ****************/
@@ -319,8 +330,9 @@
 		max-width: 85vw;
 		width: 100%;
 		position: relative;
-		max-height: 70vh; /* 设为屏幕的70%，这个数字你可以根据需要调整 */
-    overflow-y: auto;
+		max-height: 70vh;
+		/* 设为屏幕的70%，这个数字你可以根据需要调整 */
+		overflow-y: auto;
 	}
 
 
