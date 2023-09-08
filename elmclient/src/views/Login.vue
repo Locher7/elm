@@ -45,13 +45,14 @@
 <script>
 import md5 from 'js-md5';
 	import Footer from '../components/Footer.vue';
+	import md5 from "js-md5";
 	export default {
 		name: 'Login',
 		data() {
 			return {
 				user:{},
 				userId: '',
-				password: ''
+				password: '',
 			}
 		},
 		components: {
@@ -67,7 +68,6 @@ import md5 from 'js-md5';
 					alert('密码不能为空');
 					return;
 				}
-
 				//登录请求
 				this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
 					userId: this.userId,

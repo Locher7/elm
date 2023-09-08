@@ -84,7 +84,7 @@
 
 		<section class="instructions">
 			<div class="instruction-item" @click="toEditInfo">
-				<p>修改密码</p>
+				<p>修改信息</p>
 				<img src="../assets/more-icon.png">
 			</div>
 			<div class="instruction-item" @click="toggleRulesModal">

@@ -43,6 +43,7 @@ public class IntegrationServiceImpl implements IntegrationService {
 		while (it.hasNext()) {
 			integration = it.next();
 			long dateDiff = CommonUtil.dateToStamp(nowDate) - CommonUtil.dateToStamp(integration.getIntegrationDate());
+			// 计算该积分获取与当前时间差
 			if (integration.getIntegrationState() == 0 && dateDiff > CommonUtil.validDate) {
 				System.out.println(dateDiff);
 				integration.setIntegrationState(1);
@@ -62,7 +63,8 @@ public class IntegrationServiceImpl implements IntegrationService {
 	
 	public Integer payCredit(Integration integration) {
 		String nowDate = CommonUtil.getCurrentDate();
-		//Integer realPoints = new Integer(integration.getPoints());
+		
+		// 得到积分和订单id
 		Integer costPoints = new Integer(integration.getPoints());
 		Integer orderId = integration.getUsedPoints();
 		
@@ -71,16 +73,19 @@ public class IntegrationServiceImpl implements IntegrationService {
 		integration.setIntegrationDate(nowDate);
 		integration.setIntegrationState(0);
 		
+		//查询该订单
 		Orders orders = ordersMapper.getOrdersById(orderId);
 		orders.setOrderState(1);
 		Double realPoints = new Double(orders.getOrderTotal());
-		System.out.println(realPoints);
+		//System.out.println(realPoints);
+		
 		if(flag == 1) {
 			orders.setOrderTotal(realPoints*0.9);
 		} else {
 			orders.setOrderTotal(realPoints);
 		}
 		ordersMapper.updateOrders(orders);
+		// 支付订单
 		
 		if(flag == 1) { // 表示使用积分
 			
@@ -110,10 +115,11 @@ public class IntegrationServiceImpl implements IntegrationService {
 			integration.setIntegrationState(2);
 			integration.setPoints(new Integer((int)-Math.round(realPoints)));
 			integrationMapper.insertIntegration(integration);
-
+			// 加入使用积分的记录
 			realPoints = realPoints*0.9;
 		}
 		
+		// 加入得到积分的记录
 		integration.setIntegrationState(0);
 		integration.setPoints(new Integer((int)Math.round(realPoints)));
 		return (Integer)integrationMapper.insertIntegration(integration);
