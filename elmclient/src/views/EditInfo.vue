@@ -12,7 +12,7 @@
 			<li class="info-item">
 				<div class="content">
 					<i class="fa fa-user"></i>
-					<input type="text" v-model="pastPassword" placeholder="请输入旧密码">
+					<input type="password" v-model="pastPassword" placeholder="请输入旧密码">
 				</div>
 			</li>
 
@@ -77,27 +77,50 @@
 					alert('两次输入的密码不一致!');
 					return;
 				}
-				if (md5(this.pastPassword) !== this.user.password) {
-					alert('旧密码错误!');
-					return;
-				}
 				// 修改密码
-				this.$axios.post('UserController/editPasswordByUserId', this.$qs.stringify({
-					userId: this.user.userId,
-					password: md5(this.newPassword)
-				})).then((response) => {
-					if (response.data == 1) {
-						alert('修改密码成功!');
-						this.$removeSessionStorage('user');
-						this.$router.push('/login');
+				this.checkOldPassword().then(isValid => {
+					if (isValid) {
+						// 如果旧密码正确，则更新新密码
+						this.$axios.post('UserController/editPasswordByUserId', this.$qs.stringify({
+							userId: this.user.userId,
+							password: md5(this.newPassword)
+						})).then((response) => {
+							if (response.data == 1) {
+								alert('修改密码成功!');
+								this.$router.push('/myInfo');
+							} else {
+								alert('修改密码失败!');
+							}
+						}).catch((error) => {
+							console.error('请求出错:', error);
+							alert('请求出错，请稍后重试!');
+						});
 					} else {
-						alert('修改密码失败!');
+						alert('旧密码错误!');
 					}
-				}).catch((error) => {
-					console.error('请求出错:', error);
-					alert('请求出错，请稍后重试!');
 				});
 			},
+
+			checkOldPassword() {
+				// 这是一个示例方法。你应该用实际的API调用来验证旧密码。
+				// 返回一个promise，如果旧密码正确则解析为true，否则为false。
+				return new Promise((resolve, reject) => {
+					this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
+						userId: this.user.userId,
+						password: md5(this.pastPassword)
+					})).then(response => {
+						if (response.data == 0) {
+							resolve(false); // 旧密码错误
+						} else {
+							resolve(true); // 旧密码正确
+						}
+					}).catch(error => {
+						console.error('验证旧密码时出错:', error);
+						alert('验证旧密码时出错，请稍后重试!');
+						reject(error);
+					});
+				});
+			}
 
 		}
 	}
