@@ -1,12 +1,12 @@
 //获取当前时间（xxxx-xx-xx）
 export function getCurDate() {
-	var now = Date();
-	var year = now.getFullYear();
-	var month = now.getMonth() + 1;
-	var day = now.getDate();
-	month = month < 10 ? "0" + month : month;
-	day = day < 10 ? "0" + day : day;
-	return year + "-" + month + "-" + day;
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = now.getMonth() + 1;
+	const day = now.getDate();
+	const formattedMonth = month < 10 ? "0" + month : month;
+	const formattedDay = day < 10 ? "0" + day : day;
+	return `${year}-${formattedMonth}-${formattedDay}`;
 }
 
 //向前端sessionStorage中存储一个JSON对象
@@ -16,12 +16,8 @@ export function setSessionStorage(keyStr, value) {
 
 //从sessionStorage中获取一个JSON对象（取不到时返回null）
 export function getSessionStorage(keyStr) {
-	var str = sessionStorage.getItem(keyStr);
-	if (str == '' || str == null || str == 'null' || str == undefined) {
-		return null;
-	} else {
-		return JSON.parse(str);
-	}
+	const str = sessionStorage.getItem(keyStr);
+	return str && str !== 'null' ? JSON.parse(str) : null;
 }
 
 //从sessionStorage中移除一个JSON对象
@@ -30,18 +26,14 @@ export function removeSessionStorage(keyStr) {
 }
 
 //向永久存储localStorage中存储一个JSON对象
-export function setLocalStorage(keyStr,value) {
+export function setLocalStorage(keyStr, value) {
 	localStorage.setItem(keyStr, JSON.stringify(value));
 }
 
 //从localStorage中获取一个JSON对象（取不到时返回null）
 export function getLocalStorage(keyStr) {
-	var str = localStorage.getItem(keyStr);
-	if (str == '' || str == null || str == 'null' || str == undefined) {
-		return null;
-	} else {
-		return JSON.parse(str);
-	}
+	const str = localStorage.getItem(keyStr);
+	return str && str !== 'null' ? JSON.parse(str) : null;
 }
 
 //从localStorage中移除一个JSON对象
