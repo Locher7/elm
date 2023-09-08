@@ -43,4 +43,9 @@ public class UserController {
 	public int editUserImgByUserId(User user) throws Exception {
 		return userService.editUserImgByUserId(user.getUserId(), user.getUserImg());
 	}
+	
+	@RequestMapping("/getUserMessById")
+	public User getUserMessById(User user) throws Exception {
+		return userService.getUserMessById(user.getUserId());
+	}
 }

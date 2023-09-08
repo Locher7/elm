@@ -16,4 +16,6 @@ public interface UserService {
 	public int editUserNamedByUserId(String userId, String userName);
 	
 	public int editUserImgByUserId(String userId, String userImg);
+	
+	public User getUserMessById(String userId);
 }
