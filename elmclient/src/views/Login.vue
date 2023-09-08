@@ -48,6 +48,7 @@
 		name: 'Login',
 		data() {
 			return {
+				user:{},
 				userId: '',
 				password: ''
 			}
@@ -72,7 +73,10 @@
 					password: this.password
 				})).then(response => {
 					let user = response.data;
-					if (user == null) {
+					console.log(typeof user);  // 查看 user 的类型
+					console.log(user);  // 查看 user 的内容
+
+					if (!user) {
 						alert('用户名或密码不正确!');
 					} else {
 						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中
@@ -83,6 +87,7 @@
 				}).catch(error => {
 					console.error(error);
 				});
+				
 			},
 			register() {
 				this.$router.push('/register');

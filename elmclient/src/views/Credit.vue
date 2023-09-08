@@ -70,16 +70,12 @@
 				</div>
 			</li> -->
 		</ul>
-		<div v-if="isRuleModalVisible" class="rule-modal-overlay" @click="closeRuleModal">
-			<div class="rule-modal-content" @click.stop>
-				<h4>积分规则</h4>
-				<p>这里写上您的积分规则详情。</p>
-			</div>
-		</div>
 
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
 	</div>
+
+	<!-- 使用规则 -->
 	<div v-if="isRuleModalVisible" class="rule-modal-overlay" @click="closeRuleModal">
 		<div class="rule-modal-content" @click.stop>
 			<h4>积分规则</h4>
@@ -164,6 +160,7 @@
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
+		padding-bottom:85vw;
 	}
 
 	/****************** header ****************/
@@ -236,6 +233,7 @@
 	/****************** 积分明细 ****************/
 	.wrapper .credit-detailed {
 		width: 100%;
+		z-index: 2;
 	}
 
 	.wrapper .credit-detailed::after {
@@ -321,6 +319,8 @@
 		max-width: 85vw;
 		width: 100%;
 		position: relative;
+		max-height: 70vh; /* 设为屏幕的70%，这个数字你可以根据需要调整 */
+    overflow-y: auto;
 	}
 
 

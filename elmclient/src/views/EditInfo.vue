@@ -101,6 +101,8 @@
 					// 根据你的后端响应来处理结果
 					if (response.data == 1) {
 						alert('修改密码成功!');
+						this.$removeSessionStorage('user');
+				this.$router.push('/login');
 					} else {
 						alert('修改密码失败!');
 					}
@@ -139,7 +141,7 @@
 					UserImg: base64String,
 					userId: this.user.userId
 				})).then(response => {
-					if (response.data.success) {
+					if (response.data==1) {
 						alert("头像上传成功!");
 					} else {
 						alert("上传失败，请稍后重试!");
@@ -229,12 +231,14 @@
 
 		padding: 10px;
 		margin-bottom: 20px;
+		
 	}
 
 	.info-item i {
 		margin-right: 10px;
 		font-size: 20px;
 		color: #0097ff;
+		width: 10%;
 	}
 
 	.info-item input {
@@ -242,6 +246,9 @@
 		font-size: 16px;
 		border: none;
 		outline: none;
+	}
+	.info-item .content {
+		width: 100%;
 	}
 
 	.update-button {

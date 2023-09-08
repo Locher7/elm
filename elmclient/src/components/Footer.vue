@@ -52,6 +52,7 @@
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		z-index: 2;
 	}
 
 	.wrapper .footer li {

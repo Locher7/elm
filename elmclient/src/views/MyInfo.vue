@@ -19,7 +19,7 @@
 			<div v-if="showModal" class="modal-overlay">
 				<div class="modal-window">
 					<h3>修改用户名称</h3>
-					<input v-model="userName" type="text" placeholder="输入新的用户名称">
+					<input v-model="newUserName" type="text" placeholder="输入新的用户名称">
 					<button @click="updateUsername">保存</button>
 					<button @click="showModal = false">取消</button>
 				</div>
@@ -53,7 +53,7 @@
 				<p>修改信息</p>
 				<img src="../assets/more-icon.png">
 			</div>
-			<div class="instruction-item">
+			<div class="instruction-item" @click="toggleRulesModal">
 				<p>使用说明</p>
 				<img src="../assets/more-icon.png">
 			</div>
@@ -66,6 +66,39 @@
 				<img src="../assets/more-icon.png">
 			</div>
 		</section>
+
+		<!-- 使用规则弹窗 -->
+		<div v-if="showRulesModal" class="rules-modal-overlay" @click="toggleRulesModal">
+
+			<div class="rule-modal-content" @click.stop>
+				<h4>饿了么使用规则</h4>
+
+				<p class="rule-modal-content-title">1.注册与登录</p>
+				<p>&nbsp;&nbsp;&nbsp;用户需要注册并登录才能进行点餐操作。<br>
+					&nbsp;&nbsp;&nbsp;请用户确保注册时提供的信息是准确和完整的。</p>
+
+				<p class="rule-modal-content-title">2.下单与支付</p>
+				<p>&nbsp;&nbsp;&nbsp;用户可以从列出的餐厅中选择想要的食物，添加到购物车，并进行下单。用户在选择食物时，请仔细确认其详细信息。若选择在线支付且支付失败，订单将被取消。</p>
+
+				<p class="rule-modal-content-title">3.配送</p>
+				<p>&nbsp;&nbsp;&nbsp;用户在下单时需确保提供的送餐地址是准确的。<br></p>
+
+
+				<p class="rule-modal-content-title">4.评价与投诉</p>
+				<p>&nbsp;&nbsp;&nbsp;如果用户对餐厅的食物或服务不满意，也可以通过饿了么平台进行投诉。</p>
+
+				<p class="rule-modal-content-title">5.隐私与安全</p>
+				<p>&nbsp;&nbsp;&nbsp;饿了么尊重并保护用户的隐私。<br>
+					&nbsp;&nbsp;&nbsp;除非获得用户的许可，饿了么不会向第三方披露用户的个人信息。</p>
+
+				<p class="rule-modal-content-title">6.其他</p>
+				<p>&nbsp;&nbsp;&nbsp;饿了么保留在法律允许范围内更改、暂停或终止此使用规则的权利。<br>
+					&nbsp;&nbsp;&nbsp;对规则的任何修改，饿了么都会在平台上公告。</p>
+
+				<p class="rule-modal-content-bottom">&nbsp;&nbsp;&nbsp;感谢您选择饿了么，我们将不断努力为您带来更好的服务！</p>
+				<button @click="toggleRulesModal">关闭</button>
+			</div>
+		</div>
 
 		<button type="danger" @click="logout()">退出登录</button>
 
@@ -84,7 +117,9 @@
 			return {
 				user: {},
 				showModal: false,
-				showAvatarModal: false
+				showAvatarModal: false,
+				showRulesModal: false,
+				newUserName:''
 			}
 		},
 		components: {
@@ -119,9 +154,8 @@
 				// 修改用户名称
 				this.$axios.post('UserController/editUserNameByUserId', this.$qs.stringify({
 					userId: this.user.userId,
-					userName: this.user.userName,
+					userName: this.newUserName,
 				})).then((response) => {
-					// 根据你的后端响应来处理结果
 					if (response.data == 1) {
 						alert('修改用户昵称成功!');
 					} else {
@@ -131,7 +165,11 @@
 					console.error('请求出错:', error);
 					alert('请求出错，请稍后重试!');
 				});
+			},
 
+
+			toggleRulesModal() {
+				this.showRulesModal = !this.showRulesModal;
 			}
 		},
 		created() {
@@ -361,5 +399,76 @@
 	.enlarged-avatar-display {
 		max-width: 95%;
 		max-height: 95%;
+	}
+
+	/* 使用说明弹窗 */
+	.rules-modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.6);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1002;
+		/* 保证这个弹窗出现在其他弹窗的上面 */
+	}
+
+	
+
+	.rule-modal-content {
+		background-color: #fff;
+		padding: 4vw;
+		border-radius: 2.5vw;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+		max-width: 85vw;
+		width: 100%;
+		position: relative;
+		max-height: 70vh;
+    overflow-y: auto;
+	}
+	
+
+
+	.rule-modal-content h4 {
+		font-size: 5vw;
+		margin-bottom: 1.5vw;
+		font-weight: 600;
+		border-bottom: 2px solid #dedede;
+		padding-bottom: 1vw;
+		text-align: center;
+		color: #333;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		border-image: linear-gradient(to right, #aaa, #333, #aaa);
+		border-image-slice: 1;
+	}
+
+
+
+	.rule-modal-content p {
+		font-size: 4vw;
+		line-height: 5.5vw;
+		color: #666;
+		margin-bottom: 1.2vw;
+	}
+
+
+	.rule-modal-content-title {
+		font-size: 4.5vw;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 1.5vw;
+	}
+
+	.rule-modal-content-bottom {
+		font-size: 4.5vw;
+		font-weight: 500;
+		color: #444;
+		margin-top: 2vw;
+		padding-left: 1.5vw;
+		border-top: 1px solid #dedede;
+		padding-top: 1.5vw;
 	}
 </style>
