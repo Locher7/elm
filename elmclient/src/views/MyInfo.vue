@@ -30,6 +30,14 @@
 				<div class="enlarged-avatar-display" :style="avatarStyle"></div>
 			</div>
 
+			<!-- 昵称修改成功弹窗 -->
+			<div v-if="editNameshowModal" class="modal-overlay">
+    <div class="modal-content">
+		<i class="fa fa-check-circle" aria-hidden="true"></i>
+
+      <p>您的昵称已成功修改！</p>
+    </div>
+  </div>
 
 
 		</section>
@@ -119,7 +127,8 @@
 				showModal: false,
 				showAvatarModal: false,
 				showRulesModal: false,
-				newUserName:''
+				newUserName: '',
+				editNameshowModal: false
 			}
 		},
 		components: {
@@ -157,14 +166,22 @@
 					userName: this.newUserName,
 				})).then((response) => {
 					if (response.data == 1) {
-						alert('修改用户昵称成功!');
-					} else {
+						this.editNameshowModal = true;
+      setTimeout(() => {
+        this.editNameshowModal = false;
+        location.reload();
+      }, 3000);
+    }
+					 else {
 						alert('修改用户昵称失败!');
 					}
+					location.reload();
 				}).catch((error) => {
 					console.error('请求出错:', error);
 					alert('请求出错，请稍后重试!');
 				});
+
+				
 			},
 
 
@@ -173,9 +190,20 @@
 			}
 		},
 		created() {
-			this.user = this.$getSessionStorage('user');
-			console.log('用户信息：', this.user);
-		},
+			this.user = this.$getSessionStorage("user");
+
+			this.$axios.post('UserController/getUserMessById', this.$qs.stringify({
+					userId: this.user.userId,
+				})).then((response) => {
+					this.user=response.data
+					console.log('用户信息:', this.user);
+				}).catch((error) => {
+					console.error('请求出错:', error);
+					alert('请求出错，请稍后重试!');
+				});
+
+			},
+
 		computed: {
 			avatarStyle() {
 				if (this.user.userImg) {
@@ -416,7 +444,7 @@
 		/* 保证这个弹窗出现在其他弹窗的上面 */
 	}
 
-	
+
 
 	.rule-modal-content {
 		background-color: #fff;
@@ -427,9 +455,9 @@
 		width: 100%;
 		position: relative;
 		max-height: 70vh;
-    overflow-y: auto;
+		overflow-y: auto;
 	}
-	
+
 
 
 	.rule-modal-content h4 {
@@ -471,4 +499,28 @@
 		border-top: 1px solid #dedede;
 		padding-top: 1.5vw;
 	}
+
+	.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.icon {
+  width: 50px;
+}
 </style>

@@ -76,7 +76,7 @@
 					console.log(typeof user);  // 查看 user 的类型
 					console.log(user);  // 查看 user 的内容
 
-					if (!user) {
+					if (user==0) {
 						alert('用户名或密码不正确!');
 					} else {
 						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中

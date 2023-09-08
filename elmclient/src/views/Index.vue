@@ -412,6 +412,7 @@
 					search.style.position = 'static';
 				}
 			}
+			
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
@@ -478,13 +479,7 @@
 				});
 			}
 		},
-		mounted() {
-			console.log('Component is mounted');
-			document.onscroll = () => {
-				// 这里添加滚动事件的处理逻辑
-				console.log('Scroll event triggered');
-			}
-		},
+	
 	}
 </script>
 
