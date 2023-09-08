@@ -20,7 +20,7 @@ public interface OrdersMapper {
 	
 	public Orders getOrdersById (Integer orderId);
 	
-	@Update("update orders set orderState = #{orderState} where orderId = #{orderId}")
+	@Update("update orders set orderState = #{orderState}, orderTotal = #{orderTotal} where orderId = #{orderId}")
 	public int updateOrders(Orders orders);
 	
 	public List<Orders> listOrdersByUserId (String userId);

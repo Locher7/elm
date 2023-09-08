@@ -62,7 +62,7 @@ public class IntegrationServiceImpl implements IntegrationService {
 	
 	public Integer payCredit(Integration integration) {
 		String nowDate = CommonUtil.getCurrentDate();
-		Integer realPoints = new Integer(integration.getPoints());
+		//Integer realPoints = new Integer(integration.getPoints());
 		Integer costPoints = new Integer(integration.getPoints());
 		Integer orderId = integration.getUsedPoints();
 		
@@ -70,6 +70,17 @@ public class IntegrationServiceImpl implements IntegrationService {
 		integration.setUsedPoints(0);
 		integration.setIntegrationDate(nowDate);
 		integration.setIntegrationState(0);
+		
+		Orders orders = ordersMapper.getOrdersById(orderId);
+		orders.setOrderState(1);
+		Double realPoints = new Double(orders.getOrderTotal());
+		System.out.println(realPoints);
+		if(flag == 1) {
+			orders.setOrderTotal(realPoints*0.9);
+		} else {
+			orders.setOrderTotal(realPoints);
+		}
+		ordersMapper.updateOrders(orders);
 		
 		if(flag == 1) { // 表示使用积分
 			
@@ -97,19 +108,14 @@ public class IntegrationServiceImpl implements IntegrationService {
 			}
 				
 			integration.setIntegrationState(2);
-			integration.setPoints(-realPoints);
+			integration.setPoints(new Integer((int)-Math.round(realPoints)));
 			integrationMapper.insertIntegration(integration);
 
-			realPoints = new Integer((int)Math.round(realPoints*0.9));
+			realPoints = realPoints*0.9;
 		}
 		
-		Orders orders = new Orders();
-		orders.setOrderId(orderId);
-		orders.setOrderState(1);
-		ordersMapper.updateOrders(orders);
-		
 		integration.setIntegrationState(0);
-		integration.setPoints(realPoints);
+		integration.setPoints(new Integer((int)Math.round(realPoints)));
 		return (Integer)integrationMapper.insertIntegration(integration);
 	}
 }
