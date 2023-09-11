@@ -12,18 +12,18 @@
 				{{ orders.business.businessName }}
 				<i class="fa fa-caret-down" @click="detailetShow"></i>
 			</p>
-			<p>&#165;{{ orders.orderTotal }}</p>
+			<p>&#165;{{ orders.orderTotal/100 }}</p>
 		</div>
 
 		<!-- 订单明细 -->
 		<ul class="order-detailed" v-show="isShowDetailet">
 			<li v-for="item in orders.list" :key="item.id">
 				<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
-				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
+				<p>&#165;{{ item.food.foodPrice/100*item.quantity }}</p>
 			</li>
 			<li>
 				<p>配送费</p>
-				<p>&#165;{{ orders.business.deliveryPrice }}</p>
+				<p>&#165;{{ orders.business.deliveryPrice/100 }}</p>
 			</li>
 		</ul>
 
@@ -32,7 +32,7 @@
 		<div class="credit-deduction">
 			<div class="credit-info">
 				<p>剩余{{credit}}积分</p>
-				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(this.orders.orderTotal) }}积分，抵扣<label class="orangered">{{ Math.round(this.orders.orderTotal)/10 }}</label>&#165;</p>
+				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(this.orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.round(this.orders.orderTotal/100)/10 }}</label>&#165;</p>
 			</div>
 			<div class="credit-toggle">
 				<span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
@@ -146,7 +146,6 @@
 				}
 				this.$axios.post('IntegrationController/payCredit', this.$qs.stringify({
 					userId: this.user.userId,
-					points: Math.round(this.orders.orderTotal),
 					usedPoints: this.orderId,
 					integrationState: this.useIntegration
 				})).then(response => {
@@ -165,17 +164,15 @@
 			},
 
 			toggleCreditUse() {
-				if (this.credit < Math.round(this.orders.orderTotal)) {
+				if (this.credit < Math.round(this.orders.orderTotal/100)) {
 					alert("剩余积分不足");
 				} else {
 					this.useCredit = !this.useCredit;
 				}
-				// this.useCredit = !this.useCredit;
 				if (!this.useCredit) {
-
-					this.discountedTotal = this.orders.orderTotal;
+					this.discountedTotal = this.orders.orderTotal/100;
 				} else {
-					this.discountedTotal = this.orders.orderTotal - Math.round(this.orders.orderTotal) / 10;
+					this.discountedTotal = this.orders.orderTotal/100 - Math.round(this.orders.orderTotal/100) / 10;
 				}
 			},
 
@@ -309,12 +306,9 @@
 		margin: 6vw 4vw;
 		padding: 2vw;
 		border: 1px solid #e0e0e0;
-		/* 添加细边框 */
 		border-radius: 1vw;
 		background-color: #ffffff;
-		/* 更换为白色背景 */
 		box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
-		/* 更为细微的阴影效果 */
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -323,14 +317,12 @@
 	.wrapper .credit-deduction .credit-info {
 		display: flex;
 		flex-direction: column;
-		/* 垂直排列 */
 	}
 
 	.wrapper .credit-deduction p {
 		margin: 0;
 		font-size: 4vw;
 		color: #666;
-		/* 深蓝色文字 */
 	}
 
 	.wrapper .credit-deduction .credit-used-text {
@@ -357,12 +349,9 @@
 		font-size: 5vw;
 		color: white;
 		background-color: #666;
-		/* 蓝色背景 */
 		border-radius: 50%;
-		/* 圆形按钮 */
 		padding: 0.5vw;
 		transition: transform 0.3s;
-		/* 平滑的移动效果 */
 	}
 
 
@@ -370,14 +359,12 @@
 	.wrapper .current-total {
 		margin: 4vw 4vw;
 		text-align: right;
-		/* 靠右显示 */
 		font-size: 4vw;
 		color: #555;
 	}
 
 	.wrapper .current-total span {
 		color: orangered;
-		/* 高亮显示金额部分 */
 		font-weight: bold;
 	}
 
@@ -389,7 +376,6 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.75);
-		/* 更深的背景颜色 */
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -398,23 +384,17 @@
 
 	.modal-content {
 		width: 80%;
-		/* 更大的弹窗框 */
 		max-width: 500px;
-		/* 更大的弹窗框 */
 		padding: 30px;
-		/* 更大的内边距 */
 		border-radius: 15px;
 		background-color: #ffffff;
 		text-align: center;
 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-		/* 更强的阴影 */
 	}
 
 	.success-icon {
 		font-size: 80px;
-		/* 更大的图标 */
 		color: #4CAF50;
 		margin-bottom: 30px;
-		/* 更大的间距 */
 	}
 </style>

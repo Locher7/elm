@@ -16,7 +16,7 @@
 						<i class="fa fa-caret-down" @click="detailetShow(item)"></i>
 					</p>
 					<div class="order-info-right">
-						<p>&#165;{{ item.orderTotal }}</p>
+						<p>&#165;{{ item.orderTotal/100 }}</p>
 						<div class="order-info-right-icon" @click="toPayment(item.id)">去支付</div>
 					</div>
 				</div>
@@ -27,7 +27,7 @@
 					</li>
 					<li>
 						<p>配送费</p>
-						<p>&#165;{{ item.business.deliveryPrice }}</p>
+						<p>&#165;{{ item.business.deliveryPrice/100 }}</p>
 					</li>
 				</ul>
 			</li>
@@ -42,7 +42,7 @@
 						<i class="fa fa-caret-down" @click="detailetShow(item)"></i>
 					</p>
 					<div class="order-info-right">
-						<p>&#165;{{ item.orderTotal }}</p>
+						<p>&#165;{{ item.orderTotal/100 }}</p>
 					</div>
 				</div>
 				<ul class="order-detailed" v-show="item.isShowDetailet">
@@ -52,7 +52,7 @@
 					</li>
 					<li>
 						<p>配送费</p>
-						<p>&#165;{{ item.business.deliveryPrice }}</p>
+						<p>&#165;{{ item.business.deliveryPrice/100 }}</p>
 					</li>
 				</ul>
 			</li>

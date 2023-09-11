@@ -14,7 +14,7 @@
 				</div>
 				<div class="business-info">
 					<h3>{{ item.businessName }}</h3>
-					<p>&#165;{{ item.starPrice }}起送 | &#165;{{ item.deliveryPrice }}配送</p>
+					<p>&#165;{{ item.starPrice/100 }}起送 | &#165;{{ item.deliveryPrice/100 }}配送</p>
 					<p>{{ item.businessExplain }}</p>
 				</div>
 			</li>

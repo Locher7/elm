@@ -25,12 +25,12 @@
 					<img :src="item.food.foodImg">
 					<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 				</div>
-				<p>&#165;{{ item.food.foodPrice*item.quantity }}</p>
+				<p>&#165;{{ item.food.foodPrice/100*item.quantity }}</p>
 			</li>
 		</ul>
 		<div class="order-deliveryfee">
 			<p>配送费</p>
-			<p>&#165;{{ business.deliveryPrice }}</p>
+			<p>&#165;{{ business.deliveryPrice/100 }}</p>
 		</div>
 
 		<!-- ai聊天框 -->
@@ -50,7 +50,7 @@
 
 		<!-- 订单合计 -->
 		<div class="total">
-			<div class="total-left">&#165;{{ totalPrice }}</div>
+			<div class="total-left">&#165;{{ totalPrice/100 }}</div>
 			<div class="total-right" @click="toPayment">去支付</div>
 		</div>
 	</div>

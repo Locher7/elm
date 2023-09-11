@@ -13,7 +13,7 @@
 		<!-- 商家信息 -->
 		<div class="business-info">
 			<h1>{{ business.businessName }}</h1>
-			<p>&#165;{{ business.starPrice }}起送 {{ business.deliveryPrice }}配送&#165;3</p>
+			<p>&#165;{{ business.starPrice/100 }}起送 {{ business.deliveryPrice/100 }}配送&#165;3</p>
 			<p>{{ business.businessExplain }}</p>
 		</div>
 
@@ -25,7 +25,7 @@
 					<div class="food-left-info">
 						<h3>{{ item.foodName }}</h3>
 						<p>{{ item.foodExplain }}</p>
-						<p>&#165;{{ item.foodPrice }}</p>
+						<p>&#165;{{ item.foodPrice/100 }}</p>
 					</div>
 				</div>
 				<div class="food-right">
@@ -47,12 +47,12 @@
 					<div class="cart-left-icon-quantity" v-show="totalQuantity!=0">{{totalQuantity}}</div>
 				</div>
 				<div class="cart-left-info">
-					<p>&#165;{{totalPrice}}</p>
-					<p>另需配送费{{business.deliveryPrice}}元</p>
+					<p>&#165;{{totalPrice/100}}</p>
+					<p>另需配送费{{business.deliveryPrice/100}}元</p>
 				</div>
 				<div class="cart-right">
 					<!--不够配送费-->
-					<div class="cart-right-item" v-show="totalSettle<business.starPrice" style="background-color: #535356;cursor: default;">&#165;{{business.starPrice}}起送</div>
+					<div class="cart-right-item" v-show="totalSettle<business.starPrice" style="background-color: #535356;cursor: default;">&#165;{{business.starPrice/100}}起送</div>
 					<!--达到配送费-->
 					<div class="cart-right-item" @click="toOrder" v-show="totalSettle>=business.starPrice">去结算</div>
 				</div>
