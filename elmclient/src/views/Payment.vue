@@ -1,5 +1,4 @@
 <template>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<div class="wrapper">
 		<!-- header -->
 		<header>
@@ -58,14 +57,14 @@
 		<div class="payment-button" @click="pay">
 			<button>确认支付</button>
 		</div>
-		
+
 		<!-- 支付成功弹窗 -->
-		<div class="modal" v-if="showModal">
-    <div class="modal-content">
-        <i class="fas fa-check-circle success-icon"></i>
-        <p>支付成功</p>
-    </div>
-</div>
+		<div class="modal" v-if="successShowModal">
+			<div class="modal-content">
+				<i class="fa fa-check-circle success-icon"></i>
+				<p>支付成功</p>
+			</div>
+		</div>
 
 
 		<!-- 底部菜单 -->
@@ -80,21 +79,20 @@
 	export default {
 		name: 'Payment',
 		data() {
-    return {
-        user: {},
-        orderId: this.$route.query.orderId,
-        orders: {
-			business: {	
-			},
+			return {
+				user: {},
+				orderId: this.$route.query.orderId,
+				orders: {
+					business: {},
+				},
+				isShowDetailet: false,
+				credit: '',
+				useCredit: false,
+				discountedTotal: 0,
+				useIntegration: 0,
+				successShowModal: false
+			}
 		},
-        isShowDetailet: false,
-        credit: '',
-        useCredit: false,
-        discountedTotal: 0,
-        useIntegration: 0,
-		showModal: false
-    }
-},
 
 
 		created() {
@@ -153,11 +151,11 @@
 					integrationState: this.useIntegration
 				})).then(response => {
 					if (response.data == 1) {
-                this.showModal = true;
-                setTimeout(() => {
-                    this.$router.push('/index');
-                }, 1000);
-            }  else {
+						this.successShowModal = true;
+						setTimeout(() => {
+							this.$router.push('/index');
+						}, 1000);
+					} else {
 						alert("支付失败")
 					}
 				}).catch(error => {
@@ -383,34 +381,40 @@
 		font-weight: bold;
 	}
 
-	
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.75); /* 更深的背景颜色 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000; 
-}
 
-.modal-content {
-    width: 80%; /* 更大的弹窗框 */
-    max-width: 500px; /* 更大的弹窗框 */
-    padding: 30px; /* 更大的内边距 */
-    border-radius: 15px;
-    background-color: #ffffff;
-    text-align: center;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* 更强的阴影 */
-}
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.75);
+		/* 更深的背景颜色 */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 2000;
+	}
 
-.success-icon {
-    font-size: 80px; /* 更大的图标 */
-    color: #4CAF50;
-    margin-bottom: 30px; /* 更大的间距 */
-}
+	.modal-content {
+		width: 80%;
+		/* 更大的弹窗框 */
+		max-width: 500px;
+		/* 更大的弹窗框 */
+		padding: 30px;
+		/* 更大的内边距 */
+		border-radius: 15px;
+		background-color: #ffffff;
+		text-align: center;
+		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+		/* 更强的阴影 */
+	}
 
+	.success-icon {
+		font-size: 80px;
+		/* 更大的图标 */
+		color: #4CAF50;
+		margin-bottom: 30px;
+		/* 更大的间距 */
+	}
 </style>

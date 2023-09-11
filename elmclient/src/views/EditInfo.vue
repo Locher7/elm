@@ -3,11 +3,9 @@
 		<header>
 			<p>修改密码</p>
 		</header>
-		<!-- <div class="head">
-			<div v-if="!this.user.userImg || this.user.userImg === ''" class="default-avatar" @click="openModal"></div>
-			<img v-else :src="this.user.userImg" @click="openModal">
-			<p @click="openModal">更换头像</p>
-		</div> -->
+		<div class="head">
+				<img src="../assets/brand.png">
+			</div>
 		<ul class="info-section">
 			<li class="info-item">
 				<div class="content">
@@ -36,6 +34,13 @@
 			<button @click="updateInfo">确认更改</button>
 		</div>
 
+		<!-- 修改成功弹窗 -->
+		<div class="modal" v-if="successShowModal">
+			<div class="modal-content">
+				<i class="fa fa-check-circle success-icon"></i>
+				<p>修改密码成功</p>
+			</div>
+		</div>
 
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
@@ -53,7 +58,8 @@
 				confirmPassword: '',
 				user: {},
 				newPassword: '',
-				pastPassword: ''
+				pastPassword: '',
+				successShowModal: false
 			};
 		},
 		created() {
@@ -86,8 +92,11 @@
 							password: md5(this.newPassword)
 						})).then((response) => {
 							if (response.data == 1) {
-								alert('修改密码成功!');
-								this.$router.push('/myInfo');
+								this.successShowModal = true;
+						setTimeout(() => {
+							this.$router.push('/myInfo');
+						}, 1000);
+								
 							} else {
 								alert('修改密码失败!');
 							}
@@ -102,8 +111,7 @@
 			},
 
 			checkOldPassword() {
-				// 这是一个示例方法。你应该用实际的API调用来验证旧密码。
-				// 返回一个promise，如果旧密码正确则解析为true，否则为false。
+				//如果旧密码正确则解析为true，否则为false。
 				return new Promise((resolve, reject) => {
 					this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
 						userId: this.user.userId,
@@ -154,32 +162,20 @@
 
 	.head {
 		margin-top: 25vw;
-		margin-bottom: -10vw;
-
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
 	.head img {
-		width: 30vw;
-		height: 30vw;
-
-		margin-bottom: 5vw
-	}
-
-	.head p {
-		margin-top: 20px;
-		font-size: 4.8vw;
-		color: #6d6d6d;
+		width: 40vw;
+		height: 40vw;
 	}
 
 	.info-section {
 		width: 80%;
-		height: 40vw;
-		margin: 16vw auto;
+		margin: 6vw auto;
 		border-radius: 8px;
-
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
@@ -193,16 +189,13 @@
 		border: #f4eeee solid;
 		border-width: 0px 0px 1.8px 0px;
 	}
-
 	.info-item {
 		display: flex;
 		align-items: center;
-
 		padding: 10px;
 		margin-bottom: 20px;
 
 	}
-
 	.info-item i {
 		margin-right: 10px;
 		font-size: 20px;
@@ -236,5 +229,35 @@
 		font-weight: 500;
 		cursor: pointer;
 		transition: background-color 0.3s;
+	}
+
+	/* 修改密码成功弹窗 */
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.75);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 2000;
+	}
+
+	.modal-content {
+		width: 80%;
+		max-width: 500px;
+		padding: 30px;
+		border-radius: 15px;
+		background-color: #ffffff;
+		text-align: center;
+		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+	}
+
+	.success-icon {
+		font-size: 80px;
+		color: #4CAF50;
+		margin-bottom: 30px;
 	}
 </style>

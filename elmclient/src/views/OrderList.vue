@@ -88,6 +88,7 @@
 					orders.isShowDetailet = false;
 				}
 				this.orderArr = result;
+				console.log(this.orderArr)
 			}).catch(error => {
 				console.error(error);
 			});
