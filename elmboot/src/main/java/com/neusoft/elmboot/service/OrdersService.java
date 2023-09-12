@@ -12,4 +12,5 @@ public interface OrdersService {
 	
 	public List<Orders> listOrdersByUserId (String userId);
 
+	//public int payOrdersById(String orderId, Integer useIntegration);
 }

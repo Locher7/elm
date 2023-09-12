@@ -30,6 +30,10 @@ public class OrdersController {
 	public List<Orders> listOrdersByUserId (Orders orders) throws Exception{
 		return ordersService.listOrdersByUserId(orders.getUserId());
 	}
-	
-
+	/*
+	@RequestMapping("/payOrdersById")
+	public int payOrdersById(Orders orders) throws Exception {
+		return ordersService.payOrdersById(orders.getOrderId(), orders.getBusinessId());
+	}
+	*/
 }

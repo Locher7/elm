@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.neusoft.elmboot.mapper.IntegrationMapper;
 import com.neusoft.elmboot.mapper.OrdersMapper;
@@ -30,6 +31,7 @@ public class IntegrationServiceImpl implements IntegrationService {
 	}
 
 	@Override
+	@Transactional
 	public Integer getCreditByUserId(String userId) {
 		// System.out.println("IntGet");
 		//Integer result = 0;
@@ -43,7 +45,6 @@ public class IntegrationServiceImpl implements IntegrationService {
 		while (it.hasNext()) {
 			integration = it.next();
 			long dateDiff = CommonUtil.dateToStamp(nowDate) - CommonUtil.dateToStamp(integration.getIntegrationDate());
-			// 计算该积分获取与当前时间差
 			if (integration.getIntegrationState() == 0 && dateDiff > CommonUtil.validDate) {
 				System.out.println(dateDiff);
 				integration.setIntegrationState(1);
@@ -61,11 +62,11 @@ public class IntegrationServiceImpl implements IntegrationService {
 		return integrationMapper.getCreditByUserId(userId);
 	}
 	
+	@Override
+	@Transactional
 	public Integer payCredit(Integration integration) {
 		String nowDate = CommonUtil.getCurrentDate();
 		
-		// 得到积分和订单id
-		Integer costPoints = new Integer(integration.getPoints());
 		Integer orderId = integration.getUsedPoints();
 		
 		Integer flag = integration.getIntegrationState();
@@ -73,19 +74,22 @@ public class IntegrationServiceImpl implements IntegrationService {
 		integration.setIntegrationDate(nowDate);
 		integration.setIntegrationState(0);
 		
-		//查询该订单
 		Orders orders = ordersMapper.getOrdersById(orderId);
 		orders.setOrderState(1);
-		Double realPoints = new Double(orders.getOrderTotal());
-		//System.out.println(realPoints);
+		Integer realPoints = orders.getOrderTotal(); // 订单价格
+		Integer costPoints = orders.getOrderTotal()/100; // 如果使用积分应该减少的积分
+		Integer finalPoints =  (realPoints-costPoints*10)/100;  // 如果使用积分应该增加的积分
 		
+		// System.out.println(realPoints);
 		if(flag == 1) {
-			orders.setOrderTotal(realPoints*0.9);
+			orders.setOrderTotal(realPoints-costPoints*10); // 折扣价格
 		} else {
 			orders.setOrderTotal(realPoints);
 		}
 		ordersMapper.updateOrders(orders);
-		// 支付订单
+		
+		integration.setIntegrationState(2);
+		integration.setPoints(costPoints);
 		
 		if(flag == 1) { // 表示使用积分
 			
@@ -111,17 +115,12 @@ public class IntegrationServiceImpl implements IntegrationService {
 					}
 				}
 			}
-				
-			integration.setIntegrationState(2);
-			integration.setPoints(new Integer((int)-Math.round(realPoints)));
+			realPoints = finalPoints;
 			integrationMapper.insertIntegration(integration);
-			// 加入使用积分的记录
-			realPoints = realPoints*0.9;
 		}
 		
-		// 加入得到积分的记录
 		integration.setIntegrationState(0);
-		integration.setPoints(new Integer((int)Math.round(realPoints)));
+		integration.setPoints(realPoints);
 		return (Integer)integrationMapper.insertIntegration(integration);
 	}
 }

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.neusoft.elmboot.mapper.CartMapper;
 import com.neusoft.elmboot.mapper.FoodMapper;
@@ -51,6 +52,7 @@ public class CartServiceImpl implements CartService{
 	}
 	
 	@Override
+	@Transactional
 	public String aiSuggestion (Cart cart) throws IOException {
 	    OkHttpClient HTTP_CLIENT = new OkHttpClient().newBuilder().build();
 	    

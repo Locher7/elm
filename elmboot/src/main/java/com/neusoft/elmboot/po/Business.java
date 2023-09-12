@@ -8,8 +8,8 @@ public class Business {
 	private String businessExplain;
 	private String businessImg;
 	private Integer orderTypeId;
-	private double starPrice; //起送费
-	private double deliveryPrice; //配送费
+	private Integer starPrice; //起送费
+	private Integer deliveryPrice; //配送费
 	private String remarks;
 	
 	public String getBusinessAddress() {
@@ -32,20 +32,12 @@ public class Business {
 		return businessName;
 	}
 	
-	public double getDeliveryPrice() {
-		return deliveryPrice;
-	}
-	
 	public Integer getOrderTypeId() {
 		return orderTypeId;
 	}
 	
 	public String getRemarks() {
 		return remarks;
-	}
-	
-	public double getStarPrice() {
-		return starPrice;
 	}
 	
 	public void setBusinessAddress(String businessAddress) {
@@ -68,9 +60,6 @@ public class Business {
 		this.businessName = businessName;
 	}
 	
-	public void setDeliveryPrice(double deliveryPrice) {
-		this.deliveryPrice = deliveryPrice;
-	}
 	
 	public void setOrderTypeId(Integer orderTypeId) {
 		this.orderTypeId = orderTypeId;
@@ -79,9 +68,22 @@ public class Business {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
-	public void setStarPrice(double starPrice) {
+
+	public Integer getStarPrice() {
+		return starPrice;
+	}
+
+	public void setStarPrice(Integer starPrice) {
 		this.starPrice = starPrice;
 	}
+
+	public Integer getDeliveryPrice() {
+		return deliveryPrice;
+	}
+
+	public void setDeliveryPrice(Integer deliveryPrice) {
+		this.deliveryPrice = deliveryPrice;
+	}
 	
+
 }
