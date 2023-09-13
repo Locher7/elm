@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="current-total">
-			<p>总金额: <span>&#165;{{ discountedTotal }}</span></p>
+			<p>总金额: <span>&#165;{{ discountedTotal/100 }}</span></p>
 		</div>
 
 		<!-- 支付方式 -->
@@ -114,6 +114,7 @@
 				userId: this.user.userId,
 			})).then(response => {
 				this.credit = response.data;
+				console.log(this.credit)
 			}).catch(error => {
 				console.error(error);
 			});
@@ -170,9 +171,9 @@
 					this.useCredit = !this.useCredit;
 				}
 				if (!this.useCredit) {
-					this.discountedTotal = this.orders.orderTotal/100;
+					this.discountedTotal = this.orders.orderTotal;
 				} else {
-					this.discountedTotal = this.orders.orderTotal/100 - Math.round(this.orders.orderTotal/100) / 10;
+					this.discountedTotal = this.orders.orderTotal - Math.round(this.orders.orderTotal) / 10;
 				}
 			},
 
