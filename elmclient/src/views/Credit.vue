@@ -23,6 +23,7 @@
 			</span>
 		</h3>
 
+		<!-- 积分明细 -->
 		<ul class="credit-detailed">
 			<ul class="credit-detailed">
 				<li v-for="item in detailArr" :key="item.id">
@@ -44,33 +45,6 @@
 					</div>
 				</li>
 			</ul>
-			<!-- <li>
-				<div class="credit-detailed-left">
-					<p>使用积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>-9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>获得积分</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>+9</p>
-				</div>
-			</li>
-			<li>
-				<div class="credit-detailed-left">
-					<p>积分过期</p>
-					<p>2023-08-14 17:21:33</p>
-				</div>
-				<div class="credit-detailed-right">
-					<p>-9</p>
-				</div>
-			</li> -->
 		</ul>
 
 		<!-- 底部菜单部分 -->
@@ -102,63 +76,90 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Credit',
-		data() {
-			return {
-				detailArr: [],
-				user: {},
-				isRuleModalVisible: false,
-				credit: 0,
-			}
-		},
-		methods: {
-			toIndex() {
-				this.$router.push('/index');
-			},
-			showRuleModal() {
-				this.isRuleModalVisible = true;
-			},
-			closeRuleModal() {
-				this.isRuleModalVisible = false;
-			},
-		},
-		created() {
-			this.user = this.$getSessionStorage('user');
-			//查询总积分
-			this.$axios.post('IntegrationController/getCreditByUserId', this.$qs.stringify({
-				userId: this.user.userId,
-			})).then(response => {
-				if(response.data==''){
-					this.credit =0;
-				}else{
-				this.credit = response.data;
-			}
-				console.log('总积分:',this.credit)
-			}).catch(error => {
-				console.error(error);
-			});
-			//查询积分明细
-			this.$axios.post('IntegrationController/getDetailsByUserId', this.$qs.stringify({
-				userId: this.user.userId,
-			})).then(response => {
-				this.detailArr = response.data;
-				console.log('积分信息:', this.detailArr);
-			}).catch(error => {
-				console.error(error);
-			});
-		},
 		components: {
 			Footer
 		},
-		mounted() {
-			console.log('Component is mounted');
-			document.onscroll = () => {
-				// 这里添加滚动事件的处理逻辑
-				console.log('Scroll event triggered');
+		setup() {
+			const detailArr = ref([]);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const isRuleModalVisible = ref(false);
+			const credit = ref(0);
+			const router = useRouter();
+
+			const toIndex = () => {
+				router.push('/index');
+			};
+			const showRuleModal = () => {
+				isRuleModalVisible.value = true;
+			};
+			const closeRuleModal = () => {
+				isRuleModalVisible.value = false;
+			};
+
+			// 请求总积分
+			const getCreditByUserId = () => {
+				axios.post('IntegrationController/getCreditByUserId', qs.stringify({
+						userId: user.value.userId,
+					}))
+					.then(response => {
+						if (response.data == '') {
+							credit.value = 0;
+						} else {
+							credit.value = response.data;
+						}
+						// console.log('总积分:', credit.value);
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			};
+
+			// 请求积分明细
+			const getDetailsByUserId = () => {
+				axios.post('IntegrationController/getDetailsByUserId', qs.stringify({
+						userId: user.value.userId,
+					}))
+					.then(response => {
+						detailArr.value = response.data;
+						// console.log('积分信息:', detailArr.value);
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			};
+
+			onMounted(() => {
+				getCreditByUserId();
+				getDetailsByUserId();
+			});
+
+
+			return {
+				detailArr,
+				user,
+				isRuleModalVisible,
+				credit,
+				toIndex,
+				showRuleModal,
+				closeRuleModal
 			}
-		},
+		}
 	}
 </script>
 
@@ -302,7 +303,7 @@
 		cursor: pointer;
 	}
 
-	/* 积分规则弹窗 */
+	/****************** 积分规则弹窗 ****************/
 	.credit-rule i {
 		margin-left: 1vw;
 		font-size: 2vw;
@@ -331,7 +332,6 @@
 		width: 100%;
 		position: relative;
 		max-height: 70vh;
-		/* 设为屏幕的70%，这个数字你可以根据需要调整 */
 		overflow-y: auto;
 	}
 

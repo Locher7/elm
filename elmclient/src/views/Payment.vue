@@ -32,7 +32,7 @@
 		<div class="credit-deduction">
 			<div class="credit-info">
 				<p>剩余{{credit}}积分</p>
-				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(this.orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.round(this.orders.orderTotal/100)/10 }}</label>&#165;</p>
+				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.round(orders.orderTotal/100)/10 }}</label>&#165;</p>
 			</div>
 			<div class="credit-toggle">
 				<span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
@@ -74,86 +74,98 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 
 	export default {
 		name: 'Payment',
-		data() {
-			return {
-				user: {},
-				orderId: this.$route.query.orderId,
-				orders: {
-					business: {},
+		components: {
+			Footer
+		},
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const orderId = ref(route.query.orderId);
+			const isShowDetailet = ref(false);
+			const credit = ref('');
+			const useCredit = ref(false);
+			const discountedTotal = ref(0);
+			const useIntegration = ref(0);
+			const successShowModal = ref(false);
+			const orders = ref({
+				business: {
+					businessName: ''
 				},
-				isShowDetailet: false,
-				credit: '',
-				useCredit: false,
-				discountedTotal: 0,
-				useIntegration: 0,
-				successShowModal: false
-			}
-		},
-
-
-		created() {
-			this.user = this.$getSessionStorage('user');
-
-			//查询订单
-			this.$axios.post('OrdersController/getOrdersById', this.$qs.stringify({
-				orderId: this.orderId
-			})).then(response => {
-				this.orders = response.data;
-				this.discountedTotal = this.orders.orderTotal;
-				console.log(this.orders)
-			}).catch(error => {
-				console.error(error);
 			});
 
-			//查询总积分
-			this.$axios.post('IntegrationController/getCreditByUserId', this.$qs.stringify({
-				userId: this.user.userId,
-			})).then(response => {
-				this.credit = response.data;
-				console.log(this.credit)
-			}).catch(error => {
-				console.error(error);
+
+			onMounted(() => {
+				//查询订单
+				axios.post('OrdersController/getOrdersById', qs.stringify({
+					orderId: orderId.value
+				})).then(response => {
+					orders.value = response.data;
+					// console.log("请求回应:", response.data);
+					discountedTotal.value = orders.value.orderTotal;
+					// console.log(orders.value)
+				}).catch(error => {
+					console.error(error);
+				});
+
+				//查询总积分
+				axios.post('IntegrationController/getCreditByUserId', qs.stringify({
+					userId: user.value.userId,
+				})).then(response => {
+					credit.value = response.data;
+					// console.log(credit.value)
+				}).catch(error => {
+					console.error(error);
+				});
+
+				history.pushState(null, null, document.URL);
+				window.onpopstate = () => {
+					router.push('/index');
+				};
 			});
-		},
 
-		mounted() {
-			//一旦路由到在线支付组件，就不能回到订单确认组件
-			//先将当前url添加到history对象中
-			history.pushState(null, null, document.URL);
-			//popstate事件能够监听history对象的变化
-			window.onpopstate = () => {
-				this.$router.push('/index');
-			}
-		},
+			// 	onBeforeUnmount(() => {
+			// 	window.onpopstate = null;
+			// });
 
-		destroyed() {
-			window.onpopstate = null;
-		},
+			const detailetShow = () => {
+				isShowDetailet.value = !isShowDetailet.value;
+			};
 
-		methods: {
-			//是否展示订单明细
-			detailetShow() {
-				this.isShowDetailet = !this.isShowDetailet;
-			},
-			//支付
-			pay() {
-
-				if (this.useCredit == true) {
-					this.useIntegration = 1;
+			//支付方法
+			const pay = () => {
+				if (useCredit.value == true) {
+					useIntegration.value = 1;
 				}
-				this.$axios.post('IntegrationController/payCredit', this.$qs.stringify({
-					userId: this.user.userId,
-					usedPoints: this.orderId,
-					integrationState: this.useIntegration
+				// 请求新建一个已支付订单
+				axios.post('IntegrationController/payCredit', qs.stringify({
+					userId: user.value.userId,
+					usedPoints: orderId.value,
+					integrationState: useIntegration.value
 				})).then(response => {
 					if (response.data == 1) {
-						this.successShowModal = true;
+						successShowModal.value = true;
 						setTimeout(() => {
-							this.$router.push('/index');
+							router.push('/index');
 						}, 1000);
 					} else {
 						alert("支付失败")
@@ -162,25 +174,36 @@
 					console.error(error);
 					alert("请求出错，请稍后重试!")
 				});
-			},
+			};
 
-			toggleCreditUse() {
-				if (this.credit < Math.round(this.orders.orderTotal/100)) {
+			const toggleCreditUse = () => {
+				if (credit.value < Math.round(orders.value.orderTotal / 100)) {
 					alert("剩余积分不足");
 				} else {
-					this.useCredit = !this.useCredit;
+					useCredit.value = !useCredit.value;
 				}
-				if (!this.useCredit) {
-					this.discountedTotal = this.orders.orderTotal;
+				if (!useCredit.value) {
+					discountedTotal.value = orders.value.orderTotal;
 				} else {
-					this.discountedTotal = this.orders.orderTotal - Math.round(this.orders.orderTotal) / 10;
+					discountedTotal.value = orders.value.orderTotal - Math.round(orders.value.orderTotal) / 10;
 				}
-			},
+			};
 
-		},
+			return {
+				user,
+				orderId,
+				orders,
+				isShowDetailet,
+				credit,
+				useCredit,
+				discountedTotal,
+				useIntegration,
+				successShowModal,
+				detailetShow,
+				pay,
+				toggleCreditUse
+			};
 
-		components: {
-			Footer
 		}
 	}
 </script>

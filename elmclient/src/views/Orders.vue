@@ -43,7 +43,7 @@
 			<div class="ai-chat">
 				<img src="../assets/aiImg.png">
 				<pre class="ai-text">{{ aiString }}</pre>
-				<!-- <pre class="ai-text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</pre> -->
+				<!-- <pre class="ai-text">测试测试</pre> -->
 			</div>
 		</div>
 
@@ -57,83 +57,103 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
+
+
 	export default {
 		name: 'Orders',
-		data() {
-			return {
-				businessId: this.$route.query.businessId,
-				business: {},
-				user: {},
-				cartArr: [],
-				deliveryaddress: {},
-				aiString: ''
-			}
-		},
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const businessId = ref(route.query.businessId);
+			const business = ref({});
+			const cartArr = ref([]);
+			const deliveryaddress = ref(null);
+			const aiString = ref('');
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
 
-		created() {
-			this.user = this.$getSessionStorage('user');
-			this.deliveryaddress = this.$getLocalStorage(this.user.userId);
+			onMounted(() => {
+				// console.log(businessId.value)
+				let address = localStorage.getItem(user.value.userId);
+				if (address) {
+					deliveryaddress.value = JSON.parse(address);
+				}
 
-			// 输出用户和地址信息，确保它们被正确加载
-			console.log('用户信息:', this.user);
-			console.log('收货地址信息:', this.deliveryaddress);
 
-			//查询当前商家
-			this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
-				businessId: this.businessId
-			})).then(response => {
-				this.business = response.data;
-			}).catch(error => {
-				console.error(error);
+				// console.log('用户信息:', user.value);
+				// console.log('收货地址信息:', deliveryaddress.value);
+
+				//查询当前商家
+				axios.post('BusinessController/getBusinessById', qs.stringify({
+					businessId: businessId.value
+				})).then(response => {
+					business.value = response.data;
+				}).catch(error => {
+					console.error(error);
+				});
+
+				//查询当前用户在购物车中的商家食品列表
+				axios.post('CartController/listCart', qs.stringify({
+					userId: user.value.userId,
+					businessId: businessId.value
+				})).then(response => {
+					cartArr.value = response.data;
+					// console.log('购物车信息:', cartArr.value);
+					// 查询AI语音
+					return axios.post('CartController/aiSuggestion', qs.stringify({
+						userId: user.value.userId,
+						businessId: businessId.value
+					}));
+
+				}).then(response => {
+					aiString.value = response.data;
+					// console.log('ai语言:', aiString.value);
+				}).catch(error => {
+					console.error(error);
+				});
 			});
 
-			//查询当前用户在购物车中的商家食品列表
-			this.$axios.post('CartController/listCart', this.$qs.stringify({
-				userId: this.user.userId,
-				businessId: this.businessId
-			})).then(response => {
-				this.cartArr = response.data;
-				console.log('购物车信息:', this.cartArr);
-				// 在这里查询AI语音
-				return this.$axios.post('CartController/aiSuggestion', this.$qs.stringify({
-					userId: this.user.userId,
-					businessId: this.businessId
-				}));
-
-			}).then(response => {
-				this.aiString = response.data;
-				console.log('ai语言:', this.aiString);
-			}).catch(error => {
-				console.error(error);
-			});
-		},
-
-
-		methods: {
-			toUserAddress() {
-				this.$router.push({
+			const toUserAddress = () => {
+				router.push({
 					path: '/userAddress',
 					query: {
-						businessId: this.businessId
+						businessId: business.value.businessId
 					}
 				});
-			},
-			toPayment() {
-				if (this.deliveryaddress == null) {
+			};
+
+			//确认支付方法
+			const toPayment = () => {
+				if (deliveryaddress.value == null) {
 					alert('请选择送货地址');
 					return;
 				}
 
 				//创建订单
-				this.$axios.post('OrdersController/createOrders', this.$qs.stringify({
-					userId: this.user.userId,
-					businessId: this.businessId,
-					daId: this.deliveryaddress.daId,
-					orderTotal: this.totalPrice
+				axios.post('OrdersController/createOrders', qs.stringify({
+					userId: user.value.userId,
+					businessId: businessId.value,
+					daId: deliveryaddress.value.daId,
+					orderTotal: totalPrice.value
 				})).then(response => {
 					let orderId = response.data;
 					if (orderId > 0) {
-						this.$router.push({
+						router.push({
 							path: '/payment',
 							query: {
 								orderId: orderId
@@ -146,31 +166,47 @@
 					console.error(error);
 				});
 
-			},
-			refreshPage() {
-				location.reload();
-			},
-		},
+			};
 
-		computed: {
-			totalPrice() {
-				let totalPrice = 0;
-				for (let cartItem of this.cartArr) {
-					totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+			// 刷新页面
+			const refreshPage = () => {
+				location.reload();
+			};
+
+			// 计算总金额
+			const totalPrice = computed(() => {
+				let total = 0;
+				for (let cartItem of cartArr.value) {
+					total += cartItem.food.foodPrice * cartItem.quantity;
 				}
-				totalPrice += this.business.deliveryPrice;
-				return totalPrice;
-			},
-			contactSex() {
-				if (this.deliveryaddress == null) {
+				total += business.value.deliveryPrice;
+				return total;
+			});
+
+			// 计算性别
+			const contactSex = computed(() => {
+				if (!deliveryaddress.value) {
 					return;
 				} else {
-					return this.deliveryaddress.contactSex === 1 ? '先生' : '女士';
+					return deliveryaddress.value.contactSex === 1 ? '先生' : '女士';
 				}
+			});
 
-			}
-		},
+			return {
+				businessId,
+				business,
+				user,
+				cartArr,
+				deliveryaddress,
+				aiString,
+				toUserAddress,
+				toPayment,
+				refreshPage,
+				totalPrice,
+				contactSex
+			};
 
+		}
 	}
 </script>
 
@@ -296,7 +332,7 @@
 		font-size: 3.5vw;
 	}
 
-	/* ai健康助手 */
+	/****************** ai健康助手 ****************/
 	.wrapper .ai-section {
 		display: flex;
 		flex-direction: column;
@@ -360,7 +396,7 @@
 		text-align: left;
 		position: relative;
 		white-space: pre-wrap;
-    max-height: XXvw;
+		max-height: XXvw;
 	}
 
 	.wrapper .ai-chat .ai-text:after {
@@ -381,7 +417,6 @@
 	.refresh-btn {
 		background: #62C7A9;
 		margin: 10px;
-		/* 选择一个与页面相搭配的颜色 */
 		color: #fff;
 		padding: 5px 15px;
 		border: none;
@@ -392,7 +427,6 @@
 
 	.refresh-btn:hover {
 		background: #5DBBE8;
-		/* 悬停时的颜色，与页面相搭配 */
 	}
 
 

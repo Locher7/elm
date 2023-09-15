@@ -21,17 +21,43 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
+
 	export default {
 		name: 'Footer',
-		methods: {
-			toIndex() {
-				this.$router.push('/index');
-			},
-			toOrderList() {
-				this.$router.push('/orderList');
-			},
-			toMyInfo() {
-				this.$router.push('/myInfo');
+		setup() {
+			const router = useRouter();
+
+			const toIndex = () => {
+				router.push('/index');
+			}
+
+			const toOrderList = () => {
+				router.push('/orderList');
+			}
+
+			const toMyInfo = () => {
+				router.push('/myInfo');
+			}
+
+			return {
+				toIndex,
+				toOrderList,
+				toMyInfo
 			}
 		}
 	}

@@ -34,6 +34,7 @@
 			</li>
 		</ul>
 
+		<!-- 更新按钮 -->
 		<div class="button-update">
 			<button @click="editUserAddress">更新</button>
 		</div>
@@ -45,62 +46,68 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'EditUserAddress',
-		data() {
-			return {
-				businessId: this.$route.query.businessId,
-				daId: this.$route.query.daId,
-				user: {},
-				deliveryAddress: {
-					// deliveryAddress: {
-  					// contactName: '', // 初始化联系人姓名
-  					// contactSex: '',  // 初始化性别
-  					// contactTel: '',  // 初始化电话
-  					// address: '',     // 初始化收货地址
-					// },
-				}
-			}
-		},
-
-		created() {
-			this.user = this.$getSessionStorage('user');
-
-			this.$axios.post('DeliveryAddressController/getDeliveryAddressById', this.$qs.stringify({
-				daId: this.daId
-			})).then(response => {
-				this.deliveryAddress = response.data;
-			}).catch(error => {
-				console.error(error);
-			});
-		},
-
 		components: {
 			Footer
 		},
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const businessId = ref(route.query.businessId);
+			const daId = ref(sessionStorage.getItem('daId'));
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const deliveryAddress = ref({})
 
+			// 页面初始化时请求即将更改地址信息
+			onMounted(async () => {
+				try {
+					const response = await axios.post('DeliveryAddressController/getDeliveryAddressById', qs.stringify({
+						daId: daId.value
+					}));
+					deliveryAddress.value = response.data;
+				} catch (error) {
+					console.error(error);
+				}
+			});
 
-		methods: {
-			editUserAddress() {
-				if (this.deliveryAddress.contactName == '') {
+			// 更改地址方法
+			const editUserAddress = () => {
+				if (deliveryAddress.contactName == '') {
 					alert('联系人姓名不能为空');
 					return;
 				}
-				if (this.deliveryAddress.contactTel == '') {
+				if (deliveryAddress.contactTel == '') {
 					alert('联系人电话不能为空');
 					return;
 				}
-				if (this.deliveryAddress.address == '') {
+				if (deliveryAddress.address == '') {
 					alert('联系人地址不能为空');
 					return;
 				}
 
-				this.$axios.post('DeliveryAddressController/updateDeliveryAddress', this.$qs.stringify(
-					this.deliveryAddress
+				//更改地址请求
+				axios.post('DeliveryAddressController/updateDeliveryAddress', qs.stringify(
+					deliveryAddress.value
 				)).then(response => {
 					if (response.data > 0) {
-						this.$router.go(-1);
+						router.go(-1);
 					} else {
 						alert('更新地址失败!')
 					}
@@ -108,6 +115,15 @@
 					console.error(error);
 				});
 			}
+
+			return {
+				businessId,
+				daId,
+				user,
+				deliveryAddress,
+				editUserAddress
+			}
+
 		}
 	}
 </script>

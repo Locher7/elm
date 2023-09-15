@@ -65,68 +65,72 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'OrderList',
-		data() {
-			return {
-				orderArr: [],
-				user: {},
-				userId: null
-			}
-		},
-
-		created() {
-			this.user = this.$getSessionStorage('user');
-			console.log('User:', this.user);
-			//根据businessId查询商家信息
-			this.$axios.post('OrdersController/listOrdersByUserId', this.$qs.stringify({
-				userId: this.user.userId
-			})).then(response => {
-				let result = response.data
-				for (let orders of result) {
-					orders.isShowDetailet = false;
-				}
-				this.orderArr = result;
-				console.log(this.orderArr)
-			}).catch(error => {
-				console.error(error);
-			});
-		},
-
-		computed: {
-			unpaidOrders() {
-				return this.orderArr.filter(item => item.orderState === 0);
-			},
-			paidOrders() {
-				return this.orderArr.filter(item => item.orderState === 1);
-			}
-		},
-
-		methods: {
-			detailetShow(orders) {
-				orders.isShowDetailet = !orders.isShowDetailet
-			},
-			toPayment(orderId) {
-				this.$router.push({
-					path: '/payment',
-					query: {
-						orderId: orderId
-					}
-				});
-			}
-		},
-
 		components: {
 			Footer
 		},
-		mounted() {
-			console.log('Component is mounted');
-			document.onscroll = () => {
-				// 这里添加滚动事件的处理逻辑
-				console.log('Scroll event triggered');
+		setup() {
+			const router = useRouter();
+			const orderArr = ref([]);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const userId = ref(null);
+
+			onMounted(() => {
+				//根据businessId查询商家信息
+				axios.post('OrdersController/listOrdersByUserId', qs.stringify({
+					userId: user.value.userId
+				})).then(response => {
+					let result = response.data
+					for (let orders of result) {
+						orders.isShowDetailet = false;
+					}
+					orderArr.value = result;
+					// console.log(orderArr.value)
+				}).catch(error => {
+					console.error(error);
+				});
+				document.onscroll = () => {
+					console.log('Scroll event triggered');
+				}
+			});
+
+			const unpaidOrders = computed(() => {
+				return orderArr.value.filter(item => item.orderState === 0);
+			});
+
+			const paidOrders = computed(() => {
+				return orderArr.value.filter(item => item.orderState === 1);
+			});
+
+			// 是否显示订单明细
+			const detailetShow = (orders) => {
+				orders.isShowDetailet = !orders.isShowDetailet;
+			};
+			return {
+				orderArr,
+				user,
+				userId,
+				unpaidOrders,
+				paidOrders,
+				detailetShow,
 			}
-		},
+
+		}
 	}
 </script>
 
@@ -135,7 +139,7 @@
 	.wrapper {
 		width: 100%;
 		height: 100%;
-		padding-bottom:140vw;
+		padding-bottom: 140vw;
 	}
 
 	/****************** header ****************/

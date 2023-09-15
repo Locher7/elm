@@ -12,15 +12,14 @@ import {
 	getCurDate,
 	setSessionStorage,
 	getSessionStorage,
-	removeSessionStorage,   
+	removeSessionStorage,
 	setLocalStorage,
 	getLocalStorage,
 	removeLocalStorage
 } from './common.js'
 
-axios.defaults.baseURL = 'http://localhost:8080/elm/';
-
 const app = createApp(App);
+axios.defaults.baseURL = 'http://localhost:8080/elm/';
 
 // 注册全局属性和方法
 app.config.globalProperties.$axios = axios;
@@ -35,18 +34,26 @@ app.config.globalProperties.$removeLocalStorage = removeLocalStorage;
 
 //导航守卫
 router.beforeEach((to, from, next) => {
-	let user = app.config.globalProperties.$getSessionStorage('user'); 
-	if (!(to.path == '/' || to.path == '/index' || to.path == '/businessList' || to.path == '/businessInfo' || to.path == '/login' || to.path == '/register')) {
+	let user = sessionStorage.getItem('user');
+	if (
+		![
+			'/',
+			'/index',
+			'/businessList',
+			'/businessInfo',
+			'/login',
+			'/register',
+		].includes(to.path)
+	) {
 		if (user == null) {
-			next('/login'); 
+			next('/login');
 		} else {
-			next(); 
+			next();
 		}
 	} else {
 		next();
 	}
 });
-
 app.use(router).mount('#app');
 
-console.log('API URL:', API_URL);
+// console.log('API URL:', API_URL);

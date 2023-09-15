@@ -27,67 +27,44 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
+	import {
+		useRoute
+	} from 'vue-router';
 	export default {
 		name: 'BusinessList',
-		data() {
-			return {
-				orderTypeId: this.$route.query.orderTypeId,
-				businessArr: [
-					// 	{
-					// 	id: 1,
-					// 	businessName: '商家1',
-					// 	businessImg: 'path_to_image1.jpg',
-					// 	starPrice: 10.00,
-					// 	deliveryPrice: 2.00,
-					// 	businessExplain: '这是商家1的说明',
-					// 	quantity: 3, // 假设有3个商品在购物车中
-					// },
-					// 	{
-					// 	id: 2,
-					// 	businessName: '商家2',
-					// 	businessImg: 'path_to_image2.jpg',
-					// 	starPrice: 12.00,
-					// 	deliveryPrice: 2.50,
-					// 	businessExplain: '这是商家2的说明',
-					// 	quantity: 0, // 假设购物车中没有商品
-					// },
-				],
-				user: {}
-			}
-		},
-		created() {
-			this.user = this.$getSessionStorage('user');
-
-			//根据orderTypeId查询商家信息
-			this.$axios.post('BusinessController/listBusinessByOrderTypeId', this.$qs.stringify({
-				orderTypeId: this.orderTypeId
-			})).then(response => {
-				this.businessArr = response.data;
-				console.log(this.businessArr)
-				//判断是否登录
-				if (this.user != null) {
-					this.listCart();
-				}
-
-			}).catch(error => {
-				console.error(error);
-			});
-
-			console.log(this.$route.query);
-		},
 		components: {
 			Footer
 		},
+		setup() {
+			const route = useRoute(); // Initialize the useRoute hook
+			const router = useRouter();
+			const orderTypeId = ref(route.query.orderTypeId || null);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const businessArr = ref([]);
 
-		methods: {
-			listCart() {
-				this.$axios.post('CartController/listCart', this.$qs.stringify({
-					userId: this.user.userId,
+
+			// 请求购物车信息
+			const listCart = () => {
+				axios.post('CartController/listCart', qs.stringify({
+					userId: user.value.userId,
 				})).then(response => {
 					let cartArr = response.data;
 					//遍历所有食品列表
-					for (let businessItem of this.businessArr) {
+					for (let businessItem of businessArr.value) {
 						businessItem.quantity = 0;
 						for (let cartItem of cartArr) {
 							if (cartItem.businessId == businessItem.businessId) {
@@ -95,29 +72,52 @@
 							}
 						}
 					}
-					this.businessArr.sort();
+					businessArr.value.sort();
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
-			toBusinessInfo(businessId) {
-				this.$router.push({
+			const toBusinessInfo = (businessId) => {
+				router.push({
 					path: '/businessInfo',
 					query: {
 						businessId: businessId
 					}
 				});
 			}
-		},
 
-		mounted() {
-			console.log('Component is mounted');
-			document.onscroll = () => {
-				// 这里添加滚动事件的处理逻辑
-				console.log('Scroll event triggered');
+			// 请求商家信息
+			const fetchBusinessInfo = () => {
+				axios.post('BusinessController/listBusinessByOrderTypeId', qs.stringify({
+						orderTypeId: orderTypeId.value
+					}))
+					.then(response => {
+						businessArr.value = response.data;
+						// console.log(businessArr.value);
+
+						if (user.value !== null) {
+							listCart();
+						}
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			};
+
+			onMounted(() => {
+				fetchBusinessInfo();
+				// console.log(orderTypeId.value);
+			});
+
+			return {
+				orderTypeId,
+				businessArr,
+				user,
+				toBusinessInfo,
+				listCart
 			}
-		},
+		}
 	}
 </script>
 

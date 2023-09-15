@@ -22,7 +22,7 @@
 					<h3>修改用户名称</h3>
 					<input v-model="newUserName" type="text" placeholder="输入新的用户名称">
 					<button @click="updateUsername">保存</button>
-					<button @click="showModal = false">取消</button>
+					<button @click="closeEditName">取消</button>
 				</div>
 			</div>
 
@@ -64,12 +64,9 @@
 					<p>您的头像已成功修改！</p>
 				</div>
 			</div>
-
-
 		</section>
 
-
-
+		<!-- 图标信息 -->
 		<nav class="nav-section">
 			<div class="nav-item" @click="toMyAddress">
 				<i class="fa fa-list icon"></i>
@@ -81,7 +78,7 @@
 			</div>
 		</nav>
 
-
+		<!-- 表单信息 -->
 		<section class="instructions">
 			<div class="instruction-item" @click="toEditInfo">
 				<p>修改信息</p>
@@ -144,87 +141,114 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
+	import {
+		removeSessionStorage,
+	} from '../common.js'
 	import Footer from '../components/Footer.vue';
 
 	export default {
 		name: 'MyInfo',
-		data() {
-			return {
-				user: {},
-				editNameShowModal: false,
-				showAvatarModal: false,
-				showRulesModal: false,
-				newUserName: '',
-				successNameShowModal: false,
-				editImgShowModal: false,
-				successImgShowModal:false,
-				images: [
-					require('../assets/userImg/yhtx01.png'),
-					require('../assets/userImg/yhtx02.png'),
-					require('../assets/userImg/yhtx03.png'),
-					require('../assets/userImg/yhtx04.png'),
-					require('../assets/userImg/yhtx05.png'),
-					require('../assets/userImg/yhtx06.png'),
-					require('../assets/userImg/yhtx07.png'),
-					require('../assets/userImg/yhtx08.png'),
-					require('../assets/userImg/yhtx09.png'),
-				]
-			}
-		},
 		components: {
 			Footer
 		},
-		methods: {
-			toMyAddress() {
-				this.$router.push('/myAddress');
-			},
-			logout() {
+		setup() {
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const editNameShowModal = ref(false);
+			const showAvatarModal = ref(false);
+			const showRulesModal = ref(false);
+			const successNameShowModal = ref(false);
+			const editImgShowModal = ref(false);
+			const successImgShowModal = ref(false);
+			const newUserName = ref('');
+			const router = useRouter();
+			const images = ref([
+				require('../assets/userImg/yhtx01.png'),
+				require('../assets/userImg/yhtx02.png'),
+				require('../assets/userImg/yhtx03.png'),
+				require('../assets/userImg/yhtx04.png'),
+				require('../assets/userImg/yhtx05.png'),
+				require('../assets/userImg/yhtx06.png'),
+				require('../assets/userImg/yhtx07.png'),
+				require('../assets/userImg/yhtx08.png'),
+				require('../assets/userImg/yhtx09.png'),
+			]);
+
+
+			const toMyAddress = () => {
+				router.push('/myAddress');
+			};
+
+			const logout = () => {
 				// 清除sessionStorage的用户信息
-				this.$removeSessionStorage('user');
-				this.$router.push('/login');
-			},
-			toCredit() {
-				this.$router.push('/credit');
-			},
-			toEditInfo() {
-				this.$router.push('/editInfo');
-			},
-			toggleAvatarModal() {
-				this.showAvatarModal = !this.showAvatarModal;
-			},
-			updateUsername() {
-				this.user.userName = this.newUsername;
-				this.editNameShowModal = false;
-				if (this.user.userName == '') {
+				removeSessionStorage('user');
+				router.push('/login');
+			};
+
+
+			const toCredit = () => {
+				router.push('/credit');
+			};
+			const toEditInfo = () => {
+				router.push('/editInfo');
+			};
+			const toggleAvatarModal = () => {
+				showAvatarModal.value = !showAvatarModal.value;
+			};
+
+
+			const closeEditName = () => {
+				editNameShowModal.value = false;
+				newUserName.value = '';
+			}
+
+
+			// 修改用户名称
+			const updateUsername = () => {
+				if (!newUserName.value) {
 					alert('用户名称不能为空!');
 					return;
 				}
+				axios.post('UserController/editUserNameByUserId', qs.stringify({
+						userId: user.value.userId,
+						userName: newUserName.value,
+					}))
+					.then((response) => {
+						if (response.data == 1) {
+							user.value.userName = newUserName.value;
+							sessionStorage.setItem('user', JSON.stringify(user.value));
+							newUserName.value = '';
+							successNameShowModal.value = true;
+							editNameShowModal.value = false;
+							setTimeout(() => {
+								successNameShowModal.value = false;
+								location.reload();
+							}, 1000);
+						} else {
+							alert('修改用户昵称失败!');
+						}
+					})
+					.catch((error) => {
+						console.error(error);
+						alert('请求出错，请稍后重试!');
+					});
+			};
 
-				// 修改用户名称
-				this.$axios.post('UserController/editUserNameByUserId', this.$qs.stringify({
-					userId: this.user.userId,
-					userName: this.newUserName,
-				})).then((response) => {
-					if (response.data == 1) {
-						this.successNameShowModal = true;
-						setTimeout(() => {
-							this.successNameShowModal = false;
-							location.reload();
-						}, 1000);
-					} else {
-						alert('修改用户昵称失败!');
-					}
-					location.reload();
-				}).catch((error) => {
-					console.error('请求出错:', error);
-					alert('请求出错，请稍后重试!');
-				});
 
-
-			},
-
-			//修改用户头像
-			selectImage(imgPath) {
+			//将头像信息转换为base64字符串
+			const selectImage = (imgPath) => {
 				let img = new Image();
 				img.onload = () => {
 					let canvas = document.createElement("canvas");
@@ -232,78 +256,106 @@
 					canvas.height = img.height;
 					let ctx = canvas.getContext("2d");
 					ctx.drawImage(img, 0, 0);
-					let base64String = canvas.toDataURL("image/png").split(",")[1];
-					let imageData = "data:image/png;base64," + base64String;
-					// 调用后端API
-					this.uploadImage(imageData);
-
-					// 将图片设置为用户的头像
-					this.user.userImg = imgPath;
-					this.editImgShowModal = false;
+					// 保留整个base64字符串，不需要拆分
+					let base64String = canvas.toDataURL("image/png");
+					// 使用整个base64字符串
+					uploadImage(base64String);
+					// 仍然使用原始图像路径作为显示的图像
+					user.value.userImg = imgPath;
+					editImgShowModal.value = false;
 				};
 				img.src = imgPath;
-			},
+			};
 
-			openModal() {
-				this.editImgShowModal = true;
-			},
+			//修改用户头像
+			const uploadImage = (base64String) => {
+				axios.post('UserController/editUserImgByUserId', qs.stringify({
+						UserImg: base64String,
+						userId: user.value.userId
+					}))
+					.then(response => {
+						if (response.data == 1) {
+							editImgShowModal.value = false;
+							successImgShowModal.value = true;
+							setTimeout(() => {
+								successImgShowModal.value = false;
+							}, 1000);
+						} else {
+							alert("上传失败，请稍后重试!");
+						}
+					})
+					.catch(error => {
+						console.error(error);
+						alert("请求出错，请稍后重试!");
+					});
+			};
 
 
-			toggleRulesModal() {
-				this.showRulesModal = !this.showRulesModal;
-			},
-			uploadImage(base64String) {
-				this.$axios.post('UserController/editUserImgByUserId', this.$qs.stringify({
-					UserImg: base64String,
-					userId: this.user.userId
-				})).then(response => {
-					if (response.data == 1) {
-						this.editImgShowModal = false,
-						this.successImgShowModal = true;
-						setTimeout(() => {
-							this.successImgShowModal = false;
-						}, 1000);
+			const openModal = () => {
+				editImgShowModal.value = true;
+			};
 
-					} else {
-						alert("上传失败，请稍后重试!");
-					}
-				}).catch(error => {
-					console.error("请求出错:", error);
-					alert("请求出错，请稍后重试!");
-				});
-			}
-		},
-		created() {
-			this.user = this.$getSessionStorage("user");
+			const toggleRulesModal = () => {
+				showRulesModal.value = !showRulesModal.value;
+			};
 
-			this.$axios.post('UserController/getUserMessById', this.$qs.stringify({
-				userId: this.user.userId,
-			})).then((response) => {
-				this.user = response.data
-				console.log('用户信息:', this.user);
-			}).catch((error) => {
-				console.error('请求出错:', error);
-				alert('请求出错，请稍后重试!');
-			});
-
-		},
-
-		computed: {
-			avatarStyle() {
-				if (this.user.userImg) {
+			// 计算头像样式
+			const avatarStyle = computed(() => {
+				if (user.value.userImg) {
 					return {
-						backgroundImage: `url(${this.user.userImg})`,
+						backgroundImage: `url(${user.value.userImg})`,
 						backgroundSize: 'cover'
 					};
 				}
 				return {};
+			});
+
+			// 重新请求用户信息
+			onMounted(async () => {
+				if (!user.value.userId) return;
+				try {
+					const response = await axios.post('DeliveryAddressController/getDeliveryAddressById', qs.stringify({
+						userId: user.value.userId,
+					}));
+					if (response.data) {
+						// console.log("收到响应:", response.data);
+						user.value = response.data;
+						// console.log('user')
+					}
+				} catch (error) {
+					console.error(error);
+				}
+			});
+
+			return {
+				user,
+				editNameShowModal,
+				showAvatarModal,
+				showRulesModal,
+				newUserName,
+				successNameShowModal,
+				editImgShowModal,
+				successImgShowModal,
+				images,
+				toMyAddress,
+				logout,
+				toCredit,
+				toEditInfo,
+				toggleAvatarModal,
+				updateUsername,
+				selectImage,
+				openModal,
+				toggleRulesModal,
+				uploadImage,
+				avatarStyle,
+				closeEditName
 			}
 		}
-
 	}
 </script>
 
 <style scoped>
+	/****************** 总容器 ****************/
 	* {
 		box-sizing: border-box;
 	}
@@ -317,6 +369,7 @@
 		overflow: auto;
 	}
 
+	/****************** header ****************/
 	.header {
 		background-color: white;
 		padding: 20px;
@@ -418,8 +471,7 @@
 		background-color: #ef5350;
 	}
 
-
-	/* 弹出修改用户昵称框 */
+	/****************** 弹出修改用户昵称框 ****************/
 	.modal-overlay {
 		position: fixed;
 		top: 0;
@@ -480,7 +532,7 @@
 		color: #fff;
 	}
 
-	/* 放大头像框框 */
+	/****************** 放大头像框框 ****************/
 	.avatar-modal {
 		position: fixed;
 		top: 0;
@@ -513,7 +565,6 @@
 	.enlarged-avatar-display {
 		border-radius: 50%;
 		background-color: #eee;
-		/* Default gray background */
 	}
 
 	.avatar-display {
@@ -526,7 +577,7 @@
 		max-height: 95%;
 	}
 
-	/* 使用说明弹窗 */
+	/****************** 使用说明弹窗 ****************/
 	.rules-modal-overlay {
 		position: fixed;
 		top: 0;
@@ -537,8 +588,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 1002;
 		/* 保证这个弹窗出现在其他弹窗的上面 */
+		z-index: 1002;
 	}
 
 
@@ -597,6 +648,7 @@
 		padding-top: 1.5vw;
 	}
 
+	/****************** 弹窗 ****************/
 	.modal-overlay {
 		position: fixed;
 		top: 0;
@@ -621,7 +673,7 @@
 		width: 50px;
 	}
 
-	/* 选择头像框框 */
+	/****************** 选择头像框框 ****************/
 	.modal {
 		position: fixed;
 		top: 0;
@@ -638,12 +690,10 @@
 		width: 80%;
 		background-color: #fff;
 		padding: 20px 30px;
-		/* 增加水平填充以获得更好的间距 */
 		border-radius: 12px;
-		/* 更大的圆角 */
 		text-align: center;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 		/* 添加阴影 */
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 	}
 
 	.images-grid {
@@ -664,30 +714,26 @@
 		background-color: #eee;
 		border: none;
 		border-radius: 25px;
-		/* 圆角边 */
 		color: #333;
 		font-size: 18px;
 		font-weight: 500;
 		cursor: pointer;
 		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-		/* 添加阴影 */
 		transition: background-color 0.3s, transform 0.3s;
-		/* 添加过渡效果 */
 	}
 
 	.modal-content button:hover {
-		background-color: #007ccd;
 		/* 鼠标悬停时颜色稍微变深 */
-		transform: translateY(-3px);
+		background-color: #007ccd;
 		/* 鼠标悬停时稍微上移 */
+		transform: translateY(-3px);
 	}
 
 	.default-avatar {
 		width: 30vw;
 		height: 30vw;
 		background-color: #D3D3D3;
-		/* 灰色 */
-		border-radius: 50%;
 		/* 使其成为一个圆形 */
+		border-radius: 50%;
 	}
 </style>

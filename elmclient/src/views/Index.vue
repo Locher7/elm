@@ -369,7 +369,7 @@
 			</li>
 		</ul>
 
-		
+
 
 		<!-- 底部菜单部分 -->
 		<Footer></Footer>
@@ -380,108 +380,77 @@
 
 
 <script>
-	//导入共通组件
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 
 	export default {
 		name: 'Index',
-		data() {
-			return {
-				orderTypeId:1,
-				businessArr:[],
-				user:{},
-			}
+		components: {
+			Footer
 		},
-		mounted() {
-			document.onscroll = () => {
-				//获取滚动条位置
-				let s1 = document.documentElement.scrollTop;
-				let s2 = document.body.scrollTop;
-				let scroll = s1 == 0 ? s2 : s1;
-				//获取视口宽度
-				let width = document.documentElement.clientWidth;
-				//获取顶部固定块
-				// let search = document.getElementById('fixedBox');
-				let search = this.$refs.fixedBox;
-				//判断滚动条超过视口宽度的12%时，搜索块变固定定位
-				if (scroll > width * 0.12) {
+		setup() {
+			const router = useRouter();
+			const fixedBox = ref(null);
+			const orderTypeId = ref(1);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+
+
+			// 搜索框滚动后固定
+			const onScroll = () => {
+				const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+				const screenWidth = document.documentElement.clientWidth;
+				const search = fixedBox.value;
+
+				if (scrollTop > screenWidth * 0.12) {
 					search.style.position = 'fixed';
 					search.style.left = '0';
 					search.style.top = '0';
 				} else {
 					search.style.position = 'static';
 				}
-			}
-			
-		},
-		created() {
-			this.user = this.$getSessionStorage('user');
+			};
 
-			//根据orderTypeId查询商家信息
-			this.$axios.post('BusinessController/listBusinessByOrderTypeId', this.$qs.stringify({
-				orderTypeId: this.orderTypeId
-			})).then(response => {
-				this.businessArr = response.data;
-
-				//判断是否登录
-				if (this.user != null) {
-					this.listCart();
-				}
-
-			}).catch(error => {
-				console.error(error);
+			onMounted(() => {
+				document.addEventListener('scroll', onScroll);
 			});
 
-			console.log(this.$route.query);
-		},
-		destroyed() {
-			//当切换到其他主件时，就不需要document滚动条事件，所以将此事件去掉
-			document.onscroll = null;
-		},
-		components: {
-			Footer
-		},
-		methods: {
-			toBusinessList(orderTypeId) {
-				this.$router.push({
+			onUnmounted(() => {
+				document.removeEventListener('scroll', onScroll);
+			});
+
+			// 跳转到商家列表
+			const toBusinessList = (selectedOrderTypeId) => {
+				router.push({
 					path: '/businessList',
 					query: {
-						orderTypeId: orderTypeId
+						orderTypeId: selectedOrderTypeId
 					}
 				});
-			},
-			listCart() {
-				this.$axios.post('CartController/listCart', this.$qs.stringify({
-					userId: this.user.userId,
-				})).then(response => {
-					let cartArr = response.data;
-					//遍历所有食品列表
-					for (let businessItem of this.businessArr) {
-						businessItem.quantity = 0;
-						for (let cartItem of cartArr) {
-							if (cartItem.businessId == businessItem.businessId) {
-								businessItem.quantity += cartItem.quantity;
-							}
-						}
-					}
-					this.businessArr.sort();
-				}).catch(error => {
-					console.error(error);
-				});
-			},
+			};
 
-			toBusinessInfo(businessId) {
-				this.$router.push({
-					path: '/businessInfo',
-					query: {
-						businessId: businessId
-					}
-				});
+
+			return {
+				orderTypeId,
+				user,
+				toBusinessList,
+				fixedBox
 			}
-		},
-	
+		}
 	}
 </script>
+
 
 
 

@@ -4,8 +4,10 @@
 			<p>修改密码</p>
 		</header>
 		<div class="head">
-				<img src="../assets/brand.png">
-			</div>
+			<img src="../assets/brand.png">
+		</div>
+
+		<!-- 输入框 -->
 		<ul class="info-section">
 			<li class="info-item">
 				<div class="content">
@@ -49,73 +51,82 @@
 
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import md5 from 'js-md5';
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'UpdateInfo',
-		data() {
-			return {
-				confirmPassword: '',
-				user: {},
-				newPassword: '',
-				pastPassword: '',
-				successShowModal: false
-			};
-		},
-		created() {
-			this.user = this.$getSessionStorage('user');
-		},
 		components: {
 			Footer
 		},
-		methods: {
+		setup() {
+			const confirmPassword = ref('');
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const newPassword = ref('');
+			const router = useRouter();
+			const pastPassword = ref('');
+			const successShowModal = ref(false);
 
-			updateInfo() {
-				if (this.pastPassword == '') {
+
+			// 更新密码请求
+			const updateInfo = () => {
+				if (pastPassword.value == '') {
 					alert('旧密码不能为空!');
 					return;
 				}
-				if (this.newPassword == '') {
+				if (newPassword.value == '') {
 					alert('密码不能为空!');
 					return;
 				}
-				if (this.newPassword != this.confirmPassword) {
+				if (newPassword.value != confirmPassword.value) {
 					alert('两次输入的密码不一致!');
 					return;
 				}
 				// 修改密码
-				this.checkOldPassword().then(isValid => {
+				checkOldPassword().then(isValid => {
 					if (isValid) {
 						// 如果旧密码正确，则更新新密码
-						this.$axios.post('UserController/editPasswordByUserId', this.$qs.stringify({
-							userId: this.user.userId,
-							password: md5(this.newPassword)
+						axios.post('UserController/editPasswordByUserId', qs.stringify({
+							userId: user.value.userId,
+							password: md5(newPassword.value)
 						})).then((response) => {
 							if (response.data == 1) {
-								this.successShowModal = true;
-						setTimeout(() => {
-							this.$router.push('/myInfo');
-						}, 1000);
-								
+								successShowModal.value = true;
+								setTimeout(() => {
+									router.push('/myInfo');
+								}, 1000);
+
 							} else {
 								alert('修改密码失败!');
 							}
 						}).catch((error) => {
-							console.error('请求出错:', error);
-							alert('请求出错，请稍后重试!');
+							console.error(error);
 						});
 					} else {
 						alert('旧密码错误!');
 					}
 				});
-			},
+			};
 
-			checkOldPassword() {
+			// 检查旧密码是否正确
+			const checkOldPassword = () => {
 				//如果旧密码正确则解析为true，否则为false。
 				return new Promise((resolve, reject) => {
-					this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
-						userId: this.user.userId,
-						password: md5(this.pastPassword)
+					axios.post('UserController/getUserByIdByPass', qs.stringify({
+						userId: user.value.userId,
+						password: md5(pastPassword.value)
 					})).then(response => {
 						if (response.data == 0) {
 							resolve(false); // 旧密码错误
@@ -123,18 +134,29 @@
 							resolve(true); // 旧密码正确
 						}
 					}).catch(error => {
-						console.error('验证旧密码时出错:', error);
+						console.error(error);
 						alert('验证旧密码时出错，请稍后重试!');
 						reject(error);
 					});
 				});
-			}
+			};
 
+
+			return {
+				confirmPassword,
+				user,
+				newPassword,
+				pastPassword,
+				successShowModal,
+				updateInfo,
+				checkOldPassword
+			};
 		}
 	}
 </script>
 
 <style scoped>
+	/* 总容器 */
 	.wrapper {
 		width: 100%;
 		height: 100%;
@@ -160,6 +182,7 @@
 		align-items: center;
 	}
 
+	/****************** header ****************/
 	.head {
 		margin-top: 25vw;
 		display: flex;
@@ -172,6 +195,7 @@
 		height: 40vw;
 	}
 
+	/****************** 表单信息 ****************/
 	.info-section {
 		width: 80%;
 		margin: 6vw auto;
@@ -189,6 +213,7 @@
 		border: #f4eeee solid;
 		border-width: 0px 0px 1.8px 0px;
 	}
+
 	.info-item {
 		display: flex;
 		align-items: center;
@@ -196,6 +221,7 @@
 		margin-bottom: 20px;
 
 	}
+
 	.info-item i {
 		margin-right: 10px;
 		font-size: 20px;
@@ -231,7 +257,7 @@
 		transition: background-color 0.3s;
 	}
 
-	/* 修改密码成功弹窗 */
+	/****************** 修改密码成功弹窗 ****************/
 	.modal {
 		position: fixed;
 		top: 0;

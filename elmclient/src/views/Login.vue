@@ -23,19 +23,23 @@
 			</li>
 		</ul>
 
+		<!-- 登录按钮 -->
 		<div class="button-login">
 			<button @click="login">登录</button>
 		</div>
 
+		<!-- 分割线 -->
 		<div class="divider">
 			<div class="line"></div>
 			<div class="text">OR</div>
 			<div class="line"></div>
 		</div>
+		<!-- 注册按钮 -->
 		<div class="button-register">
 			<button @click="register">注册</button>
 		</div>
 
+		<!-- 底部图标 -->
 		<div class="brand">
 			<img src="../assets/brand.png">
 		</div>
@@ -43,56 +47,85 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
+	import {
+		setSessionStorage,
+	} from '../common.js'
+
 	import Footer from '../components/Footer.vue';
 	import md5 from "js-md5";
+
 	export default {
 		name: 'Login',
-		data() {
-			return {
-				user:{},
-				userId: '',
-				password: '',
-			}
-		},
 		components: {
 			Footer
 		},
-		methods: {
-			login() {
-				if (this.userId == '') {
+		setup() {
+			const router = useRouter();
+			const user = ref({});
+			const userId = ref('');
+			const password = ref('');
+
+			// 登录方法
+			const login = () => {
+				if (userId.value == '') {
 					alert('手机号码不能为空');
 					return;
 				}
-				if (this.password == '') {
+				if (password.value == '') {
 					alert('密码不能为空');
 					return;
 				}
-				//登录请求
-				this.$axios.post('UserController/getUserByIdByPass', this.$qs.stringify({
-					userId: this.userId,
-					password: md5(this.password)
-				})).then(response => {
-					let user = response.data;
-					console.log(typeof user);  // 查看 user 的类型
-					console.log(user);  // 查看 user 的内容
 
-					if (user==0) {
+				// 登录请求
+				axios.post('UserController/getUserByIdByPass', qs.stringify({
+					userId: userId.value,
+					password: md5(password.value)
+				})).then(response => {
+					const returnedUser = response.data;
+					// 查看 user 的类型
+					console.log(typeof returnedUser);
+					// 查看 user 的内容
+					console.log(returnedUser);
+
+					if (returnedUser == 0) {
 						alert('用户名或密码不正确!');
 					} else {
-						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中
-						user.userImg = '';
-						this.$setSessionStorage('user', user);
-						this.$router.go(-1);
+						// sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中
+						returnedUser.userImg = '';
+						setSessionStorage('user', returnedUser);
+						router.go(-1);
 					}
 				}).catch(error => {
 					console.error(error);
 				});
-				
-			},
-			register() {
-				this.$router.push('/register');
 			}
-		},
+
+			// 跳转到注册页面
+			const register = () => {
+				router.push('/register');
+			}
+
+			return {
+				user,
+				userId,
+				password,
+				login,
+				register
+			};
+		}
 	}
 </script>
 
@@ -167,6 +200,7 @@
 		background-color: transparent;
 	}
 
+	/****************** 登录按钮 ****************/
 	.wrapper .button-login {
 		width: 100%;
 		box-sizing: border-box;
@@ -186,6 +220,7 @@
 		outline: none;
 	}
 
+	/****************** 注册按钮 ****************/
 	.wrapper .button-register {
 		width: 100%;
 		box-sizing: border-box;
@@ -206,7 +241,7 @@
 		border: solid 1px #ddd;
 	}
 
-
+	/****************** 分割线 ****************/
 	.wrapper .divider {
 		display: flex;
 		margin: 5vw 6vw;

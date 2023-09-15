@@ -40,6 +40,7 @@
 			</li>
 		</ul>
 
+		<!-- 底部购物车 -->
 		<div class="cart">
 			<div class="cart-left">
 				<div class="cart-left-icon" :style="totalQuantity==0?'background-color:#505051;':'background-color:#3190E8;'">
@@ -63,68 +64,88 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed,
+		onUnmounted
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
+
+
 	export default {
 		name: 'BusinessInfo',
-		data() {
-			return {
-				businessId: this.$route.query.businessId,
-				business: {},
-				foodArr: [],
-				user: {}
-			}
-		},
-		created() {
-			this.user = this.$getSessionStorage('user');
-			console.log('用户信息：', this.user);
-			
-			//根据businessId查询商家信息
-			this.$axios.post('BusinessController/getBusinessById', this.$qs.stringify({
-				businessId: this.businessId,
-				
-			})).then(response => {
-				this.business = response.data;
-				console.log('商家信息：', this.business);
-			}).catch(error => {
-				console.error(error);
-			});
-			console.log('商家信息：', this.business)
-			//根据businessId查询所属食品信息
-			this.$axios.post('FoodController/listFoodByBusinessId', this.$qs.stringify({
-				businessId:this.businessId
-			})).then(response => {
-				this.foodArr = response.data;
-				for (let i = 0; i < this.foodArr.length; i++) {
-					this.foodArr[i].quantity = 0;
-				}
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const businessId = ref(route.query.businessId);
+			const business = ref({});
+			const foodArr = ref([]);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
 
-				//如果已登录，需要去查询购物车中是否已经选购了某个食品
-				if (this.user != null) {
-					this.listCart();
-				}
-				console.log('食品列表：', this.foodArr);
-			}).catch(error => {
-				console.error(error);
+			onMounted(() => {
+
+				// 请求商家信息
+				axios.post('BusinessController/getBusinessById', qs.stringify({
+						businessId: businessId.value,
+					}))
+					.then(response => {
+						business.value = response.data;
+						// console.log('商家信息：', business.value);
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				//请求食品列表信息
+				axios.post('FoodController/listFoodByBusinessId', qs.stringify({
+						businessId: businessId.value,
+					}))
+					.then(response => {
+						foodArr.value = response.data;
+						for (let i = 0; i < foodArr.value.length; i++) {
+							foodArr.value[i].quantity = 0;
+						}
+
+						if (user.value != null) {
+							listCart();
+						}
+						// console.log('食品列表：', foodArr.value);
+					})
+					.catch(error => {
+						console.error(error);
+					});
 			});
-		},
-		methods: {
-			toOrder() {
-				this.$router.push({
+
+			//跳转到订单界面
+			const toOrder = () => {
+				router.push({
 					path: '/orders',
 					query: {
-						businessId: this.business.businessId
+						businessId: business.value.businessId
 					}
 				});
-			},
+			};
 
 
-			listCart() {
-				this.$axios.post('CartController/listCart', this.$qs.stringify({
-					businessId: this.businessId,
-					userId: this.user.userId,
+			// 请求购物车信息
+			const listCart = () => {
+				axios.post('CartController/listCart', qs.stringify({
+					businessId: businessId.value,
+					userId: user.value.userId,
 				})).then(response => {
 					let cartArr = response.data;
 					//遍历所有食品列表
-					for (let foodItem of this.foodArr) {
+					for (let foodItem of foodArr.value) {
 						foodItem.quantity = 0;
 						for (let cartItem of cartArr) {
 							if (cartItem.foodId == foodItem.foodId) {
@@ -132,133 +153,142 @@
 							}
 						}
 					}
-					this.foodArr.sort();
+					foodArr.value.sort();
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
-
-			add(index) {
+			// 增加按钮
+			const add = (index) => {
 				//首先做登录验证
-				if (this.user == null) {
-					this.$router.push('/login');
+				if (user.value == null) {
+					router.push('/login');
 					return
 				}
 
-				if (this.foodArr[index].quantity == 0) {
+				if (foodArr.value[index].quantity == 0) {
 					//做insert
-					this.saveCart(index);
+					saveCart(index);
 				} else {
 					//做update
-					this.updateCart(index, 1);
+					updateCart(index, 1);
 				}
-			},
+			};
 
-			minus(index) {
-				if (this.user == null) {
-					this.$router.push('/login');
+			// 减少按钮
+			const minus = (index) => {
+				if (user.value == null) {
+					router.push('/login');
 					return
 				}
-				if (this.foodArr[index].quantity > 1) {
+				if (foodArr.value[index].quantity > 1) {
 					//做update
-					this.updateCart(index, -1);
+					updateCart(index, -1);
 				} else {
 					//做delete
-					this.removeCart(index);
+					removeCart(index);
 				}
-			},
+			};
 
 			//封装函数
 			//增加一个食品
-			saveCart(index) {
-				this.$axios.post('CartController/saveCart', this.$qs.stringify({
-					businessId: this.businessId,
-					userId: this.user.userId,
-					foodId: this.foodArr[index].foodId
+			const saveCart = (index) => {
+				axios.post('CartController/saveCart', qs.stringify({
+					businessId: businessId.value,
+					userId: user.value.userId,
+					foodId: foodArr.value[index].foodId
 				})).then(response => {
 					if (response.data == 1) {
 						//此食品数量要更新为1
-						this.foodArr[index].quantity = 1;
-						this.foodArr.sort();
+						foodArr.value[index].quantity = 1;
+						foodArr.value.sort();
 					} else {
 						alert('向购物车中添加食品失败！');
 					}
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
 			//更新食品数量
-			updateCart(index, num) {
-				this.$axios.post('CartController/updateCart', this.$qs.stringify({
-					businessId: this.businessId,
-					userId: this.user.userId,
-					foodId: this.foodArr[index].foodId,
-					quantity: this.foodArr[index].quantity + num
+			const updateCart = (index, num) => {
+				axios.post('CartController/updateCart', qs.stringify({
+					businessId: businessId.value,
+					userId: user.value.userId,
+					foodId: foodArr.value[index].foodId,
+					quantity: foodArr.value[index].quantity + num
 				})).then(response => {
 					if (response.data == 1) {
 						//此食品数量要更新为1或-1；
-						this.foodArr[index].quantity += num;
+						foodArr.value[index].quantity += num;
 						//让vue监听数量变化,视图层发生变化
-						this.foodArr.sort();
+						foodArr.value.sort();
 					} else {
 						alert('向购物车中更新食品失败!')
 					}
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
 			//删除食品数量
-			removeCart(index) {
-				this.$axios.post('CartController/removeCart', this.$qs.stringify({
-					businessId: this.businessId,
-					userId: this.user.userId,
-					foodId: this.foodArr[index].foodId,
+			const removeCart = (index) => {
+				axios.post('CartController/removeCart', qs.stringify({
+					businessId: businessId.value,
+					userId: user.value.userId,
+					foodId: foodArr.value[index].foodId,
 				})).then(response => {
 					if (response.data == 1) {
 						//此食品数量要更新为0；视图的减号和数量要消失
-						this.foodArr[index].quantity = 0;
+						foodArr.value[index].quantity = 0;
 						//让vue监听数量变化,视图层发生变化
-						this.foodArr.sort();
+						foodArr.value.sort();
 					} else {
 						alert('从购物车中删除食品失败!')
 					}
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
-			
-
-		},
-
-		//计算属性
-		computed: {
-				//食品总价格
-				totalPrice() {
-					let total = 0;
-					for (let item of this.foodArr) {
-						total += item.foodPrice * item.quantity;
-					}
-					console.log('totalPrice:', total);
-					return total;
-				},
-				//食品总数量
-				totalQuantity() {
-					let quantity = 0;
-					for (let item of this.foodArr) {
-						quantity += item.quantity;
-					}
-					console.log('totalQuantity:', quantity);
-					return quantity;
-				},
-				//结算总价格
-				totalSettle() {
-					return this.totalPrice + this.business.deliveryPrice;
+			// 计算食物总价格
+			const totalPrice = computed(() => {
+				let total = 0;
+				for (let item of foodArr.value) {
+					total += item.foodPrice * item.quantity;
 				}
-			},
+				// console.log('totalPrice:', total);
+				return total;
+			});
+
+			// 计算食物总数量
+			const totalQuantity = computed(() => {
+				let quantity = 0;
+				for (let item of foodArr.value) {
+					quantity += item.quantity;
+				}
+				// console.log('totalQuantity:', quantity);
+				return quantity;
+			});
+
+			// 计算总费用
+			const totalSettle = computed(() => {
+				return totalPrice.value + business.value.deliveryPrice;
+			});
+
+			return {
+				foodArr,
+				business,
+				totalPrice,
+				totalQuantity,
+				totalSettle,
+				add,
+				minus,
+				toOrder
+			};
+
+		}
 	}
 </script>
 
@@ -468,7 +498,7 @@
 		flex: 1;
 	}
 
-	/*达到起送费时的样式*/
+	/****************** 达到起送费时的样式 ****************/
 	.wrapper .cart .cart-right .cart-right-item {
 		width: 50%;
 		height: 100%;
@@ -484,7 +514,7 @@
 		align-items: center;
 	}
 
-	/*不够起送费时的样式*/
+	/****************** 不够起送费时的样式 ****************/
 	/*.wrapper .cart .cart-right .cart-right-item{
 	width: 100%;
 	height: 100%;

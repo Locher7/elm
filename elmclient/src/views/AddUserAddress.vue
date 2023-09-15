@@ -34,6 +34,7 @@
 			</li>
 		</ul>
 
+		<!-- 保存按钮 -->
 		<div class="button-add">
 			<button @click="addUserAddress">保存</button>
 		</div>
@@ -45,62 +46,82 @@
 </template>
 
 <script>
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
+
+
 	export default {
 		name: 'AddUserAddress',
-		data() {
-			return {
-				businessId: this.$route.query.businessId,
-				user: {},
-				deliveryAddress: {
-					contactName: '',
-					contactSex: 1,
-					contactTel: '',
-					address: ''
-				}
-			}
-		},
-
-		created() {
-			this.user = this.$getSessionStorage('user');
-		},
-
 		components: {
 			Footer
 		},
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const businessId = ref(route.query.businessId);
+			const user = ref(JSON.parse(sessionStorage.getItem('user')));
+			const deliveryAddress = ref({
+				contactName: '',
+				contactSex: 1,
+				contactTel: '',
+				address: ''
+			});
 
 
-		methods: {
-			addUserAddress() {
-				if (this.deliveryAddress.contactName == '') {
-					alert('联系人姓名不能为空');
+			// 添加用户地址
+			const addUserAddress = () => {
+				if (deliveryAddress.value.contactName === '') {
+					alert('联系人姓名不能为空！');
 					return;
 				}
-				if (this.deliveryAddress.contactTel == '') {
-					alert('联系人电话不能为空');
+				if (deliveryAddress.value.contactTel === '') {
+					alert('联系人电话不能为空！');
 					return;
 				}
-				if (this.deliveryAddress.address == '') {
-					alert('联系人地址不能为空');
+				if (deliveryAddress.value.address === '') {
+					alert('联系人地址不能为空！');
 					return;
 				}
 
-				this.deliveryAddress.userId = this.user.userId;
-				//查询送货地址
-				this.$axios.post('DeliveryAddressController/saveDeliveryAddress', this.$qs.stringify(
-					this.deliveryAddress
-				)).then(response => {
-					if (response.data > 0) {
-						this.$router.go(-1);
-					} else {
-						alert('新增地址失败!')
-					}
-				}).catch(error => {
-					console.error(error);
-				});
-			}
+				deliveryAddress.value.userId = user.value.userId;
+
+
+				// 新增地址请求
+				axios.post('DeliveryAddressController/saveDeliveryAddress', qs.stringify(deliveryAddress.value))
+					.then(response => {
+						if (response.data > 0) {
+							router.go(-1);
+						} else {
+							alert('新增地址失败！');
+						}
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			};
+
+			return {
+				businessId,
+				user,
+				deliveryAddress,
+				addUserAddress
+			};
 		}
-	}
+	};
 </script>
 
 <style scoped>
@@ -166,6 +187,7 @@
 		background-color: transparent;
 	}
 
+	/****************** 保存按钮 ****************/
 	.wrapper .button-add {
 		width: 100%;
 		box-sizing: border-box;

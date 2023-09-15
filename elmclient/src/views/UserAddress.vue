@@ -36,99 +36,122 @@
 </template>
 
 <script>
-	//导入共通组件
+	import {
+		ref,
+		inject,
+		onMounted,
+		watch,
+		computed
+	} from 'vue';
+	import {
+		useRoute
+	} from 'vue-router';
+	import {
+		useRouter
+	} from 'vue-router';
+	import axios from 'axios';
+	import qs from 'qs';
 	import Footer from '../components/Footer.vue';
 
 	export default {
 		name: 'UserAddress',
-		data() {
-			return {
-				businessId: this.$route.query.businessId,
-				user: {},
-				deliveryAddressArr: []
-			}
-		},
-
-		created() {
-			this.user = this.$getSessionStorage('user');
-			this.listDeliveryAddressByUserId();
-			console.log('用户信息:', this.user);
-		},
-
 		components: {
 			Footer
 		},
+		setup() {
+			const route = useRoute();
+			const router = useRouter();
+			const businessId = ref(route.query.businessId);
+			const user = ref({});
+			const deliveryAddressArr = ref([])
 
-		methods: {
-			contactSex(index) {
-			return this.deliveryAddressArr[index].contactSex === 1 ? '先生' : '女士';
-		},
+			onMounted(() => {
+				// console.log(businessId.value);
+				user.value = JSON.parse(sessionStorage.getItem('user'));
+				listDeliveryAddressByUserId();
+			});
 
+			const contactSex = (index) => {
+				return deliveryAddressArr.value[index].contactSex === 1 ? '先生' : '女士';
+			};
 
-			listDeliveryAddressByUserId() {
-				this.$axios.post('DeliveryAddressController/listDeliveryAddressByUserId', this.$qs.stringify({
-					userId: this.user.userId
+			// 请求所有地址信息
+			const listDeliveryAddressByUserId = () => {
+				axios.post('DeliveryAddressController/listDeliveryAddressByUserId', qs.stringify({
+					userId: user.value.userId
 				})).then(response => {
-					this.deliveryAddressArr = response.data;
-					console.log('地址信息:', this.deliveryAddressArr);
+					deliveryAddressArr.value = response.data;
+					// console.log('地址信息:', deliveryAddressArr.value);
 				}).catch(error => {
 					console.error(error);
 				});
-			},
+			};
 
-			setDeliveryAddress(item) {
-				//把用户选择的默认送货地址存储到localStorage
-				// this.$setLocalStorage(this.user.userId, deliveryAddress);
-				this.$setLocalStorage(this.user.userId, item);
-				this.$router.push({
+			// 把选择地址放入localStorage
+			const setDeliveryAddress = (deliveryAddress) => {
+				localStorage.setItem(user.value.userId, JSON.stringify(deliveryAddress));
+				router.push({
 					path: '/orders',
 					query: {
-						businessId: this.businessId
+						businessId: businessId.value
 					}
 				});
-			},
-			
+			};
 
-			toAddUserAddress() {
-				this.$router.push({
+			const toAddUserAddress = () => {
+				router.push({
 					path: '/addUserAddress',
 					query: {
-						businessId: this.businessId
+						businessId: businessId.value
 					}
 				});
-			},
+			};
 
-			editUserAddress(daId) {
-				this.$router.push({
+			const editUserAddress = (daId) => {
+				router.push({
 					path: '/editUserAddress',
 					query: {
-						businessId: this.businessId,
-						daId: daId
+						businessId: businessId.value
 					}
 				});
-			},
+				// 把地址号放入sessionStorage
+				sessionStorage.setItem('daId', daId);
+			};
 
-			removeUserAddress(daId) {
+
+			const removeUserAddress = (daId) => {
 				if (!confirm('确认要删除此送货地址吗?')) {
 					return;
 				}
-
-				this.$axios.post('DeliveryAddressController/removeDeliveryAddress', this.$qs.stringify({
-					daId: daId
+				// 删除地址请求
+				axios.post('DeliveryAddressController/removeDeliveryAddress', qs.stringify({
+					daId: daId,
 				})).then(response => {
 					if (response.data > 0) {
-						let deliveryAddress = this.$getLocalStorage(this.user.userId);
-						if (deliveryAddress != null && deliveryAddress.daId == daId) {
-							this.$removeLocalStorage(this.user.userId);
+						if (JSON.parse(localStorage.getItem(user.value.userId)).daId == daId) {
+							localStorage.removeItem(user.value.userId);
 						}
-						this.listDeliveryAddressByUserId();
+						listDeliveryAddressByUserId();
 					} else {
 						alert('删除地址失败!');
 					}
 				}).catch(error => {
 					console.error(error);
 				});
-			}
+			};
+
+
+			return {
+				businessId,
+				user,
+				deliveryAddressArr,
+				contactSex,
+				listDeliveryAddressByUserId,
+				setDeliveryAddress,
+				toAddUserAddress,
+				editUserAddress,
+				removeUserAddress
+			};
 		}
 	}
 </script>
