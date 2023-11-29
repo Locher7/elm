@@ -43,7 +43,6 @@
 			<div class="ai-chat">
 				<img src="../assets/aiImg.png">
 				<pre class="ai-text">{{ aiString }}</pre>
-				<!-- <pre class="ai-text">测试测试</pre> -->
 			</div>
 		</div>
 
@@ -122,7 +121,7 @@
 
 				}).then(response => {
 					aiString.value = response.data;
-					// console.log('ai语言:', aiString.value);
+					console.log('ai语言:', aiString.value);
 				}).catch(error => {
 					console.error(error);
 				});

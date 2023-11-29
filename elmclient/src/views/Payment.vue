@@ -32,7 +32,7 @@
 		<div class="credit-deduction">
 			<div class="credit-info">
 				<p>剩余{{credit}}积分</p>
-				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.round(orders.orderTotal/100)/10 }}</label>&#165;</p>
+				<p v-if="useCredit" class="credit-used-text">使用{{ Math.floor(orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.floor(orders.orderTotal/100)/10 }}</label>&#165;</p>
 			</div>
 			<div class="credit-toggle">
 				<span class="credit-use">{{ useCredit ? '使用' : '不使用' }}</span>
@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="current-total">
-			<p>总金额: <span>&#165;{{ discountedTotal/100 }}</span></p>
+			<p>总金额: <span>&#165;{{ discountedTotal }}</span></p>
 		</div>
 
 		<!-- 支付方式 -->
@@ -121,7 +121,7 @@
 				})).then(response => {
 					orders.value = response.data;
 					// console.log("请求回应:", response.data);
-					discountedTotal.value = orders.value.orderTotal;
+					discountedTotal.value = orders.value.orderTotal/100;
 					// console.log(orders.value)
 				}).catch(error => {
 					console.error(error);
@@ -177,15 +177,15 @@
 			};
 
 			const toggleCreditUse = () => {
-				if (credit.value < Math.round(orders.value.orderTotal / 100)) {
+				if (credit.value < Math.floor(orders.value.orderTotal / 100)) {
 					alert("剩余积分不足");
 				} else {
 					useCredit.value = !useCredit.value;
 				}
 				if (!useCredit.value) {
-					discountedTotal.value = orders.value.orderTotal;
+					discountedTotal.value = orders.value.orderTotal/100;
 				} else {
-					discountedTotal.value = orders.value.orderTotal - Math.round(orders.value.orderTotal) / 10;
+					discountedTotal.value = orders.value.orderTotal/100 - Math.floor(orders.value.orderTotal/100) / 10;
 				}
 			};
 

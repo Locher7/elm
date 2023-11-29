@@ -92,6 +92,35 @@
 			const foodArr = ref([]);
 			const user = ref(JSON.parse(sessionStorage.getItem('user')));
 
+
+			// const business = ref({
+			// 	businessImg: '',
+			// 	businessName: '测试商家',
+			// 	starPrice: 5000,
+			// 	deliveryPrice: 200,
+			// 	businessExplain: '这是一个测试商家说明'
+			// });
+
+			// const foodArr = ref([{
+			// 		id: 1,
+			// 		foodImg: '',
+			// 		foodName: '测试食物1',
+			// 		foodExplain: '这是一个测试食物1的说明',
+			// 		foodPrice: 1500,
+			// 		quantity: 0
+			// 	},
+			// 	{
+			// 		id: 2,
+			// 		foodImg: '',
+			// 		foodName: '测试食物2',
+			// 		foodExplain: '这是一个测试食物2的说明',
+			// 		foodPrice: 2500,
+			// 		quantity: 0
+			// 	}
+
+			// ]);
+
+
 			onMounted(() => {
 
 				// 请求商家信息
@@ -100,7 +129,7 @@
 					}))
 					.then(response => {
 						business.value = response.data;
-						// console.log('商家信息：', business.value);
+						console.log('商家信息：', business.value);
 					})
 					.catch(error => {
 						console.error(error);
@@ -119,7 +148,7 @@
 						if (user.value != null) {
 							listCart();
 						}
-						// console.log('食品列表：', foodArr.value);
+						console.log('食品列表：', foodArr.value);
 					})
 					.catch(error => {
 						console.error(error);

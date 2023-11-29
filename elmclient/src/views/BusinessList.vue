@@ -94,7 +94,7 @@
 					}))
 					.then(response => {
 						businessArr.value = response.data;
-						// console.log(businessArr.value);
+						console.log(businessArr.value);
 
 						if (user.value !== null) {
 							listCart();
@@ -107,7 +107,7 @@
 
 			onMounted(() => {
 				fetchBusinessInfo();
-				// console.log(orderTypeId.value);
+				console.log(orderTypeId.value);
 			});
 
 			return {
