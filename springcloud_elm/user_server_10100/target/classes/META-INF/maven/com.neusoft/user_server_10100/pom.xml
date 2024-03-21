@@ -9,7 +9,6 @@
 	</parent>
 	<artifactId>user_server_10100</artifactId>
 
-
 	<dependencies>
 		<!--以下是boot -->
 		<dependency>

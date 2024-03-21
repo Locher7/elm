@@ -145,9 +145,9 @@
 
 			// 请求购物车信息
 			const listCart = () => {
-				axios.get('/carts')
-					.then(response => {
-					let cartArr = response.data;
+				let url = `http://localhost:10400/CartController/listCart/${user.value.userId}/${businessId.value}`
+				axios.get(url).then(response => {
+					let cartArr = response.data.result;
 					//遍历所有食品列表
 					for (let foodItem of foodArr.value) {
 						foodItem.quantity = 0;
@@ -198,8 +198,9 @@
 			//封装函数
 			//增加一个食品
 			const saveCart = (index) => {
-				axios.post('/carts', cartData).then(response => {
-					if (response.data == 1) {
+				let url = `http://localhost:10400/CartController/saveCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`
+				axios.post(url).then(response => {
+					if (response.data.result == 1) {
 						//此食品数量要更新为1
 						foodArr.value[index].quantity = 1;
 						foodArr.value.sort();
@@ -213,11 +214,10 @@
 
 			//更新食品数量
 			const updateCart = (index, num) => {
+				let url = `http://localhost:10400/CartController/updateCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}/${foodArr.value[index].quantity + num}`
 				const cartId = foodArr.value[index].cartId; 
-				axios.put(`/carts/${cartId}`, {
-    				quantity: foodArr.value[index].quantity + num // 更新数量
-					}).then(response => {
-					if (response.data == 1) {
+				axios.put(url).then(response => {
+					if (response.data.result == 1) {
 						//此食品数量要更新为1或-1；
 						foodArr.value[index].quantity += num;
 						//让vue监听数量变化,视图层发生变化
@@ -232,10 +232,10 @@
 
 			//删除食品数量
 			const removeCart = (index) => {
+				let url = `http://localhost:10400/CartController/removeCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`
 				const cartId = foodArr.value[index].cartId; 
-				axios.delete(`/carts/${cartId}`)
-					.then(response => {
-					if (response.data == 1) {
+				axios.delete(url).then(response => {
+					if (response.data.result == 1) {
 						//此食品数量要更新为0；视图的减号和数量要消失
 						foodArr.value[index].quantity = 0;
 						//让vue监听数量变化,视图层发生变化
