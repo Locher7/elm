@@ -221,12 +221,10 @@
 					alert('用户名称不能为空!');
 					return;
 				}
-				axios.post('UserController/editUserNameByUserId', qs.stringify({
-						userId: user.value.userId,
-						userName: newUserName.value,
-					}))
+				let url1 =`http://localhost:10100/UserController/editUserNameByUserId/${user.value.userId}/${newUserName.value}`;
+				axios.put(url1)
 					.then((response) => {
-						if (response.data == 1) {
+						if (response.data.result == 1) {
 							user.value.userName = newUserName.value;
 							sessionStorage.setItem('user', JSON.stringify(user.value));
 							newUserName.value = '';
@@ -269,12 +267,10 @@
 
 			//修改用户头像
 			const uploadImage = (base64String) => {
-				axios.post('UserController/editUserImgByUserId', qs.stringify({
-						UserImg: base64String,
-						userId: user.value.userId
-					}))
+				let url2 =`http://localhost:10100/UserController/editUserImgByUserId/${user.value.userId}/${base64String}`;
+				axios.put(url2)
 					.then(response => {
-						if (response.data == 1) {
+						if (response.data.result == 1) {
 							editImgShowModal.value = false;
 							successImgShowModal.value = true;
 							setTimeout(() => {
@@ -286,7 +282,7 @@
 					})
 					.catch(error => {
 						console.error(error);
-						alert("请求出错，请稍后重试!");
+						// alert("请求出错，请稍后重试!");
 					});
 			};
 

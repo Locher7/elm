@@ -88,10 +88,9 @@
 
 			// 检查是否手机号已注册
 			const checkUserId = () => {
-				axios.post('UserController/getUserById', qs.stringify({
-					userId: user.value.userId,
-				})).then(response => {
-					if (response.data == 1) {
+				let url1 =`http://localhost:10100/UserController/getUserById/${user.value.userId}`;
+				axios.get(url1).then(response => {
+					if (response.data.result == 1) {
 						user.value.userId = '';
 						alert('此手机号码已存在!');
 					}
@@ -117,12 +116,11 @@
 					alert('用户名称不能为空!');
 					return;
 				}
-				user.value.password = md5(user.value.password);
+				// user.value.password = md5(user.value.password);
 				// 注册请求
-				axios.post('UserController/saveUser', qs.stringify(
-					user.value
-				)).then(response => {
-					if (response.data > 0) {
+				let url2 =`http://localhost:10100/UserController/saveUser/${user.value.userId}/${user.value.password}/${user.value.userName}/${user.value.userSex}`;
+				axios.post(url2).then(response => {
+					if (response.data.result > 0) {
 						alert('注册成功!');
 						router.go(-1);
 					} else {

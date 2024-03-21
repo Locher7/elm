@@ -90,17 +90,15 @@
 				}
 
 				// 登录请求
-				axios.post('UserController/getUserByIdByPass', qs.stringify({
-					userId: userId.value,
-					password: md5(password.value)
-				})).then(response => {
-					const returnedUser = response.data;
-					// 查看 user 的类型
+				let url =`http://localhost:10100/UserController/getUserByIdByPass/${userId.value}/${password.value}`;
+				axios.get(url).then(response => {
+					const returnedUser = response.data.result;
+					// 查看 user 的类型 
 					console.log(typeof returnedUser);
 					// 查看 user 的内容
 					console.log(returnedUser);
 
-					if (returnedUser == 0) {
+					if (returnedUser == null) {
 						alert('用户名或密码不正确!');
 					} else {
 						// sessionstorage有容量限制，为了防止数据溢出，所以不将userImg放入数据中

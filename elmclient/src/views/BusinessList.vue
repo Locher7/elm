@@ -89,11 +89,10 @@
 
 			// 请求商家信息
 			const fetchBusinessInfo = () => {
-				axios.post('BusinessController/listBusinessByOrderTypeId', qs.stringify({
-						orderTypeId: orderTypeId.value
-					}))
+				let url = `http://localhost:10300/BusinessController/listBusinessByOrderTypeId/${orderTypeId.value}`;
+				axios.get(url)
 					.then(response => {
-						businessArr.value = response.data;
+						businessArr.value = response.data.result;
 						// console.log(businessArr.value);
 
 						if (user.value !== null) {

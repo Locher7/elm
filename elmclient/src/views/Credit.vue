@@ -114,9 +114,7 @@
 
 			// 请求总积分
 			const getCreditByUserId = () => {
-				axios.post('IntegrationController/getCreditByUserId', qs.stringify({
-						userId: user.value.userId,
-					}))
+				axios.get(`/users/${user.value.userId}/integrations/credit`)
 					.then(response => {
 						if (response.data == '') {
 							credit.value = 0;

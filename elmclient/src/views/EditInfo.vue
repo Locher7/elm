@@ -96,13 +96,11 @@
 				}
 				// 修改密码
 				checkOldPassword().then(isValid => {
+					let url1 =`http://localhost:10100/UserController//editPasswordByUserId/${user.value.userId}/${newPassword.value}`;
 					if (isValid) {
 						// 如果旧密码正确，则更新新密码
-						axios.post('UserController/editPasswordByUserId', qs.stringify({
-							userId: user.value.userId,
-							password: md5(newPassword.value)
-						})).then((response) => {
-							if (response.data == 1) {
+						axios.put(url1).then((response) => {
+							if (response.data.result == 1) {
 								successShowModal.value = true;
 								setTimeout(() => {
 									router.push('/myInfo');
@@ -122,13 +120,11 @@
 
 			// 检查旧密码是否正确
 			const checkOldPassword = () => {
+				let url2 =`http://localhost:10100/UserController/getUserByIdByPass/${user.value.userId}/${pastPassword.value}`;
 				//如果旧密码正确则解析为true，否则为false。
 				return new Promise((resolve, reject) => {
-					axios.post('UserController/getUserByIdByPass', qs.stringify({
-						userId: user.value.userId,
-						password: md5(pastPassword.value)
-					})).then(response => {
-						if (response.data == 0) {
+					axios.get(url2).then(response => {
+						if (response.data.result == null) {
 							resolve(false); // 旧密码错误
 						} else {
 							resolve(true); // 旧密码正确

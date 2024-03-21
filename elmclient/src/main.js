@@ -19,7 +19,7 @@ import {
 } from './common.js'
 
 const app = createApp(App);
-axios.defaults.baseURL = 'http://localhost:8080/elm/';
+// axios.defaults.baseURL = 'http://localhost:8080/elm/';
 
 // 注册全局属性和方法
 app.config.globalProperties.$axios = axios;
