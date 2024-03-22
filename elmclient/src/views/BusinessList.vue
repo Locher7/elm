@@ -59,8 +59,7 @@
 
 			// 请求购物车信息
 			const listCart = () => {
-				let url = `http://localhost:10400/CartController/listCart/${user.value.userId}`
-
+				let url = `http://localhost:10400/CartController/listCart/${user.value.userId}`;
 				axios.get(url).then(response => {
 					let cartArr = response.data.result;
 					//遍历所有食品列表

@@ -99,29 +99,25 @@
 				// console.log('收货地址信息:', deliveryaddress.value);
 
 				//查询当前商家
-				axios.post('BusinessController/getBusinessById', qs.stringify({
-					businessId: businessId.value
-				})).then(response => {
-					business.value = response.data;
+				let businessUrl = `http://localhost:10300/BusinessController/getBusinessById/${businessId.value}`;
+				axios.get(businessUrl).then(response => {
+					business.value = response.data.result;
 				}).catch(error => {
 					console.error(error);
 				});
 
 				//查询当前用户在购物车中的商家食品列表
-				axios.post('CartController/listCart', qs.stringify({
-					userId: user.value.userId,
-					businessId: businessId.value
-				})).then(response => {
-					cartArr.value = response.data;
+				let cartUrl = `http://localhost:10400/CartController/listCart/${user.value.userId}/${businessId.value}`;
+				axios.get(cartUrl).then(response => {
+					cartArr.value = response.data.result;
 					// console.log('购物车信息:', cartArr.value);
 					// 查询AI语音
-					return axios.post('CartController/aiSuggestion', qs.stringify({
-						userId: user.value.userId,
-						businessId: businessId.value
-					}));
+					let aiUrl = `http://localhost:10400/CartController/aiSuggestion/${user.value.userId}/${businessId.value}`;
+
+					return axios.get(aiUrl);
 
 				}).then(response => {
-					aiString.value = response.data;
+					aiString.value = response.data.result;
 					// console.log('ai语言:', aiString.value);
 				}).catch(error => {
 					console.error(error);
@@ -145,13 +141,9 @@
 				}
 
 				//创建订单
-				axios.post('OrdersController/createOrders', qs.stringify({
-					userId: user.value.userId,
-					businessId: businessId.value,
-					daId: deliveryaddress.value.daId,
-					orderTotal: totalPrice.value
-				})).then(response => {
-					let orderId = response.data;
+				let url = `http://localhost:10600/OrdersController/createOrders/${user.value.userId}/${businessId.value}/${deliveryaddress.value.daId}/${totalPrice.value}`;
+				axios.post(url).then(response => {
+					let orderId = response.data.result;
 					if (orderId > 0) {
 						router.push({
 							path: '/payment',

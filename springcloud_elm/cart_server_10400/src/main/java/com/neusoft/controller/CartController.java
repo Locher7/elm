@@ -2,6 +2,7 @@ package com.neusoft.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +17,8 @@ import com.neusoft.po.Cart;
 import com.neusoft.po.CommonResult;
 import com.neusoft.service.CartService;
 
-@RestController
 @CrossOrigin("*") // 允许来自此域的请求
+@RestController
 @RequestMapping("/CartController")
 public class CartController {
 	
@@ -85,17 +86,13 @@ public class CartController {
 	}
 	
 	//ksq:下面改的不一定对
-	@GetMapping("/aiSuggestion")
+	@GetMapping("/aiSuggestion/{userId}/{businessId}")
 	public CommonResult<String> aiSuggestion (			
 			@PathVariable("userId") String userId,
-			@PathVariable("businessId") Integer businessId,
-			@PathVariable("foodId") Integer foodId,
-			@PathVariable("quantity") Integer quantity) throws Exception{
+			@PathVariable("businessId") Integer businessId) throws Exception{
 		Cart param = new Cart();
 		param.setUserId(userId);
 		param.setBusinessId(businessId);
-		param.setFoodId(foodId);
-		param.setQuantity(quantity);
 		String result = cartService.aiSuggestion(param);
 		return new CommonResult(200,"success",result);
 	}

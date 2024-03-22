@@ -77,10 +77,9 @@
 
 			// 请求所有地址信息
 			const listDeliveryAddressByUserId = () => {
-				axios.post('DeliveryAddressController/listDeliveryAddressByUserId', qs.stringify({
-					userId: user.value.userId
-				})).then(response => {
-					deliveryAddressArr.value = response.data;
+				let url = `http://localhost:10500/DeliveryAddressController/listDeliveryAddressByUserId/${user.value.userId}`;
+				axios.get(url).then(response => {
+					deliveryAddressArr.value = response.data.result;
 					// console.log('地址信息:', deliveryAddressArr.value);
 				}).catch(error => {
 					console.error(error);
@@ -124,10 +123,9 @@
 					return;
 				}
 				// 删除地址请求
-				axios.post('DeliveryAddressController/removeDeliveryAddress', qs.stringify({
-					daId: daId,
-				})).then(response => {
-					if (response.data > 0) {
+				let url = `http://localhost:10500/DeliveryAddressController/removeDeliveryAddress/${daId}`;
+				axios.delete(url).then(response => {
+					if (response.data.result > 0) {
 						if (JSON.parse(localStorage.getItem(user.value.userId)).daId == daId) {
 							localStorage.removeItem(user.value.userId);
 						}

@@ -116,10 +116,9 @@
 
 			onMounted(() => {
 				//查询订单
-				axios.post('OrdersController/getOrdersById', qs.stringify({
-					orderId: orderId.value
-				})).then(response => {
-					orders.value = response.data;
+				let url1 = `http://localhost:10600/OrdersController/getOrdersById/${orderId.value}`;
+				axios.get(url1).then(response => {
+					orders.value = response.data.result;
 					// console.log("请求回应:", response.data);
 					discountedTotal.value = orders.value.orderTotal;
 					// console.log(orders.value)
@@ -128,10 +127,9 @@
 				});
 
 				//查询总积分
-				axios.post('IntegrationController/getCreditByUserId', qs.stringify({
-					userId: user.value.userId,
-				})).then(response => {
-					credit.value = response.data;
+				let url2 = `http://localhost:10700/IntegrationController/getCreditByUserId/${user.value.userId}`;
+				axios.get(url2).then(response => {
+					credit.value = response.data.result;
 					// console.log(credit.value)
 				}).catch(error => {
 					console.error(error);
@@ -157,12 +155,9 @@
 					useIntegration.value = 1;
 				}
 				// 请求新建一个已支付订单
-				axios.post('IntegrationController/payCredit', qs.stringify({
-					userId: user.value.userId,
-					usedPoints: orderId.value,
-					integrationState: useIntegration.value
-				})).then(response => {
-					if (response.data == 1) {
+				let url = `http://localhost:10700/IntegrationController/payCredit/${user.value.userId}/${orderId.value}/${useIntegration.value}`;
+				axios.put(url).then(response => {
+					if (response.data.result == 1) {
 						successShowModal.value = true;
 						setTimeout(() => {
 							router.push('/index');

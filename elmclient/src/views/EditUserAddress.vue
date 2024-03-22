@@ -77,11 +77,10 @@
 
 			// 页面初始化时请求即将更改地址信息
 			onMounted(async () => {
+				let url = `http://localhost:10500/DeliveryAddressController/getDeliveryAddressById/${daId.value}`;
 				try {
-					const response = await axios.post('DeliveryAddressController/getDeliveryAddressById', qs.stringify({
-						daId: daId.value
-					}));
-					deliveryAddress.value = response.data;
+					const response = await axios.get(url);
+					deliveryAddress.value = response.data.result;
 				} catch (error) {
 					console.error(error);
 				}
@@ -103,10 +102,9 @@
 				}
 
 				//更改地址请求
-				axios.post('DeliveryAddressController/updateDeliveryAddress', qs.stringify(
-					deliveryAddress.value
-				)).then(response => {
-					if (response.data > 0) {
+				let url = `http://localhost:10500/DeliveryAddressController/updateDeliveryAddress/${daId.value}/${deliveryAddress.value.contactName}/${deliveryAddress.value.contactSex}/${deliveryAddress.value.contactTel}/${deliveryAddress.value.address}`;
+				axios.put(url).then(response => {
+					if (response.data.result > 0) {
 						router.go(-1);
 					} else {
 						alert('更新地址失败!')

@@ -10,6 +10,11 @@
 	<artifactId>food_server_10200</artifactId>
 
 	<dependencies>
+		<!-- 添加 eureka server 依赖 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 		<!--以下是boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

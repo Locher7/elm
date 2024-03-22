@@ -101,9 +101,10 @@
 
 
 				// 新增地址请求
-				axios.post('DeliveryAddressController/saveDeliveryAddress', qs.stringify(deliveryAddress.value))
+				let url = `http://localhost:10500/DeliveryAddressController/saveDeliveryAddress/${deliveryAddress.value.contactName}/${deliveryAddress.value.contactSex}/${deliveryAddress.value.contactTel}/${deliveryAddress.value.address}/${user.value.userId}`;
+				axios.post(url)
 					.then(response => {
-						if (response.data > 0) {
+						if (response.data.result > 0) {
 							router.go(-1);
 						} else {
 							alert('新增地址失败！');

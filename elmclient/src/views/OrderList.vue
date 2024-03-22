@@ -91,11 +91,10 @@
 			const userId = ref(null);
 
 			onMounted(() => {
-				//根据businessId查询商家信息
-				axios.post('OrdersController/listOrdersByUserId', qs.stringify({
-					userId: user.value.userId
-				})).then(response => {
-					let result = response.data
+				// 查询历史订单
+				let url = `http://localhost:10600/OrdersController/listOrdersByUserId/${user.value.userId}`;
+				axios.get(url).then(response => {
+					let result = response.data.result;
 					for (let orders of result) {
 						orders.isShowDetailet = false;
 					}

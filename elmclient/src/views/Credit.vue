@@ -113,13 +113,14 @@
 			};
 
 			// 请求总积分
+			let url1 = `http://localhost:10700/IntegrationController/getCreditByUserId/${user.value.userId}`;
 			const getCreditByUserId = () => {
-				axios.get(`/users/${user.value.userId}/integrations/credit`)
+				axios.get(url1)
 					.then(response => {
-						if (response.data == '') {
+						if (response.data.result == '') {
 							credit.value = 0;
 						} else {
-							credit.value = response.data;
+							credit.value = response.data.result;
 						}
 						// console.log('总积分:', credit.value);
 					})
@@ -129,12 +130,11 @@
 			};
 
 			// 请求积分明细
+			let url2 = `http://localhost:10700/IntegrationController/getDetailsByUserId/${user.value.userId}`;
 			const getDetailsByUserId = () => {
-				axios.post('IntegrationController/getDetailsByUserId', qs.stringify({
-						userId: user.value.userId,
-					}))
+				axios.get(url2)
 					.then(response => {
-						detailArr.value = response.data;
+						detailArr.value = response.data.result;
 						// console.log('积分信息:', detailArr.value);
 					})
 					.catch(error => {
