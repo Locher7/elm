@@ -47,5 +47,6 @@
     <module>integration_server_10700</module>
     <module>eureka_server_13000</module>
     <module>eureka_server_13001</module>
+    <module>food_server_10201</module>
 </modules>
 </project> 

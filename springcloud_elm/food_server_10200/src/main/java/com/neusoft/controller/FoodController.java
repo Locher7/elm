@@ -25,6 +25,6 @@ public class FoodController {
 	public CommonResult<List> listFoodByBusinessId(
 			@PathVariable("businessId") Integer businessId) throws Exception {
 		List<Food> list = foodService.listFoodByBusinessId(businessId);
-		return new CommonResult(200, "success", list);
+		return new CommonResult(200, "success(10200)", list);
 	}
 }

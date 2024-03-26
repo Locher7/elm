@@ -11,7 +11,7 @@ spring:
       name: business-server
    datasource:
       username: root
-      password: 123456
+      password: 1579131893
       url: jdbc:mysql://localhost:3306/elm?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
       driver-class-name: com.mysql.cj.jdbc.Driver
     
@@ -29,4 +29,8 @@ eureka:
         prefer-ip-address: true   #使用ip地址向eureka server进行注册
         instance-id: ${spring.cloud.client.ip-address}:${server.port}   #设置eureka控制台中显示的注册信息
         lease-renewal-interval-in-seconds: 5         #续约间隔时间
-        lease-expiration-duration-in-seconds: 15     #续约到期时间      
+        lease-expiration-duration-in-seconds: 15     #续约到期时间    
+        
+feign:
+    hystrix:
+        enabled: true #在feign中开启hystrix熔断机制
