@@ -19,7 +19,6 @@ import com.neusoft.po.CommonResult;
 import com.neusoft.service.BusinessService;
 
 @RestController
-@CrossOrigin("*") // 允许来自此域的请求
 @RequestMapping("/BusinessController")
 public class BusinessController {
 
@@ -32,7 +31,7 @@ public class BusinessController {
 	public CommonResult<List> listBusinessByOrderTypeId(@PathVariable("orderTypeId") Integer orderTypeId)
 			throws Exception {
 		List<Business> list = businessService.listBusinessByOrderTypeId(orderTypeId);
-		return new CommonResult(200, "success", list);
+		return new CommonResult(200, "success(10300)", list);
 	}
 
 	@GetMapping("/getBusinessById/{businessId}")

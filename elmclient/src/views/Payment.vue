@@ -116,7 +116,7 @@
 
 			onMounted(() => {
 				//查询订单
-				let url1 = `http://localhost:10600/OrdersController/getOrdersById/${orderId.value}`;
+				let url1 = `OrdersController/getOrdersById/${orderId.value}`;
 				axios.get(url1).then(response => {
 					orders.value = response.data.result;
 					// console.log("请求回应:", response.data);
@@ -127,7 +127,7 @@
 				});
 
 				//查询总积分
-				let url2 = `http://localhost:10700/IntegrationController/getCreditByUserId/${user.value.userId}`;
+				let url2 = `IntegrationController/getCreditByUserId/${user.value.userId}`;
 				axios.get(url2).then(response => {
 					credit.value = response.data.result;
 					// console.log(credit.value)
@@ -155,7 +155,7 @@
 					useIntegration.value = 1;
 				}
 				// 请求新建一个已支付订单
-				let url = `http://localhost:10700/IntegrationController/payCredit/${user.value.userId}/${orderId.value}/${useIntegration.value}`;
+				let url = `IntegrationController/payCredit/${user.value.userId}/${orderId.value}/${useIntegration.value}`;
 				axios.put(url).then(response => {
 					if (response.data.result == 1) {
 						successShowModal.value = true;

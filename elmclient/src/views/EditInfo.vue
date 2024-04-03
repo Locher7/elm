@@ -96,7 +96,7 @@
 				}
 				// 修改密码
 				checkOldPassword().then(isValid => {
-					let url1 =`http://localhost:10100/UserController//editPasswordByUserId/${user.value.userId}/${newPassword.value}`;
+					let url1 =`UserController//editPasswordByUserId/${user.value.userId}/${newPassword.value}`;
 					if (isValid) {
 						// 如果旧密码正确，则更新新密码
 						axios.put(url1).then((response) => {
@@ -120,7 +120,7 @@
 
 			// 检查旧密码是否正确
 			const checkOldPassword = () => {
-				let url2 =`http://localhost:10100/UserController/getUserByIdByPass/${user.value.userId}/${pastPassword.value}`;
+				let url2 =`UserController/getUserByIdByPass/${user.value.userId}/${pastPassword.value}`;
 				//如果旧密码正确则解析为true，否则为false。
 				return new Promise((resolve, reject) => {
 					axios.get(url2).then(response => {

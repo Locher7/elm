@@ -14,7 +14,6 @@ import com.neusoft.po.CommonResult;
 import com.neusoft.po.Orders;
 import com.neusoft.service.OrdersService;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/OrdersController")
 public class OrdersController {
@@ -46,7 +45,7 @@ public class OrdersController {
 	@GetMapping("/listOrdersByUserId/{userId}")
 	public CommonResult<List> listOrdersByUserId (@PathVariable("userId") String userId) throws Exception{
 		List<Orders> list = ordersService.listOrdersByUserId(userId);
-		return new CommonResult(200,"success",list);
+		return new CommonResult(200,"success(10600)",list);
 	}
 	/*
 	@RequestMapping("/payOrdersById")

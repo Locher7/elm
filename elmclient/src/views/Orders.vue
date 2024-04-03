@@ -99,7 +99,7 @@
 				// console.log('收货地址信息:', deliveryaddress.value);
 
 				//查询当前商家
-				let businessUrl = `http://localhost:10300/BusinessController/getBusinessById/${businessId.value}`;
+				let businessUrl = `BusinessController/getBusinessById/${businessId.value}`;
 				axios.get(businessUrl).then(response => {
 					business.value = response.data.result;
 				}).catch(error => {
@@ -107,17 +107,17 @@
 				});
 
 				//查询当前用户在购物车中的商家食品列表
-				let cartUrl = `http://localhost:10400/CartController/listCart/${user.value.userId}/${businessId.value}`;
+				let cartUrl = `CartController/listCart/${user.value.userId}/${businessId.value}`;
 				axios.get(cartUrl).then(response => {
 					cartArr.value = response.data.result;
 					// console.log('购物车信息:', cartArr.value);
 					// 查询AI语音
-					let aiUrl = `http://localhost:10400/CartController/aiSuggestion/${user.value.userId}/${businessId.value}`;
+					//let aiUrl = `CartController/aiSuggestion/${user.value.userId}/${businessId.value}`;
 
-					return axios.get(aiUrl);
+					//return axios.get(aiUrl);
 
 				}).then(response => {
-					aiString.value = response.data.result;
+					//aiString.value = response.data.result;
 					// console.log('ai语言:', aiString.value);
 				}).catch(error => {
 					console.error(error);
@@ -141,7 +141,7 @@
 				}
 
 				//创建订单
-				let url = `http://localhost:10600/OrdersController/createOrders/${user.value.userId}/${businessId.value}/${deliveryaddress.value.daId}/${totalPrice.value}`;
+				let url = `OrdersController/createOrders/${user.value.userId}/${businessId.value}/${deliveryaddress.value.daId}/${totalPrice.value}`;
 				axios.post(url).then(response => {
 					let orderId = response.data.result;
 					if (orderId > 0) {

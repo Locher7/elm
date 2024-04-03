@@ -18,6 +18,7 @@ import MyAddress from '../views/MyAddress.vue';
 import Credit from '../views/Credit.vue';
 import EditInfo from '../views/EditInfo.vue';
 
+import Error403 from '../components/Error403.vue';
 
 const routes = [{
 		path: '/',
@@ -98,6 +99,11 @@ const routes = [{
 		path: '/editInfo',
 		name: 'EditInfo',
 		component: EditInfo
+	},
+	{
+		path: '/error403',
+		name: 'Error403',
+		component: Error403
 	}
 ];
 

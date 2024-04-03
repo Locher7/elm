@@ -94,7 +94,7 @@
 
 			onMounted(() => {
 
-				let url = `http://localhost:10300/BusinessController/getBusinessById/${businessId.value}`;
+				let url = `BusinessController/getBusinessById/${businessId.value}`;
 
 				// 请求商家信息
 				axios.get(url).then(response => {
@@ -145,7 +145,7 @@
 
 			// 请求购物车信息
 			const listCart = () => {
-				let url = `http://localhost:10400/CartController/listCart/${user.value.userId}/${businessId.value}`;
+				let url = `CartController/listCart/${user.value.userId}/${businessId.value}`;
 				axios.get(url).then(response => {
 					let cartArr = response.data.result;
 					//遍历所有食品列表
@@ -198,7 +198,7 @@
 			//封装函数
 			//增加一个食品
 			const saveCart = (index) => {
-				let url = `http://localhost:10400/CartController/saveCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`;
+				let url = `CartController/saveCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`;
 				axios.post(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1
@@ -214,7 +214,7 @@
 
 			//更新食品数量
 			const updateCart = (index, num) => {
-				let url = `http://localhost:10400/CartController/updateCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}/${foodArr.value[index].quantity + num}`;
+				let url = `CartController/updateCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}/${foodArr.value[index].quantity + num}`;
 				axios.put(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1或-1；
@@ -231,7 +231,7 @@
 
 			//删除食品数量
 			const removeCart = (index) => {
-				let url = `http://localhost:10400/CartController/removeCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`;
+				let url = `CartController/removeCart/${user.value.userId}/${businessId.value}/${foodArr.value[index].foodId}`;
 				const cartId = foodArr.value[index].cartId; 
 				axios.delete(url).then(response => {
 					if (response.data.result == 1) {

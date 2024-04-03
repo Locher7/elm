@@ -113,7 +113,7 @@
 			};
 
 			// 请求总积分
-			let url1 = `http://localhost:10700/IntegrationController/getCreditByUserId/${user.value.userId}`;
+			let url1 = `IntegrationController/getCreditByUserId/${user.value.userId}`;
 			const getCreditByUserId = () => {
 				axios.get(url1)
 					.then(response => {
@@ -130,7 +130,7 @@
 			};
 
 			// 请求积分明细
-			let url2 = `http://localhost:10700/IntegrationController/getDetailsByUserId/${user.value.userId}`;
+			let url2 = `IntegrationController/getDetailsByUserId/${user.value.userId}`;
 			const getDetailsByUserId = () => {
 				axios.get(url2)
 					.then(response => {

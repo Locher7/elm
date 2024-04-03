@@ -88,7 +88,7 @@
 
 			// 检查是否手机号已注册
 			const checkUserId = () => {
-				let url1 =`http://localhost:10100/UserController/getUserById/${user.value.userId}`;
+				let url1 =`UserController/getUserById/${user.value.userId}`;
 				axios.get(url1).then(response => {
 					if (response.data.result == 1) {
 						user.value.userId = '';
@@ -116,9 +116,10 @@
 					alert('用户名称不能为空!');
 					return;
 				}
+				router.push('/')
 				// user.value.password = md5(user.value.password);
 				// 注册请求
-				let url2 =`http://localhost:10100/UserController/saveUser/${user.value.userId}/${user.value.password}/${user.value.userName}/${user.value.userSex}`;
+				let url2 =`UserController/saveUser/${user.value.userId}/${user.value.password}/${user.value.userName}/${user.value.userSex}`;
 				axios.post(url2).then(response => {
 					if (response.data.result > 0) {
 						alert('注册成功!');

@@ -221,7 +221,7 @@
 					alert('用户名称不能为空!');
 					return;
 				}
-				let url1 =`http://localhost:10100/UserController/editUserNameByUserId/${user.value.userId}/${newUserName.value}`;
+				let url1 =`UserController/editUserNameByUserId/${user.value.userId}/${newUserName.value}`;
 				axios.put(url1)
 					.then((response) => {
 						if (response.data.result == 1) {
@@ -267,7 +267,7 @@
 
 			//修改用户头像
 			const uploadImage = (base64String) => {
-				let url2 =`http://localhost:10100/UserController/editUserImgByUserId/${user.value.userId}/${base64String}`;
+				let url2 =`UserController/editUserImgByUserId/${user.value.userId}/${base64String}`;
 				axios.put(url2)
 					.then(response => {
 						if (response.data.result == 1) {

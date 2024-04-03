@@ -19,7 +19,19 @@ import {
 } from './common.js'
 
 const app = createApp(App);
-// axios.defaults.baseURL = 'http://localhost:8080/elm/';
+axios.defaults.baseURL = 'http://localhost:14000/';
+// 设置响应拦截器
+axios.interceptors.response.use(function(response){
+	if(response.data.code == 403) {
+		//location.href = '/error403';
+		router.push('/error403')
+		console.log(response);
+	}
+	return response;
+},function(error) {
+	console.error();
+	return Promise.reject(error);
+});
 
 // 注册全局属性和方法
 app.config.globalProperties.$axios = axios;
@@ -43,6 +55,7 @@ router.beforeEach((to, from, next) => {
 			'/businessInfo',
 			'/login',
 			'/register',
+			'/error403',
 		].includes(to.path)
 	) {
 		if (user == null) {

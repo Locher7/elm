@@ -16,7 +16,6 @@ import com.neusoft.po.Orders;
 import com.neusoft.service.IntegrationService;
 
 @RestController
-@CrossOrigin("*") // 允许来自此域的请求
 @RequestMapping("/IntegrationController")
 public class IntegrationController {
 	

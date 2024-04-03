@@ -16,7 +16,6 @@ import com.neusoft.po.CommonResult;
 import com.neusoft.po.DeliveryAddress;
 import com.neusoft.service.DeliveryAddressService;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/DeliveryAddressController")
 public class DeliveryAddressController {

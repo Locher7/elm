@@ -92,7 +92,7 @@
 
 			onMounted(() => {
 				// 查询历史订单
-				let url = `http://localhost:10600/OrdersController/listOrdersByUserId/${user.value.userId}`;
+				let url = `OrdersController/listOrdersByUserId/${user.value.userId}`;
 				axios.get(url).then(response => {
 					let result = response.data.result;
 					for (let orders of result) {

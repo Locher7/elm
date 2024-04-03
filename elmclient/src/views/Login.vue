@@ -90,7 +90,7 @@
 				}
 
 				// 登录请求
-				let url =`http://localhost:10100/UserController/getUserByIdByPass/${userId.value}/${password.value}`;
+				let url =`UserController/getUserByIdByPass/${userId.value}/${password.value}`;
 				axios.get(url).then(response => {
 					const returnedUser = response.data.result;
 					// 查看 user 的类型 

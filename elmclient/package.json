@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.6.8",
     "core-js": "^3.8.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -23,7 +23,7 @@
     "@types/js-md5": "^0.7.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vue/cli-service": "^5.0.8",
     "webpack-merge": "^5.9.0"
   },
   "browserslist": [
@@ -31,5 +31,10 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "description": "```\r npm install\r ```",
+  "main": "babel.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

@@ -13,7 +13,6 @@ import com.neusoft.po.CommonResult;
 import com.neusoft.po.Food;
 import com.neusoft.service.FoodService;
 
-@CrossOrigin("*") //跨域处理
 @RestController
 @RequestMapping("/FoodController")
 public class FoodController {
