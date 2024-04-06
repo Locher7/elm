@@ -54,7 +54,6 @@
 	<module>orders_server_10601</module>
     <module>business_server_10301</module>
 	<module>cart_server_10401</module>
-	<module>orders_server_10601</module>
     <module>orders_server_10601</module>
 	<module>config_server_15000</module>
 </modules>
