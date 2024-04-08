@@ -112,12 +112,12 @@
 					cartArr.value = response.data.result;
 					// console.log('购物车信息:', cartArr.value);
 					// 查询AI语音
-					//let aiUrl = `CartController/aiSuggestion/${user.value.userId}/${businessId.value}`;
+					// let aiUrl = `CartController/aiSuggestion/${user.value.userId}/${businessId.value}`;
 
-					//return axios.get(aiUrl);
+					// return axios.get(aiUrl);
 
 				}).then(response => {
-					//aiString.value = response.data.result;
+					// aiString.value = response.data.result;
 					// console.log('ai语言:', aiString.value);
 				}).catch(error => {
 					console.error(error);

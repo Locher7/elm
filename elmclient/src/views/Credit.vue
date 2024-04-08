@@ -27,10 +27,12 @@
 		<ul class="credit-detailed">
 			<ul class="credit-detailed">
 				<li v-for="item in detailArr" :key="item.id">
+
 					<div class="credit-detailed-left" v-if="item.points > 0">
 						<p>获得积分</p>
 						<p>{{ item.integrationDate }}</p>
 					</div>
+
 					<div class="credit-detailed-left" v-if="item.points < 0 && item.integrationState==1">
 						<p>积分过期</p>
 					</div>
@@ -39,10 +41,11 @@
 						<p>使用积分</p>
 						<p>{{ item.integrationDate }}</p>
 					</div>
+
 					<div class="credit-detailed-right">
 						<p :style="{color: item.points > 0 ? 'green' : 'red'}"><span v-if="item.points > 0">+</span>{{ item.points }}</p>
-
 					</div>
+
 				</li>
 			</ul>
 		</ul>
@@ -120,9 +123,9 @@
 						if (response.data.result == '') {
 							credit.value = 0;
 						} else {
-							credit.value = response.data.result;
+							credit.value = response.data.result/100;
 						}
-						// console.log('总积分:', credit.value);
+						console.log('总积分:', credit.value);
 					})
 					.catch(error => {
 						console.error(error);
@@ -135,7 +138,7 @@
 				axios.get(url2)
 					.then(response => {
 						detailArr.value = response.data.result;
-						// console.log('积分信息:', detailArr.value);
+						console.log('积分信息:', detailArr.value);
 					})
 					.catch(error => {
 						console.error(error);

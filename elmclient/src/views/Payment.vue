@@ -129,7 +129,7 @@
 				//查询总积分
 				let url2 = `IntegrationController/getCreditByUserId/${user.value.userId}`;
 				axios.get(url2).then(response => {
-					credit.value = response.data.result;
+					credit.value = response.data.result/100;
 					// console.log(credit.value)
 				}).catch(error => {
 					console.error(error);
