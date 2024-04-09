@@ -23,7 +23,7 @@
 				<ul class="order-detailed" v-show="item.isShowDetailet">
 					<li v-for="odItem in item.list" :key="odItem.id">
 						<p>{{ odItem.food.foodName }} x {{ odItem.quantity }}</p>
-						<p>&#165;{{ odItem.food.foodPrice*odItem.quantity }}</p>
+						<p>&#165;{{ odItem.food.foodPrice/100*odItem.quantity }}</p>
 					</li>
 					<li>
 						<p>配送费</p>

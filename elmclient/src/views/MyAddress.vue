@@ -81,9 +81,23 @@
 				axios.get(url).then(response => {
 					deliveryAddressArr.value = response.data.result;
 					// console.log('地址信息:', deliveryAddressArr.value);
-				}).catch(error => {
+				})
+				.catch(error => {
 					console.error(error);
 				});
+
+				let url2 = `DeliveryAddressController/getDeliveryAddressById/${user.value.userId}`;
+				axios.put(url2)
+					.then(response => {
+						if (response.data.code == 200) {
+							deliveryAddressArr.value = response.data.result;
+							// console.log('地址信息:', deliveryAddressArr.value);
+						}
+					})
+					.catch(error => {
+						console.error(error);
+						// alert("请求出错，请稍后重试!");
+					});
 			};
 
 
