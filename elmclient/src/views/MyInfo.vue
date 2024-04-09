@@ -309,6 +309,19 @@
 			// 重新请求用户信息
 			onMounted(async () => {
 				if (!user.value.userId) return;
+				/*
+				let url = `DeliveryAddressController/getDeliveryAddressById/${user.value.userId}`;
+				axios.put(url2)
+					.then(response => {
+						if (response.data.code == 200) {
+
+						}
+					})
+					.catch(error => {
+						console.error(error);
+						// alert("请求出错，请稍后重试!");
+					});*/
+				/*
 				try {
 					const response = await axios.post('DeliveryAddressController/getDeliveryAddressById', qs.stringify({
 						userId: user.value.userId,
@@ -320,7 +333,7 @@
 					}
 				} catch (error) {
 					console.error(error);
-				}
+				}*/
 			});
 
 			return {

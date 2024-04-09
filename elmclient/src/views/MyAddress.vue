@@ -73,6 +73,7 @@
 
 			// 请求全部地址信息
 			const listDeliveryAddressByUserId = () => {
+				/*
 				axios.post('DeliveryAddressController/listDeliveryAddressByUserId', qs.stringify({
 					userId: user.value.userId
 				})).then(response => {
@@ -80,7 +81,19 @@
 					// console.log('地址信息:', deliveryAddressArr.value);
 				}).catch(error => {
 					console.error(error);
-				});
+				});*/
+				let url = `DeliveryAddressController/getDeliveryAddressById/${user.value.userId}`;
+				axios.put(url2)
+					.then(response => {
+						if (response.data.code == 200) {
+							deliveryAddressArr.value = response.data.result;
+							// console.log('地址信息:', deliveryAddressArr.value);
+						}
+					})
+					.catch(error => {
+						console.error(error);
+						// alert("请求出错，请稍后重试!");
+					});
 			};
 
 

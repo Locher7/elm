@@ -8,7 +8,7 @@
 		<!-- 总积分 -->
 		<div class="credit">
 			<div class="credit-icon"><i class="fa fa-gift"></i></div>
-			<h2>{{ credit }}</h2>
+			<h2>{{ credit/100 }}</h2>
 			<p>总积分</p>
 			<div class="credit-use">
 				<button @click="toIndex">去使用</button>
@@ -40,7 +40,7 @@
 						<p>{{ item.integrationDate }}</p>
 					</div>
 					<div class="credit-detailed-right">
-						<p :style="{color: item.points > 0 ? 'green' : 'red'}"><span v-if="item.points > 0">+</span>{{ item.points }}</p>
+						<p :style="{color: item.points > 0 ? 'green' : 'red'}"><span v-if="item.points > 0">+</span>{{ item.points/100 }}</p>
 
 					</div>
 				</li>
