@@ -10,13 +10,28 @@
 	<artifactId>business_server_10300</artifactId>
 
 	<dependencies>
-	
+
+		<!-- 消息总线依赖 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-bus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
+		<!-- 监听依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!--SpringCloud整合的openFeign -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
-	
+
 		<!-- 添加 eureka server 依赖 -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

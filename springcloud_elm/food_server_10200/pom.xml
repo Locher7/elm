@@ -10,6 +10,22 @@
 	<artifactId>food_server_10200</artifactId>
 
 	<dependencies>
+		<!-- 消息总线依赖 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-bus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
+		<!-- 监听依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+
 		<!--加入spring-cloud-config的依赖 -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

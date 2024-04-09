@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import com.neusoft.po.Cart;
 import com.neusoft.po.CommonResult;
 import com.neusoft.service.CartService;
 
+@RefreshScope
 @RestController
 @RequestMapping("/CartController")
 public class CartController {
