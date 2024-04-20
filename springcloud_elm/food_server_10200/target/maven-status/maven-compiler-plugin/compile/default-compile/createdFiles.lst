@@ -1,0 +1,7 @@
+com\neusoft\MyApplication.class
+com\neusoft\mapper\FoodMapper.class
+com\neusoft\po\CommonResult.class
+com\neusoft\service\impl\FoodServiceImpl.class
+com\neusoft\controller\FoodController.class
+com\neusoft\po\Food.class
+com\neusoft\service\FoodService.class
