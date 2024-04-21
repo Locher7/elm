@@ -19,7 +19,7 @@ import {
 } from './common.js'
 
 const app = createApp(App);
-axios.defaults.baseURL = 'http://localhost:14000/';
+axios.defaults.baseURL = 'http://59.110.233.138:14000/';
 // 设置响应拦截器
 axios.interceptors.response.use(function(response){
 	if(response.data.code == 403) {

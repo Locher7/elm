@@ -87,7 +87,7 @@
 				});
 
 				let url2 = `DeliveryAddressController/getDeliveryAddressById/${user.value.userId}`;
-				axios.put(url2)
+				axios.get(url2)
 					.then(response => {
 						if (response.data.code == 200) {
 							deliveryAddressArr.value = response.data.result;

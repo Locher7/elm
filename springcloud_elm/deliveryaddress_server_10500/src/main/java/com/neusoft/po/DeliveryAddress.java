@@ -7,6 +7,7 @@ public class DeliveryAddress {
 	private String contactTel;
 	private String address;
 	private String userId;
+	private Integer delTag;
 	public Integer getDaId() {
 		return daId;
 	}
@@ -43,5 +44,6 @@ public class DeliveryAddress {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+	public Integer getDelTag() { return delTag; }
+	public void setDelTag(Integer delTag) { this.delTag = delTag; }
 }
