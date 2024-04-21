@@ -19,7 +19,7 @@ public interface DeliveryAddressMapper {
 	@Select("select * from deliveryaddress where daId = #{daId}")
 	public DeliveryAddress getDeliveryAddressById(Integer daId);
 	
-	@Insert("insert into deliveryaddress values(null, #{contactName}, #{contactSex}, #{contactTel}, #{address}, #{userId}), #{delTag}")
+	@Insert("insert into deliveryaddress values(null, #{contactName}, #{contactSex}, #{contactTel}, #{address}, #{userId}, #{delTag})")
 	public int saveDeliveryAddress(DeliveryAddress deliveryAddress);
 	
 	@Update("update deliveryaddress set  contactName = #{contactName}, contactSex = #{contactSex}, contactTel = #{contactTel}, address = #{address} where daId = #{daId}")

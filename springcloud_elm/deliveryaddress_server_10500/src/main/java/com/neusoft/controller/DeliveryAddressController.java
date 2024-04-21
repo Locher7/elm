@@ -50,7 +50,7 @@ public class DeliveryAddressController {
 		param.setContactTel(contactTel);
 		param.setAddress(address);
 		param.setUserId(userId);
-		param.setDaId(1);
+		param.setDelTag(1);
 		int result = deliveryAddressService.saveDeliveryAddress(param);
 		return new CommonResult(200,"success",result);
 	}

@@ -20,7 +20,7 @@ public interface IntegrationMapper {
 	@Select("select * from integration where userId = #{userId} order by integrationId desc")
 	public List<Integration> getDetailByUserId(String userId);
 	
-	@Select("select sum(points) from integration where userId = #{userId}")
+	@Select("select COALESCE(sum(points), 0) from integration where userId = #{userId}")
 	public Integer getCreditByUserId(String userId);
 	
 	@Insert ("insert into integration values(null, #{userId}, #{points}, #{usedPoints}, #{integrationDate}, #{integrationState})")
