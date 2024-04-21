@@ -87,10 +87,11 @@ public class IntegrationServiceImpl implements IntegrationService {
 			orders.setOrderTotal(realPoints);
 		}
 		ordersMapper.updateOrders(orders);
-		
+
+		realPoints /= 100;
 		integration.setIntegrationState(2);
-		integration.setPoints(costPoints);
-		
+		integration.setPoints(-costPoints);
+
 		if(flag == 1) { // 表示使用积分
 			
 			//System.out.println("进入");

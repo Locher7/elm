@@ -31,7 +31,7 @@
 
 		<div class="credit-deduction">
 			<div class="credit-info">
-				<p>剩余{{credit/100}}积分</p>
+				<p>剩余{{credit}}积分</p>
 				<p v-if="useCredit" class="credit-used-text">使用{{ Math.round(orders.orderTotal/100) }}积分，抵扣<label class="orangered">{{ Math.round(orders.orderTotal/100)/10 }}</label>&#165;</p>
 			</div>
 			<div class="credit-toggle">
@@ -129,7 +129,7 @@
 				//查询总积分
 				let url2 = `IntegrationController/getCreditByUserId/${user.value.userId}`;
 				axios.get(url2).then(response => {
-					credit.value = response.data.result/100;
+					credit.value = response.data.result;
 					// console.log(credit.value)
 				}).catch(error => {
 					console.error(error);
@@ -172,7 +172,7 @@
 			};
 
 			const toggleCreditUse = () => {
-				if (credit.value < Math.round(orders.value.orderTotal)) {
+				if (credit.value < Math.round(orders.value.orderTotal/100)) {
 					alert("剩余积分不足");
 				} else {
 					useCredit.value = !useCredit.value;

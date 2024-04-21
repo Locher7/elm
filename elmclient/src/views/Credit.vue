@@ -8,7 +8,7 @@
 		<!-- 总积分 -->
 		<div class="credit">
 			<div class="credit-icon"><i class="fa fa-gift"></i></div>
-			<h2>{{ credit/100 }}</h2>
+			<h2>{{ credit }}</h2>
 			<p>总积分</p>
 			<div class="credit-use">
 				<button @click="toIndex">去使用</button>
@@ -123,7 +123,7 @@
 						if (response.data.result == '') {
 							credit.value = 0;
 						} else {
-							credit.value = response.data.result/100;
+							credit.value = response.data.result;
 						}
 						console.log('总积分:', credit.value);
 					})
