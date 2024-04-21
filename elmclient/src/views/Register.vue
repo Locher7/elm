@@ -123,7 +123,7 @@
 				axios.post(url2).then(response => {
 					if (response.data.result > 0) {
 						alert('注册成功!');
-						router.go(-1);
+						router.push('/Login');
 					} else {
 						alert('注册失败!');
 					}
