@@ -38,6 +38,7 @@
 <script>
 	import {
 		ref,
+		reactive,
 		inject,
 		onMounted,
 		watch,
@@ -63,7 +64,7 @@
 			const router = useRouter();
 			const businessId = ref(route.query.businessId);
 			const user = ref({});
-			const deliveryAddressArr = ref([])
+			let deliveryAddressArr = reactive([])
 
 			onMounted(() => {
 				user.value = JSON.parse(sessionStorage.getItem('user'));
@@ -72,14 +73,15 @@
 
 			// 计算性别
 			const contactSex = (index) => {
-				return deliveryAddressArr.value[index].contactSex === 1 ? '先生' : '女士';
+				return deliveryAddressArr[index].contactSex === 1 ? '先生' : '女士';
 			};
 
 			// 请求全部地址信息
 			const listDeliveryAddressByUserId = () => {
 				let url = `DeliveryAddressController/listDeliveryAddressByUserId/${user.value.userId}`;
 				axios.get(url).then(response => {
-					deliveryAddressArr.value = response.data.result;
+					deliveryAddressArr.push(...response.data.result);
+					//console.log(deliveryAddressArr);
 					// console.log('地址信息:', deliveryAddressArr.value);
 				})
 				.catch(error => {
