@@ -5,6 +5,14 @@
 			<p>新增收货地址</p>
 		</header>
 
+
+		<div class="auto_address">
+			<textarea v-model="message" class="auto_recognition" placeholder="粘贴信息，自动识别地址"></textarea>
+			<van-button color="#17BF6A" @click="parseAddress">
+				识别
+			</van-button>
+		</div>
+		
 		<!-- 表单部分 -->
 		<ul class="form-box">
 			<li>
@@ -46,85 +54,108 @@
 </template>
 
 <script>
-	import {
-		ref,
-		inject,
-		onMounted,
-		watch,
-		computed
-	} from 'vue';
-	import {
-		useRoute
-	} from 'vue-router';
-	import {
-		useRouter
-	} from 'vue-router';
-	import axios from 'axios';
-	import qs from 'qs';
-	import Footer from '../components/Footer.vue';
+import {
+    ref,
+    inject,
+    onMounted,
+    watch,
+    computed
+} from 'vue';
+import {
+    useRoute,
+    useRouter
+} from 'vue-router';
+import axios from 'axios';
+import qs from 'qs';
+import Footer from '../components/Footer.vue';
+import AddressParse from 'address-parse';
 
+export default {
+    name: 'AddUserAddress',
+    components: {
+        Footer
+    },
+    setup() {
+        const route = useRoute();
+        const router = useRouter();
+        const businessId = ref(route.query.businessId);
+        const user = ref(JSON.parse(sessionStorage.getItem('user')));
+        const deliveryAddress = ref({
+            contactName: '',
+            contactSex: 1,
+            contactTel: '',
+            address: ''
+        });
+        const message = ref(''); // 存储用户输入的整体信息
 
-	export default {
-		name: 'AddUserAddress',
-		components: {
-			Footer
-		},
-		setup() {
-			const route = useRoute();
-			const router = useRouter();
-			const businessId = ref(route.query.businessId);
-			const user = ref(JSON.parse(sessionStorage.getItem('user')));
-			const deliveryAddress = ref({
-				contactName: '',
-				contactSex: 1,
-				contactTel: '',
-				address: ''
-			});
+        const parseAddress = () => {
+            if (message.value != '') {
+                const results = AddressParse.parse(message.value);
+                if (results.length > 0) {
+                    const result = results[0];
+                    deliveryAddress.value.contactName = result.name;
+                    deliveryAddress.value.contactTel = result.mobile;
+                    deliveryAddress.value.address = `${result.province}-${result.city}-${result.area} ${result.details}`;
+                } else {
+                    alert('无法识别地址，请检查输入格式');
+                }
+            } else {
+                alert('请输入您要识别的地址');
+            }
+        };
 
+        // 添加用户地址
+        const addUserAddress = () => {
+            if (deliveryAddress.value.contactName === '') {
+                alert('联系人姓名不能为空！');
+                return;
+            }
+            if (deliveryAddress.value.contactTel === '') {
+                alert('联系人电话不能为空！');
+                return;
+            }
+            if (deliveryAddress.value.address === '') {
+                alert('联系人地址不能为空！');
+                return;
+            }
 
-			// 添加用户地址
-			const addUserAddress = () => {
-				if (deliveryAddress.value.contactName === '') {
-					alert('联系人姓名不能为空！');
-					return;
-				}
-				if (deliveryAddress.value.contactTel === '') {
-					alert('联系人电话不能为空！');
-					return;
-				}
-				if (deliveryAddress.value.address === '') {
-					alert('联系人地址不能为空！');
-					return;
-				}
+            deliveryAddress.value.userId = user.value.userId;
 
-				deliveryAddress.value.userId = user.value.userId;
+            // 新增地址请求
+            let url = `DeliveryAddressController/saveDeliveryAddress/${deliveryAddress.value.contactName}/${deliveryAddress.value.contactSex}/${deliveryAddress.value.contactTel}/${deliveryAddress.value.address}/${user.value.userId}`;
+            axios.post(url)
+                .then(response => {
+                    if (response.data.result > 0) {
+                        router.go(-1);
+                    } else {
+                        alert('新增地址失败！');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
 
+        return {
+            businessId,
+            user,
+            deliveryAddress,
+            addUserAddress,
+            message,
+            parseAddress
+        };
+    }
+};
 
-				// 新增地址请求
-				let url = `DeliveryAddressController/saveDeliveryAddress/${deliveryAddress.value.contactName}/${deliveryAddress.value.contactSex}/${deliveryAddress.value.contactTel}/${deliveryAddress.value.address}/${user.value.userId}`;
-				axios.post(url)
-					.then(response => {
-						if (response.data.result > 0) {
-							router.go(-1);
-						} else {
-							alert('新增地址失败！');
-						}
-					})
-					.catch(error => {
-						console.error(error);
-					});
-			};
-
-			return {
-				businessId,
-				user,
-				deliveryAddress,
-				addUserAddress
-			};
-		}
-	};
 </script>
-
+<style>
+.auto_address van-button {
+    background-color: #17BF6A;
+    border-radius: 20px;
+    color: white;
+    padding: 10px 20px;
+}
+</style>
 <style scoped>
 	/****************** 总容器 ****************/
 	.wrapper {
@@ -150,11 +181,28 @@
 		align-items: center;
 	}
 
+	.auto_address {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    margin-top: 20vw;
+}
+
+.auto_address .auto_recognition {
+	height: 20vw;
+    flex: 1;
+    margin-right: 10px;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    background: #fff;
+}
+
+
 	/****************** 表单部分 ****************/
 
 	.wrapper .form-box {
 		width: 100%;
-		margin-top: 20vw;
+		/* margin-top: 20vw; */
 	}
 
 	.wrapper .form-box li {
@@ -203,8 +251,9 @@
 		color: #fff;
 		background-color: #0097ff;
 		border-radius: 50px;
-
 		border: none;
 		outline: none;
 	}
+
+
 </style>
