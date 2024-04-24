@@ -96,7 +96,7 @@
 				}
 				// 修改密码
 				checkOldPassword().then(isValid => {
-					let url1 =`UserController//editPasswordByUserId/${user.value.userId}/${newPassword.value}`;
+					let url1 =`UserController/editPasswordByUserId/${user.value.userId}/${newPassword.value}`;
 					if (isValid) {
 						// 如果旧密码正确，则更新新密码
 						axios.put(url1).then((response) => {

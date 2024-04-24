@@ -41,6 +41,11 @@ spring:
           uri: lb://cart-server
           predicates:
             - Path=/CartController/*/**
+          metadata:
+        	  # 读取超时
+            response-timeout: 50000
+            # 连接超时
+            connect-timeout: 300000
 
         - id: ordersServer
           uri: lb://orders-server
