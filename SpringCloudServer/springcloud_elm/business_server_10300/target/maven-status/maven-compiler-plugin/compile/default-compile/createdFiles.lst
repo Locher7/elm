@@ -1,0 +1,10 @@
+com\neusoft\MyApplication.class
+com\neusoft\feign\FoodFeignClient.class
+com\neusoft\mapper\BusinessMapper.class
+com\neusoft\po\Business.class
+com\neusoft\controller\BusinessController.class
+com\neusoft\po\CommonResult.class
+com\neusoft\service\BusinessService.class
+com\neusoft\service\impl\BusinessServiceImpl.class
+com\neusoft\feign\FoodFeignClientCallBack.class
+com\neusoft\po\Food.class
